@@ -1,8 +1,8 @@
-import { PredictionParams, UserSpecificParams } from "@/types/types";
+import { ExternPredictionParams, UserSpecificParams } from "@/types/types";
 import { URL_ENERGY_COST_PREDICTION_PARAMS, URL_ENERGY_USAGE } from "@/utils/Urls";
 import axios from "axios";
 
-export function fetchPredictionParams(): Promise<PredictionParams> {
+export function fetchPredictionParams(): Promise<ExternPredictionParams> {
     return axios.get(URL_ENERGY_COST_PREDICTION_PARAMS).then((response) => response.data).catch((e) => console.error("error fetching energy cost prediction params", e));
 }
 
