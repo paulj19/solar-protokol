@@ -9,6 +9,7 @@ import { ComparisonContext } from '@/context/ComparisonParamProvider';
 import { worker } from '@/mocks/browser'
 import styles from './ComparisonChart.module.css'
 import { ExternPredictionParams, PredictionParams, UserSpecificParams } from '@/types/types';
+import Slider from '../components/Slider';
 
 if (process.env.NODE_ENV === 'development') {
     worker.listen({ onUnhandledRequest: 'bypass' })
@@ -16,9 +17,7 @@ if (process.env.NODE_ENV === 'development') {
 const predictionPoints = [0, 5, 10, 15, 20, 25];
 
 export default function ComparisonChart() {
-    const [year, setYear] = useState<number>(0)
     const [inflationRate, setInflationRate] = useState<number>(0)
-    const [priceBase, setPriceBase] = useState<number>(0)
     const [priceCurrentAvgKwh, setPriceCurrentKwh] = useState<number>(0)
     const [showSloar, setShowSolar] = useState<boolean>(false);
 
@@ -33,7 +32,6 @@ export default function ComparisonChart() {
                 const costPredicted = getPredictionCostsAllYears({ userSpecificParams, externPredictionParams });
                 comparisonContext.initContext({ userSpecificParams: { ...userSpecificParams } as UserSpecificParams, externPredictionParams: { ...externPredictionParams } as ExternPredictionParams, costPredicted });
                 setInflationRate(externPredictionParams.inflationRate);
-                setPriceBase(externPredictionParams.priceBase);
                 setPriceCurrentKwh(externPredictionParams.priceCurrentAvgKwh);
             } else {
                 // todo dialog to enter manually
@@ -43,7 +41,7 @@ export default function ComparisonChart() {
     }, [])
 
     if (state) {
-        comparisonData = getComparisonData({ ...state, externPredicitonParams: { inflationRate, priceBase, priceCurrentAvgKwh } });
+        comparisonData = getComparisonData({ ...state, externPredictionParams: { inflationRate, priceCurrentAvgKwh, priceEnpalMonthly: state.externPredictionParams.priceEnpalMonthly, priceBase: state.externPredictionParams.priceBase } });
     }
 
     return (
@@ -63,7 +61,8 @@ export default function ComparisonChart() {
                             >
                                 <CartesianGrid strokeDasharray="3 3" />
                                 <XAxis dataKey="year" />
-                                <YAxis ticks={[0, 50, 100, 150, 200, 250, 300, 350]} />
+                                {/* <YAxis ticks={[0, 50, 100, 150, 200, 250, 300, 350]} /> */}
+                                <YAxis ticks={[0, 100, 200, 300, 400, 500, 600, 700]} />
                                 <Tooltip />
                                 <Legend />
                                 <Line type="monotone" dataKey="Ohne_PV" stroke="#FF0000" activeDot={{ r: 8 }} label={CustomizedLabel} />
@@ -76,6 +75,10 @@ export default function ComparisonChart() {
                             <input type="checkbox" onChange={(e) => setShowSolar(e.target.checked)} />
                             <span className={styles.slider + " " + styles.round}></span>
                         </label>
+                    </div>
+                    <div className={styles.rangeSelectors}>
+                        <Slider ticks={[0.03, 0.04, 0.05, 0.06, 0.07, 0.08]} onChangeHandler={setInflationRate} defaultValue={inflationRate} label={"inflation rate"} />
+                        <Slider ticks={[0.30, 0.40, 0.50, 0.60, 0.70, 0.80]} onChangeHandler={setPriceCurrentKwh} defaultValue={priceCurrentAvgKwh} label={"cost per kwh"} />
                     </div>
                 </div >
                 : null
@@ -104,8 +107,8 @@ function getComparisonData(params) {
 function getPredictionCostsAllYears(params) {
     let costPredictedAllYears = {};
     predictionPoints.forEach((i) => {
-        const [energyCostUsage, energyCostTotal, solarCostTotal] = getPredictedCosts({ year: i, ...params });
-        costPredictedAllYears = Object.assign({ [i]: { ...getPredictedCosts({ year: i, ...params }) } }, costPredictedAllYears);
+        const predictedCosts = getPredictedCosts({ year: i, ...params });
+        costPredictedAllYears = Object.assign({ [i]: { ...predictedCosts } }, costPredictedAllYears);
     });
     return costPredictedAllYears;
 }

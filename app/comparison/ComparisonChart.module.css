@@ -6,13 +6,13 @@
     margin: 10px auto;
 }
 
-.chart {
-    flex: 1;
-}
+.chart {}
 
 .toggle {
-    flex: 1;
     margin: 0 auto;
+    height: 60px;
+    display: flex;
+    align-items: center;
 }
 
 .responseChart {
@@ -81,4 +81,38 @@ input:checked+.slider:before {
 
 .slider.round:before {
     border-radius: 50%;
+}
+
+/*input[type='range']:after{
+  position: absolute;
+  content: '20 40 60 80';
+  padding: 25px 4035px;
+  word-spacing: 20px;
+  left: 0px;
+  top: 0px;
+}*/
+/* .container:after {
+    position: absolute;
+    color: #777;
+    padding: 40px;
+    word-spacing: 20px;
+    left: 0px;
+    top: 0px;
+    z-index: -1;
+} */
+
+.rangeSelectors {
+    display: flex;
+    flex-direction: row;
+    width: 564px;
+    justify-content: space-around;
+    align-items: center;
+    margin: 0 auto;
+    height: 90px;
+}
+
+.sliderTitle {
+    margin: 0 auto;
+    width: 50%;
+    color: rgb(49, 49, 49);
 }

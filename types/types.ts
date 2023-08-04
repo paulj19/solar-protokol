@@ -1,3 +1,5 @@
+import { Dispatch, SetStateAction } from "react";
+
 export type ExternPredictionParams = {
     priceBase: number;
     inflationRate: number;
@@ -15,3 +17,7 @@ export type PredictionParams = {
     userSpecificParams: UserSpecificParams;
     externPredictionParams: ExternPredictionParams;
 }
+export type PredictionParamState = [
+    PredictionParams,
+    Dispatch<SetStateAction<any>>,
+];
