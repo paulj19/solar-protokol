@@ -8,14 +8,15 @@ import { getTotalSolarCost } from "@/utils/SolarCostCalculator";
 import { ComparisonContext } from '@/context/ComparisonParamProvider';
 import { worker } from '@/mocks/browser'
 import styles from './ComparisonChart.module.css'
-import { ExternPredictionParams, PredictionParams, UserSpecificParams } from '@/types/types';
+import { ExternPredictionParams, PredictionParams, ClientPredictionParams } from '@/types/types';
 import Slider from '../components/Slider';
 import { it } from 'node:test';
+const predictionPoints = [0, 5, 10, 15, 20, 25];
+
 
 if (process.env.NODE_ENV === 'development') {
     worker.listen({ onUnhandledRequest: 'bypass' })
 }
-const predictionPoints = [0, 5, 10, 15, 20, 25];
 
 export default function ComparisonChart() {
     const [inflationRate, setInflationRate] = useState<number>(0)
@@ -23,15 +24,16 @@ export default function ComparisonChart() {
     const [showSloar, setShowSolar] = useState<boolean>(false);
 
     const { state, comparisonContext }: any = useContext(ComparisonContext);
-    let comparisonData;
+    let comparisonData
+    console.log("STATE", state)
 
     useEffect(() => {
         const getPredictionParams = async (userId: number) => {
             const externPredictionParams: ExternPredictionParams = await fetchPredictionParams();
-            const userSpecificParams: UserSpecificParams = await fetchUserParams(userId);
+            const userSpecificParams: ClientPredictionParams = await fetchUserParams(userId);
             if (externPredictionParams && userSpecificParams) {
                 const costPredicted = getPredictionCostsAllYears({ userSpecificParams, externPredictionParams });
-                comparisonContext.initContext({ userSpecificParams: { ...userSpecificParams } as UserSpecificParams, externPredictionParams: { ...externPredictionParams } as ExternPredictionParams, costPredicted });
+                comparisonContext.initContext({ userSpecificParams: { ...userSpecificParams } as ClientPredictionParams, externPredictionParams: { ...externPredictionParams } as ExternPredictionParams, costPredicted });
                 setInflationRate(externPredictionParams.inflationRate);
                 setPriceCurrentKwh(externPredictionParams.priceCurrentAvgKwh);
             } else {

@@ -7,17 +7,13 @@ export type ExternPredictionParams = {
     priceEnpalMonthly: number;
 }
 
-export type UserSpecificParams = {
+export type ClientPredictionParams = {
     usageMonthly: number;
     surplus: number;
 }
 
 export type PredictionParams = {
     year: number;
-    userSpecificParams: UserSpecificParams;
+    userSpecificParams: ClientPredictionParams;
     externPredictionParams: ExternPredictionParams;
 }
-export type PredictionParamState = [
-    PredictionParams,
-    Dispatch<SetStateAction<any>>,
-];

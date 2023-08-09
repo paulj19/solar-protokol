@@ -1,7 +1,6 @@
 import { PredictionParams } from "../types/types";
 
 export function getPredictedMonthlyTotalCost(predictionProps: PredictionParams, predictedMontlyUsageCost: number): number {
-    console.log(predictionProps)
     return predictionProps.externPredictionParams.priceBase + predictedMontlyUsageCost;
 }
 
