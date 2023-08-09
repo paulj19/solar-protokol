@@ -1,9 +1,9 @@
-import { PredictionParams } from "../types/types";
+import { ExternPredictionParams } from "../types/types";
 
-export function getTotalSolarCost(predictionProps: PredictionParams) {
+export function getTotalSolarCost(predictionProps: ExternPredictionParams) {
     const priceEnpalMonthly = predictionProps.externPredictionParams.priceEnpalMonthly;
     const priceBase = predictionProps.externPredictionParams.priceBase;
-    const surplus = predictionProps.userSpecificParams.surplus;
+    const surplus = predictionProps.clientParams.surplus;
     const year = predictionProps.year;
     const inflationRate = predictionProps.externPredictionParams.inflationRate;
 

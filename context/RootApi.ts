@@ -1,6 +1,4 @@
-import { URL_EXTERN_PREDICTION_PARAMS } from '@/utils/Urls'
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import build from 'next/dist/build'
 
 export const rootApi = createApi({
     reducerPath: 'rootApi',
@@ -12,9 +10,9 @@ export const rootApi = createApi({
                 method: "get",
             })
         }),
-        getClientPredictionParams: builder.query({
+        getClientParams: builder.query({
             query: (clientId) => ({
-                url: `/${clientId}/user-params`,
+                url: `/${clientId}/client-params`,
                 method: "get",
             })
         })
@@ -22,4 +20,5 @@ export const rootApi = createApi({
     })
 })
 
-export const { useGetPredictionParamsQuery, useGetClientPredictionParamsQuery } = rootApi;
+
+export const { useGetPredictionParamsQuery, useGetClientParamsQuery } = rootApi;

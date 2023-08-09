@@ -6,7 +6,7 @@ export const handlers = [
         return res(ctx.json({
             priceBase: 10,
             inflationRate: 0.05,
-            priceCurrentAvgKwh: 0.40,
+            priceCurrentKwh: 0.40,
             priceEnpalMonthly: 125,
         }), ctx.status(200));
     }),

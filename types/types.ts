@@ -3,17 +3,17 @@ import { Dispatch, SetStateAction } from "react";
 export type ExternPredictionParams = {
     priceBase: number;
     inflationRate: number;
-    priceCurrentAvgKwh: number;
+    priceCurrentKwh: number;
     priceEnpalMonthly: number;
 }
 
-export type ClientPredictionParams = {
+export type ClientParams = {
     usageMonthly: number;
     surplus: number;
 }
 
 export type PredictionParams = {
     year: number;
-    userSpecificParams: ClientPredictionParams;
+    clientParams: ClientParams;
     externPredictionParams: ExternPredictionParams;
 }
