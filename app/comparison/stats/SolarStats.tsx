@@ -1,18 +1,14 @@
-import { ComparisonContext } from "@/context/ComparisonParamProvider";
-import { useContext } from "react";
+import styles from '@/app/comparison/stats/stats.module.css'
 
-export default function SolarStats({ year }) {
-    const { state }: any = useContext(ComparisonContext);
-    const priceBase = state.priceBase;
-    const surplus = state.surplus;
-    const costSolarTotal = state.costPredicted[year].solarCostTotal;
-    const costSolarFixed = state.priceEnpalMonthly;
+export default function SolarStats({ year, costPredicted, externParams: { priceBase, priceEnpalMonthly }, clientParams: { surplus } }) {
+    console.log("solar", costPredicted)
+    const costSolarTotal = costPredicted[year].solarCostTotal;
 
     return (
         <div className="">
             <h1>Mit Enpal</h1>
-            <div className=""><h2>{year < 20 ? costSolarFixed + "€" : "0€"}</h2></div>
-            <div className="cost-sum">
+            <div className=""><h2>{year < 20 ? priceEnpalMonthly + "€" : "0€"}</h2></div>
+            <div className={styles.costSum}>
                 <div className="cost-elements">
                     <p>Grundgebühr</p>
                     <p>{priceBase + "€"}</p>

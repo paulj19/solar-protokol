@@ -8,9 +8,9 @@
 }
 
 .description {
-  display: inherit;
-  justify-content: inherit;
-  align-items: inherit;
+  /* display: inherit; */
+  /* justify-content: inherit; */
+  /* align-items: inherit; */
   font-size: 0.85rem;
   max-width: var(--max-width);
   width: 100%;

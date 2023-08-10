@@ -3,6 +3,7 @@ import { URL_EXTERN_PREDICTION_PARAMS, URL_ENERGY_USAGE } from '@/utils/Urls';
 
 export const handlers = [
     rest.get(URL_EXTERN_PREDICTION_PARAMS, (req, res, ctx) => {
+        console.log("REQUEST")
         return res(ctx.json({
             priceBase: 10,
             inflationRate: 0.05,

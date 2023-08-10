@@ -2,15 +2,13 @@
 
 import React, { useState } from 'react';
 import { Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, AreaChart, Area, ComposedChart } from 'recharts';
-import { getPredictedMonthlyTotalCost, getPredictedMonthlyUsageCost } from "@/utils/EnergyCostCalculator";
-import { getTotalSolarCost } from "@/utils/SolarCostCalculator";
+import { getComparisonData, getPredictedMonthlyTotalCost, getPredictedMonthlyUsageCost } from "@/utils/EnergyCostCalculator";
 import { worker } from '@/mocks/browser'
 import styles from './ComparisonChart.module.css'
-import Slider from '../components/Slider';
+import Slider from '../../components/Slider';
 import { useGetClientParamsQuery, useGetPredictionParamsQuery } from '@/context/RootApi';
-import Loading from '../Loading';
-
-const predictionPoints = [0, 5, 10, 15, 20, 25];
+import Loading from '../../Loading';
+import Link from 'next/link';
 
 export default function ComparisonChart({ clientId }) {
     const [inflationRate, setInflationRate] = useState<number>(null)
@@ -27,13 +25,13 @@ export default function ComparisonChart({ clientId }) {
     if (isClientParamLoading || isExternParamLoading) {
         return <Loading />;
     }
-
     if (isExternParamQueryError) {
         //todo modal to enter params manually
     }
     if (isClientParamQueryError) {
         //todo modal to enter params manually
     }
+
     comparisonData = getComparisonData({ clientParams: { ...clientParams }, externPredictionParams: { inflationRate: inflationRate ?? externParams.inflationRate, priceCurrentKwh: priceCurrentKwh ?? externParams.priceCurrentKwh, priceEnpalMonthly: externParams.priceEnpalMonthly, priceBase: externParams.priceBase } });
     let xx = false;
     comparisonDataWithRange = comparisonData.reduce((acc, item, i, array) => {
@@ -96,6 +94,7 @@ export default function ComparisonChart({ clientId }) {
                     <Slider ticks={[0.03, 0.04, 0.05, 0.06, 0.07, 0.08]} onChangeHandler={setInflationRate} defaultValue={externParams.inflationRate} label={"inflation rate"} />
                     <Slider ticks={[0.30, 0.40, 0.50, 0.60, 0.70, 0.80]} onChangeHandler={setPriceCurrentKwh} defaultValue={externParams.priceCurrentKwh} label={"cost per kwh"} />
                 </div>
+                <Link href={'/comparison/stats/123'}> STATS </Link>
             </div >
         </>
     );
@@ -137,29 +136,4 @@ function CustomizedLabel({ x, y, stroke, value }) {
             {value + "€"}
         </text>
     );
-}
-
-function getComparisonData(params) {
-    let comparisonData = [];
-    predictionPoints.forEach((i) => {
-        const [energyCostUsage, energyCostTotal, solarCostTotal] = getPredictedCosts({ year: i, ...params });
-        comparisonData.push({ year: i + 2013, Ohne_PV: energyCostTotal, Mit_Enpal: solarCostTotal })
-    });
-    return comparisonData;
-}
-
-function getPredictionCostsAllYears(params) {
-    let costPredictedAllYears = {};
-    predictionPoints.forEach((i) => {
-        const predictedCosts = getPredictedCosts({ year: i, ...params });
-        costPredictedAllYears = Object.assign({ [i]: { ...predictedCosts } }, costPredictedAllYears);
-    });
-    return costPredictedAllYears;
-}
-
-function getPredictedCosts(params) {
-    const predictedMonthlyUsageCost = getPredictedMonthlyUsageCost(params);
-    const predictedMonthlyTotalCost = getPredictedMonthlyTotalCost(params, predictedMonthlyUsageCost);
-    const solarCostTotal = getTotalSolarCost(params);
-    return [predictedMonthlyUsageCost, predictedMonthlyTotalCost, solarCostTotal];
 }

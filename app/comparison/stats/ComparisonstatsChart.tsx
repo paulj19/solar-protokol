@@ -1,11 +1,9 @@
-import { ComparisonContext } from "@/context/ComparisonParamProvider";
 import { useContext } from "react";
 import { XAxis, BarChart, Bar, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
-export default function ComparisonstatsChart({ year }) {
-    const { state }: any = useContext(ComparisonContext);
-    const energyCost = state.costPredicted[year].energyCostTotal;
-    const solarCost = state.costPredicted[year].solarCostTotal;
+export default function ComparisonstatsChart({ year, costPredicted }) {
+    const energyCost = costPredicted[year].energyCostTotal;
+    const solarCost = costPredicted[year].solarCostTotal;
     return (
         <div className="price-comparison-bar-chart">
             <ResponsiveContainer width="100%" height="100%">

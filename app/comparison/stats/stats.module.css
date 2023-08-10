@@ -1,0 +1,41 @@
+.costSum {
+    display: flex;
+    flex-direction: row;
+}
+
+.costElements {
+    flex: 1;
+}
+
+.yearSlider {
+    display: flex;
+    flex-direction: row;
+    width: 564px;
+    justify-content: space-around;
+    align-items: center;
+    margin: 0 auto;
+    height: 90px;
+}
+
+.statsContainer {
+    display: grid;
+    grid-template-rows: 2fr 1fr 1fr;
+}
+
+.statsSection {
+    display: flex;
+    flex-direction: row;
+    /* grid-row: 1/10; */
+}
+
+.statsSection>div {
+    flex: 1;
+    border: 1px solid black;
+    padding: 20px;
+    height: 570px;
+}
+
+.totalCostSavings {
+    /* grid-row: 10/12; */
+    margin: auto;
+}

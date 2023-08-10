@@ -1,4 +1,4 @@
-import styles from '@/app/comparison/ComparisonChart.module.css'
+import styles from '@/app/comparison/chart/ComparisonChart.module.css'
 
 export default function Slider({ ticks, onChangeHandler, defaultValue, label }) {
     return (
