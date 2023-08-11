@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Slider from "../../components/Slider";
-import ComparisonstatsChart from "./ComparisonstatsChart";
+import StatsChart from "./StatsChart";
 import { ElectricityStats } from "./ElectricityStats";
 import SolarStats from "./SolarStats";
 import TotalCostSavings from "./TotalCostSavings";
@@ -12,7 +12,7 @@ import { getPredictionCostsAllYears } from "@/utils/EnergyCostCalculator";
 import { useParams, useSearchParams } from 'next/navigation'
 import styles from '@/app/comparison/stats/stats.module.css'
 
-export default function ComparisonStats({ clientId }) {
+export default function Stats({ clientId }) {
     console.log("paraMS", clientId)
     const [year, setYear] = useState<number>(0);
     const { data: externParams, isLoading: isExternParamLoading, isError: isExternParamQueryError } = useGetPredictionParamsQuery(undefined);
@@ -27,9 +27,10 @@ export default function ComparisonStats({ clientId }) {
     const costPredicted = getPredictionCostsAllYears({ clientParams: clientParams, externPredictionParams: externParams });
     return (
         <div className={styles.statsContainer}>
+            <h1 className={styles.yearHeading}>{"In " + (new Date().getFullYear() + year)}</h1>
             <div className={styles.statsSection}>
                 <ElectricityStats year={year} costPredicted={costPredicted} externParams={externParams} />
-                <ComparisonstatsChart year={year} costPredicted={costPredicted} />
+                <StatsChart year={year} costPredicted={costPredicted} />
                 <SolarStats year={year} costPredicted={costPredicted} externParams={externParams} clientParams={clientParams} />
             </div>
             <TotalCostSavings year={year} />

@@ -1,5 +1,5 @@
 import styles from '@/app/page.module.css'
-import ComparisonStats from '@/app/comparison/stats/ComparisonStats'
+import Stats from '@/app/comparison/stats/Stats'
 import { useParams } from 'next/navigation'
 
 export default function Page({ searchParams }) {
@@ -9,7 +9,7 @@ export default function Page({ searchParams }) {
   return (
     <main className={styles.main}>
       <div className={styles.description}>
-        <ComparisonStats clientId={searchParams.clientId} />
+        <Stats clientId={searchParams.clientId} />
       </div>
     </main>
   )
