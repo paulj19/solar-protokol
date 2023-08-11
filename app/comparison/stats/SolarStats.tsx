@@ -16,6 +16,7 @@ export default function SolarStats(params) {
 
 function ElectricityCosts({ year, costPredicted, externParams: { priceBase }, clientParams: { surplus } }) {
     const costSolarTotal = costPredicted[year].solarCostTotal;
+
     return (
         <div className={styles.costGrid}>
             <div className={styles.costHeading}>{"Ihre Neu Strom kosten:"}</div>

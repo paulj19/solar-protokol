@@ -44,6 +44,19 @@
 .totalCostSavings {
     grid-row: 17/21;
     margin: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.savedAmount {
+    border: 1px solid black;
+    box-shadow: inset 4px 4px 8px rgba(0, 112, 112, 0.2),
+        inset -4px -4px 8px rgba(0, 112, 112, 0.2);
+    border-radius: 4px;
+    font-size: xx-large;
+    padding: 8px;
+    margin: 4px;
+    color: rgb(0, 88, 59);
 }
 
 .yearSlider {
