@@ -14,21 +14,84 @@ pnpm dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
+1. how reststrom when
+2. which values change from user to user -> does rent change
+3. will base price also change
+
+
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+# Domain wordings translation
+### Client Specific
+0. GrundPreis -> basePrice 
+1. aktueller Strompreis (€ pro kWh) -> unitPrice
+2. Stromverbrauch/Bedarf  pro Jahr (kWh) -> consumptionYearly
+3. Stromproduktion der Anlage pro Jahr (kWh) -> productionYearly
 
-## Learn More
+### General
+0. Einspeisevergütung -> feedInPrice
+1. PV-Anlage monatl. Miete (€) -> rent
+2. infaltion rate -> inflationRate
+3. Erhöhung strompreis -> electricityIncreaseRate
 
-To learn more about Next.js, take a look at the following resources:
+### Other Terms
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- Erhöhung gesamt -> totalIncreaseRate
+- Kaufpreis Anlage -> purchasePrice
+- Eigenverbrauch -> selfConsumptionYearly
+- Netzeinspeisung pro Jahr (kWh) -> feedInElectricityYearly = selfConsumption * 
+- Restbezug Strom Haushalt pro Jahr (kWh) = residualConsumptionCostYearly
+- Restbezug Strom Haushalt pro Monat (kWh) = residualConsumptionCostMonthly
+- Miete erste 24 Monate = discountedRent
+- Einspeisevergütung gesamt pro Jahr = feedInTariffYearly
+- Einspeisevergütung gesamt pro Monat = feedInTariffMonthly
+- Reststromkosten Haushalt pro Monat mit PV = residualCostMonthly
+- aktuelle Stromkosten pro Monat ohne PV = electricityCostMonthly
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+## Solar Price
 
-## Deploy on Vercel
+> PV_Kosten        = Rate Enpal + RestNetzBezug                                     + Grundpreis    - Einspeisevergütung \
+> SolarCostMonthly = rent       + residualConsumptionMonthly * **unitPrice**        + **basePrice** - feedInTariffMonthly;
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- feedInTariffMonthly = feedInGenerationMonthly   * **feedInPrice**
+- feedInGenerationMonthly = (feedInGenerationYearly / 12) 
+- feedInGenerationYearly = i = 1..12 => sum(solarGeneration[i] - exactConsumption[i]) iff solarConsumption[i] - exactConsumption[i] > 0
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+- residualConsumptionCostMonthly = residualConsumptionMonthly  * **unitPrice** 
+- residualConsumptionMonthly = (residualConsumptionYearly / 12);
+- residualConsumptionYearly => (i = 1..12) => sum(exactConsumption[i] - solarGeneration[i]) iff exactConsumption[i] - solarConsumption[i] > 0 
+
+- exactConsumption[i] = **consumptionYearly** / 365 * *ElectricityFactor[i]* * *days[i]*
+- solarGeneration[i] = **productionYearly** * *solarFactor[i]*
+
+### Prediction
+
+> SolarCostMonthly[year] = rent[year] + residualConsumptionCostMonthly[year]  + **basePrice**[year] - feedInTariffMonthly[year];
+
+- residualConsumptionCostMonthly[year] = residualConsumptionMonthly  * **unitPrice**[year]
+- **unitPrice**[year]= **unitPrice** * (1 + totalIncreaseRate) ** year;
+
+- feedInTariffMonthly[year] = feedInGenerationMonthly   * **feedInPrice**[year];
+- **feedInPrice**[year]= **feedInPrice** * (1 + totalIncreaseRate) ** year;
+
+- **basePrice**[year] = **basePrice** * (1 + totalIncreaseRate) ** year;
+ 
+- totalIncreaseRate = **inflationRate** + **electricityIncreaseRate**
+## Electricity Price
+
+> StromKosten = GrundPreis    + Stromverbrauch/Bedarf  pro Monat(kWh) * aktueller Strompreis (€ pro kWh) * 
+
+- StromKosten = **basePrice** + consumptionCostMonthly
+
+- consumptionCostMonthly = consumptionMonthly * **unitPrice** ;
+- consumptionMonthly = (consumptionYearly / 12) 
+
+
+## Prediction
+> StromKosten[year] = **basePrice**[year] + consumptionCostMonthly[year]
+
+- consumptionCostMonthly[year] = consumptionMonthly * **unitPrice**[year];
+- **unitPrice**[year]= **unitPrice** * (1 + totalIncreaseRate) ** year;
+
+- **basePrice**[year] = **basePrice** * (1 + totalIncreaseRate) ** year;
+- totalIncreaseRate = **inflationRate** + **electricityIncreaseRate**
