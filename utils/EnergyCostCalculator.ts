@@ -1,5 +1,5 @@
 import { PredictionPoints } from "@/app/Constants";
-import { ExternPredictionParams, PredictionParams } from "../types/types";
+import { GeneralParams, PredictionParams } from "../types/types";
 
 export function getPredictedMonthlyTotalCost(predictionProps: PredictionParams, predictedMontlyUsageCost: number): number {
     return predictionProps.externPredictionParams.priceBase + predictedMontlyUsageCost;

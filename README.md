@@ -33,6 +33,8 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 1. PV-Anlage monatl. Miete (€) -> rent
 2. infaltion rate -> inflationRate
 3. Erhöhung strompreis -> electricityIncreaseRate
+4. Solar Rabatt dauer -> rentDiscountPeriod
+5. Solar Rabatt prozent -> rentDiscountRate
 
 ### Other Terms
 
@@ -48,21 +50,21 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 - Reststromkosten Haushalt pro Monat mit PV = residualCostMonthly
 - aktuelle Stromkosten pro Monat ohne PV = electricityCostMonthly
 
-## Solar Price
+## Solar Cost
 
 > PV_Kosten        = Rate Enpal + RestNetzBezug                                     + Grundpreis    - Einspeisevergütung \
 > SolarCostMonthly = rent       + residualConsumptionMonthly * **unitPrice**        + **basePrice** - feedInTariffMonthly;
 
 - feedInTariffMonthly = feedInGenerationMonthly   * **feedInPrice**
 - feedInGenerationMonthly = (feedInGenerationYearly / 12) 
-- feedInGenerationYearly = i = 1..12 => sum(solarGeneration[i] - exactConsumption[i]) iff solarConsumption[i] - exactConsumption[i] > 0
+- feedInGenerationYearly = i = 1..12 => sum( solarProduction[i] - exactConsumption[i]) iff solarConsumption[i] - exactConsumption[i] > 0
 
 - residualConsumptionCostMonthly = residualConsumptionMonthly  * **unitPrice** 
 - residualConsumptionMonthly = (residualConsumptionYearly / 12);
-- residualConsumptionYearly => (i = 1..12) => sum(exactConsumption[i] - solarGeneration[i]) iff exactConsumption[i] - solarConsumption[i] > 0 
+- residualConsumptionYearly => (i = 1..12) => sum(exactConsumption[i] - solarProduction[i]) iff exactConsumption[i] - solarConsumption[i] > 0 
 
 - exactConsumption[i] = **consumptionYearly** / 365 * *ElectricityFactor[i]* * *days[i]*
-- solarGeneration[i] = **productionYearly** * *solarFactor[i]*
+- solarProduction[i]  = **productionYearly** * *solarFactor[i]*
 
 ### Prediction
 
@@ -77,7 +79,7 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 - **basePrice**[year] = **basePrice** * (1 + totalIncreaseRate) ** year;
  
 - totalIncreaseRate = **inflationRate** + **electricityIncreaseRate**
-## Electricity Price
+## Electricity Cost
 
 > StromKosten = GrundPreis    + Stromverbrauch/Bedarf  pro Monat(kWh) * aktueller Strompreis (€ pro kWh) * 
 

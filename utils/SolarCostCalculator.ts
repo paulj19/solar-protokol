@@ -1,1 +1,1 @@
-import { ExternPredictionParams } from "../types/types";
+import { GeneralParams } from "../types/types";
