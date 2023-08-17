@@ -1,6 +1,6 @@
-import { CalculationParams } from "@/types/types";
+import { NormalizationParams, PredictionParams } from "@/types/types";
 
-export const calculationMetrics: Record<string, CalculationParams> = {
+export const calculationMetrics: Record<string, NormalizationParams> = {
     "JANUARY": { days: 31, electricityFactor: 1.16, solarFactor: 0.055 },
     "FEBRUARY": { days: 28, electricityFactor: 1.10, solarFactor: 0.065 },
     "MARCH": { days: 31, electricityFactor: 1.10, solarFactor: 0.088 },
@@ -15,6 +15,28 @@ export const calculationMetrics: Record<string, CalculationParams> = {
     "DECEMBER": { days: 31, electricityFactor: 1.07, solarFactor: 0.045 },
 };
 
+export function calcElectricityCostMonthly(params: PredictionParams): number {
+    return calcConsumptionCostMonthly(params) + calcBasePrice(params);
+}
+
+export function calcSolarCostMonthly(params: PredictionParams): number {
+    return calcRent(params) + calcResidualConsumptionCostMonthly(params) + calcBasePrice(params) - calcFeedInTariffMonthly(params);
+}
+
+export function calcFeedInTariffMonthly(params: PredictionParams): number {
+    const feedInGenerationYearly = getFeedInGeneration(params).reduce((sum, feedInGeneration) => sum + feedInGeneration, 0);
+    return round((feedInGenerationYearly / 12) * calcFeedInPrice(params));
+}
+
+export function calcResidualConsumptionCostMonthly(params: PredictionParams): number {
+    const residualConsumptionYearly = calcResidualConsumption(params).reduce((sum, residualConsumption) => sum + residualConsumption, 0);
+    return round((residualConsumptionYearly / 12) * calcUnitPrice(params));
+}
+
+export function calcConsumptionCostMonthly(params: PredictionParams): number {
+    return round((params.clientParams.consumptionYearly / 12) * calcUnitPrice(params));
+}
+
 export function calcResidualConsumption({ clientParams: { consumptionYearly, productionYearly } }): Array<number> {
     return Object.keys(calculationMetrics).reduce((residualConsumption_, month) => {
         const residualConsumption = normalizedMonthlyConsumption(consumptionYearly, calculationMetrics[month].electricityFactor, calculationMetrics[month].days) - normalizedMonthlyProduction(productionYearly, calculationMetrics[month].solarFactor)
@@ -25,12 +47,7 @@ export function calcResidualConsumption({ clientParams: { consumptionYearly, pro
     }, []);
 }
 
-export function calcResidualConsumptionCostMonthly(params): number {
-    const residualConsumptionYearly = calcResidualConsumption(params).reduce((sum, residualConsumption) => sum + residualConsumption, 0);
-    return round((residualConsumptionYearly / 12) * params.clientParams.unitPrice);
-}
-
-export function getFeedInGeneration({ clientParams: { productionYearly, consumptionYearly } }): Array<number> {
+export function getFeedInGeneration({ clientParams: { productionYearly, consumptionYearly } }: PredictionParams): Array<number> {
     return Object.keys(calculationMetrics).reduce((surplusArray, month) => {
         const surplus = normalizedMonthlyProduction(productionYearly, calculationMetrics[month].solarFactor) - normalizedMonthlyConsumption(consumptionYearly, calculationMetrics[month].electricityFactor, calculationMetrics[month].days)
         if (surplus > 0) {
@@ -40,13 +57,30 @@ export function getFeedInGeneration({ clientParams: { productionYearly, consumpt
     }, []);
 }
 
-export function getFeedInTariffMonthly(params): number {
-    const feedInGenerationYearly = getFeedInGeneration(params).reduce((sum, feedInGeneration) => sum + feedInGeneration, 0);
-    return round((feedInGenerationYearly / 12) * params.generalParams.feedInPrice);
+function calcBasePrice({ year, clientParams: { basePrice }, generalParams: { inflationRate, electricityIncreaseRate } }: PredictionParams): number {
+    return priceIncrease(basePrice, inflationRate + electricityIncreaseRate, year);
 }
 
-function priceIncrease(price, inflationRate, electricityIncreaseRate, year) {
-    return price * (1 + (inflationRate + electricityIncreaseRate)) ** year;
+function calcUnitPrice({ year, clientParams: { unitPrice }, generalParams: { inflationRate, electricityIncreaseRate } }: PredictionParams): number {
+    return priceIncrease(unitPrice, inflationRate + electricityIncreaseRate, year);
+}
+
+function calcFeedInPrice({ year, generalParams: { feedInPrice, inflationRate, electricityIncreaseRate } }: PredictionParams): number {
+    return priceIncrease(feedInPrice, inflationRate + electricityIncreaseRate, year);
+}
+
+function calcRent({ year, generalParams: { rent, rentDiscountPeriod, rentDiscountRate } }: PredictionParams): number {
+    if (year > 20) {
+        return 0;
+    }
+    if (year < rentDiscountPeriod) {
+        return round(rent * (1 - (rentDiscountRate * 0.01)));
+    }
+    return rent;
+}
+
+function priceIncrease(price, rate, year) {
+    return price * (1 + rate * 0.01) ** year;
 }
 
 export function normalizedMonthlyConsumption(consumptionYearly: number, electricityFactor: number, days: number) {

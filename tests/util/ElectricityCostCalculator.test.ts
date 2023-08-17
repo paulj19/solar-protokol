@@ -1,5 +1,6 @@
 import { describe } from "node:test";
-import { calculationMetrics, normalizedMonthlyConsumption, normalizedMonthlyProduction, calcResidualConsumption, calcResidualConsumptionCostMonthly, getFeedInGeneration, getFeedInTariffMonthly } from "@/utils/ElectricityCostCalculator";
+import { calculationMetrics, normalizedMonthlyConsumption, normalizedMonthlyProduction, calcResidualConsumption, calcResidualConsumptionCostMonthly, getFeedInGeneration, calcFeedInTariffMonthly, calcConsumptionCostMonthly, calcElectricityCostMonthly, calcSolarCostMonthly } from "@/utils/ElectricityCostCalculator";
+import { PredictionParams } from "@/types/types";
 
 describe("ElectricityCostCalculator", () => {
     it("should caluculate exact electricity cost", () => {
@@ -27,9 +28,23 @@ describe("ElectricityCostCalculator", () => {
         expect(resultResiducalConsumption).toEqual(expectedResidualConsumption);
     });
 
+    it("should calculate residual consumption as empty", () => {
+        const params: any = { clientParams: { consumptionYearly: 3500, productionYearly: 7192 } };
+        const expectedResidualConsumption = [];
+        const resultResiducalConsumption = calcResidualConsumption(params);
+        expect(resultResiducalConsumption).toEqual(expectedResidualConsumption);
+    });
+
     it("should calculate residual consumption cost monthly", () => {
-        const params = { clientParams: { consumptionYearly: 6500, productionYearly: 7192, unitPrice: 0.32 } };
+        const params: PredictionParams = { year: 0, clientParams: { consumptionYearly: 6500, productionYearly: 7192, unitPrice: 0.32 }, generalParams: { feedInPrice: 0.08, inflationRate: 3, electricityIncreaseRate: 1 } };
         const expectedResidualConsumption = 20;
+        const resultResidualConsumption = calcResidualConsumptionCostMonthly(params);
+        expect(resultResidualConsumption).toEqual(expectedResidualConsumption);
+    });
+
+    it("should calculate residual consumption cost monthly as 0", () => {
+        const params: PredictionParams = { year: 0, clientParams: { consumptionYearly: 3500, productionYearly: 7192, unitPrice: 0.32 }, generalParams: { feedInPrice: 0.08, inflationRate: 3, electricityIncreaseRate: 1 } };
+        const expectedResidualConsumption = 0;
         const resultResidualConsumption = calcResidualConsumptionCostMonthly(params);
         expect(resultResidualConsumption).toEqual(expectedResidualConsumption);
     });
@@ -42,9 +57,30 @@ describe("ElectricityCostCalculator", () => {
     });
 
     it("should calculate feedInTariff monthly", () => {
-        const params = { clientParams: { consumptionYearly: 3500, productionYearly: 7192 }, generalParams: { feedInPrice: 0.08 } };
+        const params: PredictionParams = { year: 0, clientParams: { consumptionYearly: 3500, productionYearly: 7192 }, generalParams: { feedInPrice: 0.08, inflationRate: 3, electricityIncreaseRate: 1 } };
         const expectedFeedInTariff = 25;
-        const resultFeedInTariff = getFeedInTariffMonthly(params);
+        const resultFeedInTariff = calcFeedInTariffMonthly(params);
         expect(resultFeedInTariff).toEqual(expectedFeedInTariff);
+    });
+
+    it("should calculate consumption monthly", () => {
+        const params: PredictionParams = { year: 0, clientParams: { consumptionYearly: 3500, unitPrice: 0.32 }, generalParams: { inflationRate: 3, electricityIncreaseRate: 1 } };
+        const expectedConsumption = 93;
+        const resultConsumption = calcConsumptionCostMonthly(params);
+        expect(resultConsumption).toEqual(expectedConsumption);
+    });
+
+    it("should calculate electricity cost monthly", () => {
+        const params: PredictionParams = { year: 0, clientParams: { consumptionYearly: 3500, unitPrice: 0.32, basePrice: 10 }, generalParams: { inflationRate: 3, electricityIncreaseRate: 1 } };
+        const expectedElectricityCost = 103;
+        const resultElectricityCost = calcElectricityCostMonthly(params);
+        expect(resultElectricityCost).toEqual(expectedElectricityCost);
+    });
+
+    it("should calculate solar cost monthly", () => {
+        const params: PredictionParams = { year: 0, clientParams: { consumptionYearly: 3500, unitPrice: 0.32, basePrice: 10, productionYearly: 7192 }, generalParams: { rent: 132, rentDiscountPeriod: 2, rentDiscountRate: 11.36, feedInPrice: 0.08, inflationRate: 3, electricityIncreaseRate: 1 } };
+        const expectedSolarCost = 102;
+        const result = calcSolarCostMonthly(params);
+        expect(result).toEqual(expectedSolarCost);
     });
 });

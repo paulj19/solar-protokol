@@ -83,7 +83,7 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 > StromKosten = GrundPreis    + Stromverbrauch/Bedarf  pro Monat(kWh) * aktueller Strompreis (€ pro kWh) * 
 
-- StromKosten = **basePrice** + consumptionCostMonthly
+- ElectricityCostMonthly = **basePrice** + consumptionCostMonthly
 
 - consumptionCostMonthly = consumptionMonthly * **unitPrice** ;
 - consumptionMonthly = (consumptionYearly / 12) 

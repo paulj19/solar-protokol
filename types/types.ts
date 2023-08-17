@@ -1,14 +1,16 @@
 export type GeneralParams = {
-    feedInPrice: number;
     rent: number;
+    rentDiscountPeriod: number;
+    rentDiscountRate: number;
+    feedInPrice: number;
     inflationRate: number;
     electricityIncreaseRate: number;
 }
 
 export type ClientParams = {
-    priceBase: number;
+    basePrice: number;
     unitPrice: number;
-    consumpitonYearly: number;
+    consumptionYearly: number;
     productionYearly: number;
 }
 
@@ -18,7 +20,7 @@ export type PredictionParams = {
     generalParams: GeneralParams;
 }
 
-export type CalculationParams = {
+export type NormalizationParams = {
     days: number;
     electricityFactor: number;
     solarFactor: number;
