@@ -1,11 +1,11 @@
 import { GeneralParams, ClientParams } from "@/types/types";
-import { URL_EXTERN_PREDICTION_PARAMS, URL_ENERGY_USAGE } from "@/utils/Urls";
+import { URL_GENERAL_PARAMS, URL_CLIENT_PARAMS } from "@/utils/Urls";
 import axios from "axios";
 
 export function fetchPredictionParams(): Promise<GeneralParams> {
-    return axios.get(URL_EXTERN_PREDICTION_PARAMS).then((response) => response.data).catch((e) => console.error("error fetching energy cost prediction params", e));
+    return axios.get(URL_GENERAL_PARAMS).then((response) => response.data).catch((e) => console.error("error fetching energy cost prediction params", e));
 }
 
 export function fetchUserParams(userId: number): Promise<ClientParams> {
-    return axios.get(URL_ENERGY_USAGE.replace(":userId", userId.toString())).then((response) => response.data).catch((e) => console.error("error fetching energy usage", e));
+    return axios.get(URL_CLIENT_PARAMS.replace(":userId", userId.toString())).then((response) => response.data).catch((e) => console.error("error fetching energy usage", e));
 }

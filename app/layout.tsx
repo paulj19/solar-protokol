@@ -4,7 +4,7 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import Image from 'next/image'
 import logo from 'public/enpal-logo.svg'
-import { URL_EXTERN_PREDICTION_PARAMS } from '@/utils/Urls'
+import { URL_GENERAL_PARAMS } from '@/utils/Urls'
 import { worker } from '@/mocks/browser'
 import ProviderProxy from '@/context/ProviderProxy'
 
@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 }
 
 if (process.env.NODE_ENV === 'development') {
-    worker.listen({ onUnhandledRequest: 'bypass' })
+  worker.listen({ onUnhandledRequest: 'bypass' })
 }
 
 export default async function RootLayout({
@@ -40,7 +40,7 @@ export default async function RootLayout({
 
 async function fetchExternPredictionParams() {
   try {
-    const res = await fetch(URL_EXTERN_PREDICTION_PARAMS);
+    const res = await fetch(URL_GENERAL_PARAMS);
     return await res.json();
   } catch (e) {
     console.error(e)
