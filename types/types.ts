@@ -25,3 +25,9 @@ export type NormalizationParams = {
     electricityFactor: number;
     solarFactor: number;
 }
+
+export type CostPredictions = {
+    year: number;
+    electricityCost: number;
+    solarCost: number;
+}

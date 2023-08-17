@@ -1,4 +1,4 @@
-import { NormalizationParams, PredictionParams } from "@/types/types";
+import { CostPredictions, NormalizationParams, PredictionParams } from "@/types/types";
 
 export const calculationMetrics: Record<string, NormalizationParams> = {
     "JANUARY": { days: 31, electricityFactor: 1.16, solarFactor: 0.055 },
@@ -15,26 +15,39 @@ export const calculationMetrics: Record<string, NormalizationParams> = {
     "DECEMBER": { days: 31, electricityFactor: 1.07, solarFactor: 0.045 },
 };
 
+export function calcPredictions(yearLimit: number, params: PredictionParams): Array<CostPredictions> {
+    let costPredictions: Array<CostPredictions> = [];
+    let electricityCost;
+    let solarCost;
+    for (let i = 0; i < 25; i++) {
+        electricityCost = calcElectricityCostMonthly({ ...params, year: i });
+        solarCost = calcSolarCostMonthly({ ...params, year: i });
+        costPredictions.push({
+            year: i, electricityCost, solarCost: solarCost > 0 ? solarCost : 0
+        });
+    }
+    return costPredictions;
+}
 export function calcElectricityCostMonthly(params: PredictionParams): number {
-    return calcConsumptionCostMonthly(params) + calcBasePrice(params);
+    return round(calcConsumptionCostMonthly(params) + calcBasePrice(params));
 }
 
 export function calcSolarCostMonthly(params: PredictionParams): number {
-    return calcRent(params) + calcResidualConsumptionCostMonthly(params) + calcBasePrice(params) - calcFeedInTariffMonthly(params);
+    return round(calcRent(params) + calcResidualConsumptionCostMonthly(params) + calcBasePrice(params) - calcFeedInTariffMonthly(params));
 }
 
 export function calcFeedInTariffMonthly(params: PredictionParams): number {
     const feedInGenerationYearly = getFeedInGeneration(params).reduce((sum, feedInGeneration) => sum + feedInGeneration, 0);
-    return round((feedInGenerationYearly / 12) * calcFeedInPrice(params));
+    return (feedInGenerationYearly / 12) * calcFeedInPrice(params);
 }
 
 export function calcResidualConsumptionCostMonthly(params: PredictionParams): number {
     const residualConsumptionYearly = calcResidualConsumption(params).reduce((sum, residualConsumption) => sum + residualConsumption, 0);
-    return round((residualConsumptionYearly / 12) * calcUnitPrice(params));
+    return (residualConsumptionYearly / 12) * calcUnitPrice(params);
 }
 
 export function calcConsumptionCostMonthly(params: PredictionParams): number {
-    return round((params.clientParams.consumptionYearly / 12) * calcUnitPrice(params));
+    return (params.clientParams.consumptionYearly / 12) * calcUnitPrice(params);
 }
 
 export function calcResidualConsumption({ clientParams: { consumptionYearly, productionYearly } }): Array<number> {
@@ -84,14 +97,14 @@ function priceIncrease(price, rate, year) {
 }
 
 export function normalizedMonthlyConsumption(consumptionYearly: number, electricityFactor: number, days: number) {
-    return round((consumptionYearly / 365) * electricityFactor * days);
+    return (consumptionYearly / 365) * electricityFactor * days;
 }
 
 export function normalizedMonthlyProduction(productionYearly: number, solarFactor: number) {
-    return round(productionYearly * solarFactor);
+    return productionYearly * solarFactor;
 }
 
-function round(number) {
+export function round(number) {
     const decimalPart = number - Math.floor(number);
     if (decimalPart > 0.5) {
         return Math.ceil(number);
