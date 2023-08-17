@@ -17,6 +17,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 1. how reststrom when
 2. which values change from user to user -> does rent change
 3. will base price also change
+4. wordings in graph -> Ohne Pv
 
 
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.

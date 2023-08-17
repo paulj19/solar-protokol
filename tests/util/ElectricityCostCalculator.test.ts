@@ -75,21 +75,21 @@ describe("ElectricityCostCalculator", () => {
     });
 
     it("should calculate electricity cost monthly", () => {
-        const params: PredictionParams = { year: 0, clientParams: { consumptionYearly: 3500, unitPrice: 0.32, basePrice: 10, productionYearly: 7192 }, generalParams: { rent: 132, rentDiscountPeriod: 2, rentDiscountRate: 11.36, feedInPrice: 0.08, inflationRate: 3, electricityIncreaseRate: 1 } };
+        const params: PredictionParams = { year: 0, clientParams: { consumptionYearly: 3500, unitPrice: 0.32, basePrice: 10, productionYearly: 7192 }, generalParams: { rent: 132, rentDiscountPeriod: 2, rentDiscountRate: 11.36, feedInPrice: 0.08, inflationRate: 3, electricityIncreaseRate: 1, yearLimit: 25 } };
         const expectedElectricityCost = 103;
         const resultElectricityCost = calcElectricityCostMonthly(params);
         expect(round(resultElectricityCost)).toEqual(expectedElectricityCost);
     });
 
     it("should calculate solar cost monthly", () => {
-        const params: PredictionParams = { year: 0, clientParams: { consumptionYearly: 3500, unitPrice: 0.32, basePrice: 10, productionYearly: 7192 }, generalParams: { rent: 132, rentDiscountPeriod: 2, rentDiscountRate: 11.36, feedInPrice: 0.08, inflationRate: 3, electricityIncreaseRate: 1 } };
+        const params: PredictionParams = { year: 0, clientParams: { consumptionYearly: 3500, unitPrice: 0.32, basePrice: 10, productionYearly: 7192 }, generalParams: { rent: 132, rentDiscountPeriod: 2, rentDiscountRate: 11.36, feedInPrice: 0.08, inflationRate: 3, electricityIncreaseRate: 1, yearLimit: 25 } };
         const expectedSolarCost = 102;
         const result = calcSolarCostMonthly(params);
         expect(round(result)).toEqual(expectedSolarCost);
     });
 
     it("should calculate electricity cost monthly for 25 years", () => {
-        const params: PredictionParams = { year: 0, clientParams: { consumptionYearly: 3500, unitPrice: 0.32, basePrice: 10, productionYearly: 7192 }, generalParams: { rent: 132, rentDiscountPeriod: 2, rentDiscountRate: 11.36, feedInPrice: 0.08, inflationRate: 3, electricityIncreaseRate: 1 } };
+        const params: PredictionParams = { year: 0, clientParams: { consumptionYearly: 3500, unitPrice: 0.32, basePrice: 10, productionYearly: 7192 }, generalParams: { rent: 132, rentDiscountPeriod: 2, rentDiscountRate: 11.36, feedInPrice: 0.08, inflationRate: 3, electricityIncreaseRate: 1, yearLimit: 25 } };
         const expectedElectricityCost = [103, 107, 112, 116, 121, 126, 131, 136, 141, 147, 153, 159, 165, 172, 179, 186, 194, 201, 209, 218, 226, 235, 245, 255, 265];
         for (let i = 0; i < 25; i++) {
             const resultElectricityCost = calcElectricityCostMonthly({ ...params, year: i });
@@ -98,7 +98,7 @@ describe("ElectricityCostCalculator", () => {
     });
 
     it("should calculate feedIn tariff for 25 years", () => {
-        const params: PredictionParams = { year: 0, clientParams: { consumptionYearly: 3500, unitPrice: 0.32, basePrice: 10, productionYearly: 7192 }, generalParams: { rent: 132, rentDiscountPeriod: 2, rentDiscountRate: 11.36, feedInPrice: 0.08, inflationRate: 3, electricityIncreaseRate: 1 } };
+        const params: PredictionParams = { year: 0, clientParams: { consumptionYearly: 3500, unitPrice: 0.32, basePrice: 10, productionYearly: 7192 }, generalParams: { rent: 132, rentDiscountPeriod: 2, rentDiscountRate: 11.36, feedInPrice: 0.08, inflationRate: 3, electricityIncreaseRate: 1, yearLimit: 25 } };
         const expectedFeedInTarrif = [102, 102, 116, 116, 115, 114, 113, 113, 112, 111, 110, 109, 109, 108, 107, 106, 105, 104, 102, 101, 100, -33, -35, -36, -37];
         for (let i = 0; i < 25; i++) {
             const resultFeedInTariff = calcSolarCostMonthly({ ...params, year: i });
@@ -107,7 +107,7 @@ describe("ElectricityCostCalculator", () => {
     });
 
     it("should calculate predictions for 25 years", () => {
-        const params: PredictionParams = { year: 0, clientParams: { consumptionYearly: 3500, unitPrice: 0.32, basePrice: 10, productionYearly: 7192 }, generalParams: { rent: 132, rentDiscountPeriod: 2, rentDiscountRate: 11.36, feedInPrice: 0.08, inflationRate: 3, electricityIncreaseRate: 1 } };
+        const params: PredictionParams = { year: 0, clientParams: { consumptionYearly: 3500, unitPrice: 0.32, basePrice: 10, productionYearly: 7192 }, generalParams: { rent: 132, rentDiscountPeriod: 2, rentDiscountRate: 11.36, feedInPrice: 0.08, inflationRate: 3, electricityIncreaseRate: 1, yearLimit: 25, yearStep: 1 } };
         const expectedFeedInTarrif = [
             { year: 0, electricityCost: 103, solarCost: 102 },
             { year: 1, electricityCost: 107, solarCost: 102 },
@@ -133,9 +133,10 @@ describe("ElectricityCostCalculator", () => {
             { year: 21, electricityCost: 235, solarCost: 0 },
             { year: 22, electricityCost: 245, solarCost: 0 },
             { year: 23, electricityCost: 255, solarCost: 0 },
-            { year: 24, electricityCost: 265, solarCost: 0 }
+            { year: 24, electricityCost: 265, solarCost: 0 },
+            { year: 25, electricityCost: 275, solarCost: 0 },
         ];
-        const resultFeedInTariff = calcPredictions(25, params);
+        const resultFeedInTariff = calcPredictions(params);
         expect(resultFeedInTariff).toEqual(expectedFeedInTarrif);
     });
 });

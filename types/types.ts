@@ -5,6 +5,8 @@ export type GeneralParams = {
     feedInPrice: number;
     inflationRate: number;
     electricityIncreaseRate: number;
+    yearLimit: number;
+    yearStep: number;
 }
 
 export type ClientParams = {

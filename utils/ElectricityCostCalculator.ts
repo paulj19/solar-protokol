@@ -15,11 +15,11 @@ export const calculationMetrics: Record<string, NormalizationParams> = {
     "DECEMBER": { days: 31, electricityFactor: 1.07, solarFactor: 0.045 },
 };
 
-export function calcPredictions(yearLimit: number, params: PredictionParams): Array<CostPredictions> {
+export function calcPredictions(params: PredictionParams): Array<CostPredictions> {
     let costPredictions: Array<CostPredictions> = [];
     let electricityCost;
     let solarCost;
-    for (let i = 0; i < 25; i++) {
+    for (let i = 0; i <= params.generalParams.yearLimit; i += params.generalParams.yearStep ?? 1) {
         electricityCost = calcElectricityCostMonthly({ ...params, year: i });
         solarCost = calcSolarCostMonthly({ ...params, year: i });
         costPredictions.push({
@@ -28,6 +28,7 @@ export function calcPredictions(yearLimit: number, params: PredictionParams): Ar
     }
     return costPredictions;
 }
+
 export function calcElectricityCostMonthly(params: PredictionParams): number {
     return round(calcConsumptionCostMonthly(params) + calcBasePrice(params));
 }

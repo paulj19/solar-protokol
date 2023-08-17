@@ -4,9 +4,9 @@ export const rootApi = createApi({
     reducerPath: 'rootApi',
     baseQuery: fetchBaseQuery({ baseUrl: "" }),
     endpoints: builder => ({
-        getPredictionParams: builder.query({
+        getGeneralParams: builder.query({
             query: () => ({
-                url: "/extern-prediction-params",
+                url: "/general-params",
                 method: "get",
             })
         }),
@@ -21,4 +21,4 @@ export const rootApi = createApi({
 })
 
 
-export const { useGetPredictionParamsQuery, useGetClientParamsQuery } = rootApi;
+export const { useGetGeneralParamsQuery, useGetClientParamsQuery } = rootApi;
