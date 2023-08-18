@@ -1,4 +1,6 @@
 import styles from '@/app/comparison/stats/stats.module.css'
+import { PredictionParams } from '@/types/types';
+import { calcElectricityCostMonthly, calcSolarCostMonthly } from '@/utils/ElectricityCostCalculator';
 import { XAxis, BarChart, Bar, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, LabelList } from 'recharts';
 
 const renderCustomizedLabel = (props) => {
@@ -14,14 +16,15 @@ const renderCustomizedLabel = (props) => {
         </g>
     );
 };
-export default function ComparisonstatsChart({ year, costPredicted }) {
-    const energyCost = costPredicted[year].energyCostTotal;
-    const solarCost = costPredicted[year].solarCostTotal;
+export default function ComparisonstatsChart(params: PredictionParams) {
+    const electricityCost = calcElectricityCostMonthly(params);
+    const { solarCost } = calcSolarCostMonthly(params);
+
     return (
         <div className={styles.statsChart}>
             <ResponsiveContainer >
                 <BarChart
-                    data={[{ energyCost, solarCost }]}
+                    data={[{ energyCost: electricityCost, solarCost }]}
                     margin={{
                         top: 5,
                         right: 30,

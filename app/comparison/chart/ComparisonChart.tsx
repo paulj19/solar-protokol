@@ -91,8 +91,8 @@ export default function ComparisonChart({ clientId }) {
                     </label>
                 </div>
                 <div className={styles.rangeSelectors}>
-                    <Slider ticks={[3, 4, 5, 6, 7, 8]} onChangeHandler={setInflationRate} defaultValue={generalParams.inflationRate} label={"inflation rate"} />
-                    <Slider ticks={[0.30, 0.40, 0.50, 0.60, 0.70, 0.80]} onChangeHandler={setUnitPrice} defaultValue={clientParams.unitPrice} label={"cost per kwh"} />
+                    <Slider ticks={[3, 4, 5, 6, 7, 8]} onChangeHandler={setInflationRate} defaultValue={generalParams.inflationRate} label={"inflation rate(in %)"} step={1} />
+                    <Slider ticks={[0.30, 0.40, 0.50, 0.60, 0.70, 0.80]} onChangeHandler={setUnitPrice} defaultValue={clientParams.unitPrice} label={"cost per kwh"} step={0.01} />
                 </div>
                 <Link href={'/comparison/stats/123'}> STATS </Link>
             </div >

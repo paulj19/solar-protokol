@@ -21,7 +21,7 @@ export function calcPredictions(params: PredictionParams): Array<CostPredictions
     let solarCost;
     for (let i = 0; i <= params.generalParams.yearLimit; i += params.generalParams.yearStep ?? 1) {
         electricityCost = calcElectricityCostMonthly({ ...params, year: i });
-        solarCost = calcSolarCostMonthly({ ...params, year: i });
+        solarCost = calcSolarCostMonthly({ ...params, year: i }).solarCost;
         costPredictions.push({
             year: i, electricityCost, solarCost: solarCost > 0 ? solarCost : 0
         });
@@ -30,25 +30,30 @@ export function calcPredictions(params: PredictionParams): Array<CostPredictions
 }
 
 export function calcElectricityCostMonthly(params: PredictionParams): number {
-    return round(calcConsumptionCostMonthly(params) + calcBasePrice(params));
+    return calcConsumptionCostMonthly(params) + calcBasePrice(params);
 }
 
-export function calcSolarCostMonthly(params: PredictionParams): number {
-    return round(calcRent(params) + calcResidualConsumptionCostMonthly(params) + calcBasePrice(params) - calcFeedInTariffMonthly(params));
+export function calcSolarCostMonthly(params: PredictionParams) {
+    const rent = calcRent(params);
+    const residualConsumptionCostMonthly = calcResidualConsumptionCostMonthly(params);
+    const feedInTariffMonthly = calcFeedInTariffMonthly(params);
+    const basePrice = calcBasePrice(params);
+    const solarCost = rent + residualConsumptionCostMonthly + basePrice - feedInTariffMonthly;
+    return { rent, residualConsumptionCostMonthly, basePrice, feedInTariffMonthly, solarCost };
 }
 
 export function calcFeedInTariffMonthly(params: PredictionParams): number {
     const feedInGenerationYearly = getFeedInGeneration(params).reduce((sum, feedInGeneration) => sum + feedInGeneration, 0);
-    return (feedInGenerationYearly / 12) * calcFeedInPrice(params);
+    return round((feedInGenerationYearly / 12) * calcFeedInPrice(params));
 }
 
 export function calcResidualConsumptionCostMonthly(params: PredictionParams): number {
     const residualConsumptionYearly = calcResidualConsumption(params).reduce((sum, residualConsumption) => sum + residualConsumption, 0);
-    return (residualConsumptionYearly / 12) * calcUnitPrice(params);
+    return round((residualConsumptionYearly / 12) * calcUnitPrice(params));
 }
 
 export function calcConsumptionCostMonthly(params: PredictionParams): number {
-    return (params.clientParams.consumptionYearly / 12) * calcUnitPrice(params);
+    return round((params.clientParams.consumptionYearly / 12) * calcUnitPrice(params));
 }
 
 export function calcResidualConsumption({ clientParams: { consumptionYearly, productionYearly } }): Array<number> {
@@ -72,7 +77,7 @@ export function getFeedInGeneration({ clientParams: { productionYearly, consumpt
 }
 
 function calcBasePrice({ year, clientParams: { basePrice }, generalParams: { inflationRate, electricityIncreaseRate } }: PredictionParams): number {
-    return priceIncrease(basePrice, inflationRate + electricityIncreaseRate, year);
+    return round(priceIncrease(basePrice, inflationRate + electricityIncreaseRate, year));
 }
 
 function calcUnitPrice({ year, clientParams: { unitPrice }, generalParams: { inflationRate, electricityIncreaseRate } }: PredictionParams): number {

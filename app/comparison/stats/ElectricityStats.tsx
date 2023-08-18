@@ -1,6 +1,8 @@
 import styles from '@/app/comparison/stats/stats.module.css'
+import { PredictionParams } from '@/types/types';
+import { calcElectricityCostMonthly, calcSolarCostMonthly } from '@/utils/ElectricityCostCalculator';
 
-export function ElectricityStats(params) {
+export function ElectricityStats(params: PredictionParams) {
 
     return (
         <fieldset className={styles.fieldset}>
@@ -10,26 +12,26 @@ export function ElectricityStats(params) {
     )
 }
 
-function ElectricityCosts({ year, costPredicted, externParams: { priceBase } }) {
-    const costMonthly = costPredicted[year].energyCostUsage;
-    const costTotal = costPredicted[year].energyCostTotal;
+function ElectricityCosts(params: PredictionParams) {
+    const totalCost = calcElectricityCostMonthly(params);
+
     return (
         <div className={styles.costGrid}>
             <div className={styles.costHeading}>{"Ihre Strom kosten:"}</div>
             <div className={styles.costSum}>
                 <div className={styles.costElements}>
-                    <div className={styles.costLabel}>{"Grundgebühr"}</div>
-                    <div className={styles.costNumber}>{priceBase + "€"}</div>
+                    <div className={styles.costLabel}>{"Grundpreis"}</div>
+                    <div className={styles.costNumber}>{params.clientParams.basePrice + "€"}</div>
                 </div>
                 <div className={styles.costAddition}>{"+"}</div>
                 <div className={styles.costElements}>
                     <div className={styles.costLabel}>{"Stromverbrauch"}</div>
-                    <div className={styles.costNumber}>{costMonthly + "€"}</div>
+                    <div className={styles.costNumber}>{totalCost - params.clientParams.basePrice + "€"}</div>
                 </div>
                 <div className={styles.costAddition}>{"="}</div>
                 <div className={styles.costElements}>
                     <div className={styles.costLabel}>{"Summe"}</div>
-                    <div className={styles.costNumber}>{costTotal + "€"}</div>
+                    <div className={styles.costNumber}>{totalCost + "€"}</div>
                 </div>
             </div>
         </div>
