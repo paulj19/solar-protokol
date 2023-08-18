@@ -22,15 +22,16 @@ export default function Stats({ clientId }) {
     //isError -> error page, put in rootApi, if undefined show error
     //do all error checks
 
+    const predictionParams = { year, clientParams, generalParams };
     return (
         <div className={styles.statsContainer}>
             <h1 className={styles.yearHeading}>{"In " + (new Date().getFullYear() + year)}</h1>
             <div className={styles.statsSection}>
-                <ElectricityStats {...{ year, generalParams, clientParams }} />
-                <StatsChart {...{ year, generalParams, clientParams }} />
-                <SolarStats {...{ year, generalParams, clientParams }} />
+                <ElectricityStats {...predictionParams} />
+                <StatsChart {...predictionParams} />
+                <SolarStats {...predictionParams} />
             </div>
-            <TotalCostSavings year={year} />
+            <TotalCostSavings {...predictionParams} />
             <div className={styles.yearSlider}>
                 <Slider ticks={[0, 5, 10, 15, 20, 25]} onChangeHandler={setYear} defaultValue={year} label={""} step={1} />
             </div>

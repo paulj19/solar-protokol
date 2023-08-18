@@ -35,6 +35,9 @@ export default function ComparisonChart({ clientId }) {
     comparisonData = calcPredictions({ year: undefined, clientParams: { ...clientParams, unitPrice: unitPrice ?? clientParams.unitPrice }, generalParams: { ...generalParams, inflationRate: inflationRate ?? generalParams.inflationRate } });
     let xx = false;
     comparisonDataWithRange = comparisonData.reduce((acc, item, i, array) => {
+        if (i % 5 !== 0) {
+            return acc;
+        }
         if (item.electricityCost >= item.solarCost) {
             if (i >= 1 && xx === false) {
                 const intersectionResut = intersect(array[i - 1].year, array[i - 1].solarCost, item.year, item.solarCost, array[i - 1].year, array[i - 1].electricityCost, item.year, item.electricityCost);

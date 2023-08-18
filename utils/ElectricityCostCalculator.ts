@@ -19,7 +19,7 @@ export function calcPredictions(params: PredictionParams): Array<CostPredictions
     let costPredictions: Array<CostPredictions> = [];
     let electricityCost;
     let solarCost;
-    for (let i = 0; i <= params.generalParams.yearLimit; i += params.generalParams.yearStep ?? 1) {
+    for (let i = 0; i <= 25; i += 1) {
         electricityCost = calcElectricityCostMonthly({ ...params, year: i });
         solarCost = calcSolarCostMonthly({ ...params, year: i }).solarCost;
         costPredictions.push({
@@ -27,6 +27,16 @@ export function calcPredictions(params: PredictionParams): Array<CostPredictions
         });
     }
     return costPredictions;
+}
+
+export function calcTotalSaved(params: PredictionParams): number {
+    const predictedCosts = calcPredictions(params);
+
+    let totalSaved = 0;
+    for (let i = 0; i <= params.year; i++) {
+        totalSaved += (predictedCosts[i].electricityCost - predictedCosts[i].solarCost) * 12;
+    }
+    return totalSaved;
 }
 
 export function calcElectricityCostMonthly(params: PredictionParams): number {

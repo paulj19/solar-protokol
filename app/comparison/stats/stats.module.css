@@ -57,6 +57,8 @@
     padding: 8px;
     margin: 4px;
     color: rgb(0, 88, 59);
+    width: 130px;
+    text-align: center;
 }
 
 .yearSlider {
