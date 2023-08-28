@@ -27,7 +27,6 @@ export default function ClientList() {
         <tbody>
             {
                 Object.entries(clientList).map(([key, value]) => {
-
                     return (
                         <>
                             {

@@ -250,5 +250,6 @@ thead th:nth-child(4) {
 
 th,
 td {
-  padding: 20px;
+  padding: 10px;
+  text-align: left;
 }
