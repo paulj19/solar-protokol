@@ -10,8 +10,10 @@ import Loading from "@/app/Loading";
 import { useGetClientParamsQuery, useGetGeneralParamsQuery } from "@/context/RootApi";
 import { getPredictionCostsAllYears } from "@/utils/EnergyCostCalculator";
 import styles from '@/app/comparison/stats/stats.module.css'
+import { useParams, useSearchParams } from "react-router-dom";
 
-export default function Stats({ clientId }) {
+export default function Stats() {
+    const { clientId } = useParams();
     const [year, setYear] = useState<number>(0);
     const { data: generalParams, isLoading: isGeneralParamLoading, isError: isGeneralParamQueryError } = useGetGeneralParamsQuery(undefined);
     const { data: clientParams, isLoading: isClientParamLoading, isError: isClientParamQueryError } = useGetClientParamsQuery(clientId);

@@ -5,32 +5,31 @@ import { Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer
 import { getComparisonData } from "@/utils/EnergyCostCalculator";
 import styles from './ComparisonChart.module.css'
 import Slider from '../../components/Slider';
-import { useGetClientParamsQuery, useGetGeneralParamsQuery } from '@/context/RootApi';
+import { useGetGeneralParamsQuery, selectClientById, selectClientByIdResult } from '@/context/RootApi';
 import Loading from '../../Loading';
 import Link from 'next/link';
 import { calcPredictions } from '@/utils/ElectricityCostCalculator';
 import { CostPredictions } from '@/types/types';
+import { useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
 
-export default function ComparisonChart({ clientId }) {
+export default function ComparisonChart() {
     const [inflationRate, setInflationRate] = useState<number>(null)
     const [unitPrice, setUnitPrice] = useState<number>(null)
     const [showSloar, setShowSolar] = useState<boolean>(false);
+    const { clientId } = useParams();
 
-    const { data: generalParams, isLoading: isGeneralParamLoading, isError: isGeneralParamsQueryError } = useGetGeneralParamsQuery(undefined);
-    const { data: clientParams, isLoading: isClientParamLoading, isError: isClientParamQueryError } = useGetClientParamsQuery(clientId);
+    //todo replace with clientId
+    const clientParams = useSelector(state => selectClientById(state, "cid_1"));
     let comparisonData: Array<CostPredictions>;
     //todo why undef rendered twice
     let comparisonDataWithRange;
+    const { data: generalParams, isLoading: isGeneralParamLoading, isError: isGeneralParamsError } = useGetGeneralParamsQuery(undefined);
 
-    if (isClientParamLoading || isGeneralParamLoading) {
-        return <Loading />;
+    if (!clientParams || !generalParams) {
+        return <div>no data, fix me</div>
     }
-    if (isGeneralParamsQueryError) {
-        //todo modal to enter params manually
-    }
-    if (isClientParamQueryError) {
-        //todo modal to enter params manually
-    }
+    //todo no direct url calls with cid, then have to handle loading and error conditions of query
 
     comparisonData = calcPredictions({ year: undefined, clientParams: { ...clientParams, unitPrice: unitPrice ?? clientParams.unitPrice }, generalParams: { ...generalParams, inflationRate: inflationRate ?? generalParams.inflationRate } });
     let xx = false;

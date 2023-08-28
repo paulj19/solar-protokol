@@ -5,7 +5,7 @@ import store from "@/app/store"
 import { worker } from "@/mocks/browser";
 
 if (process.env.NODE_ENV === 'development') {
-    worker.listen({ onUnhandledRequest: 'bypass' })
+    // worker.listen({ onUnhandledRequest: 'bypass' })
 }
 
 export default function ProviderProxy({ children }) {
