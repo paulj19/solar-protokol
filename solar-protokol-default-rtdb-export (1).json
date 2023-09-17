@@ -1,0 +1,211 @@
+{
+  "clientList": {
+    "uid_1": {
+      "2023-08-22": {
+        "cid_1": {
+          "basePrice": 10,
+          "consumptionYearly": 3500,
+          "creationDate": "2023-08-22T12:04:24.211Z",
+          "id": 1,
+          "nickname": "john walter",
+          "presentationDate": "2023-08-22T07:00:24.211Z",
+          "productionYearly": 7192,
+          "remarks": "This is a remark",
+          "status": "done",
+          "unitPrice": 0.32
+        },
+        "cid_10": {
+          "basePrice": 10,
+          "consumptionYearly": 3500,
+          "creationDate": "2023-08-22T12:04:24.211Z",
+          "id": 10,
+          "nickname": "abc and then 123898",
+          "presentationDate": "2023-08-22T17:00:24.211Z",
+          "productionYearly": 5192,
+          "remarks": "This is a remark, he is a good guy, but it is a bit long, so we will see how it goes, maybe does not go that well, who knows, we will see",
+          "status": "open",
+          "unitPrice": 0.32
+        },
+        "cid_11": {
+          "basePrice": 10,
+          "consumptionYearly": 3500,
+          "creationDate": "2023-08-22T12:04:24.211Z",
+          "id": 11,
+          "nickname": "abc and then 123898",
+          "presentationDate": "2023-08-22T18:00:24.211Z",
+          "productionYearly": 5192,
+          "remarks": "This is a remark, he is a good guy, but it is a bit long, so we will see how it goes, maybe does not go that well, who knows, we will see",
+          "status": "open",
+          "unitPrice": 0.32
+        },
+        "cid_2": {
+          "basePrice": 20,
+          "consumptionYearly": 6500,
+          "creationDate": "2023-08-22T12:04:24.211Z",
+          "id": 2,
+          "nickname": "peter walterstein",
+          "presentationDate": "2023-08-22T08:30:24.211Z",
+          "productionYearly": 7192,
+          "remarks": "This is a remark, he is a good guy, but it is a bit long, so we will see how it goes",
+          "status": "open",
+          "unitPrice": 0.32
+        },
+        "cid_3": {
+          "basePrice": 10,
+          "consumptionYearly": 1500,
+          "creationDate": "2023-08-22T12:04:24.211Z",
+          "id": 3,
+          "nickname": "mathias jeferson walterstein",
+          "presentationDate": "2023-08-22T09:00:24.211Z",
+          "productionYearly": 3592,
+          "remarks": "This is a remark, he is a good guy, but it is a bit long, so we will see how it goes, maybe does not go that well, who knows, we will see",
+          "status": "open",
+          "unitPrice": 0.32
+        },
+        "cid_4": {
+          "basePrice": 10,
+          "consumptionYearly": 1500,
+          "creationDate": "2023-08-22T12:04:24.211Z",
+          "id": 4,
+          "nickname": "mathias",
+          "presentationDate": "2023-08-22T10:30:24.211Z",
+          "productionYearly": 3592,
+          "remarks": "",
+          "status": "open",
+          "unitPrice": 0.32
+        },
+        "cid_5": {
+          "basePrice": 10,
+          "consumptionYearly": 4500,
+          "creationDate": "2023-08-22T12:04:24.211Z",
+          "id": 5,
+          "nickname": "",
+          "presentationDate": "2023-08-22T12:00:24.211Z",
+          "productionYearly": 2192,
+          "remarks": "",
+          "status": "open",
+          "unitPrice": 0.32
+        },
+        "cid_6": {
+          "basePrice": 10,
+          "consumptionYearly": 3500,
+          "creationDate": "2023-08-22T12:04:24.211Z",
+          "id": 6,
+          "nickname": "123898",
+          "presentationDate": "2023-08-22T13:00:24.211Z",
+          "productionYearly": 7192,
+          "remarks": "This is a remark, he is a good guy, but it is a bit long, so we will see how it goes, maybe does not go that well, who knows, we will see",
+          "status": "open",
+          "unitPrice": 0.32
+        },
+        "cid_7": {
+          "basePrice": 10,
+          "consumptionYearly": 3500,
+          "creationDate": "2023-08-22T12:04:24.211Z",
+          "id": 7,
+          "nickname": "john walter",
+          "presentationDate": "2023-08-22T14:00:24.211Z",
+          "productionYearly": 5192,
+          "remarks": "This is a remark",
+          "status": "open",
+          "unitPrice": 0.32
+        },
+        "cid_8": {
+          "basePrice": 10,
+          "consumptionYearly": 3500,
+          "creationDate": "2023-08-22T12:04:24.211Z",
+          "id": 8,
+          "nickname": "john walter",
+          "presentationDate": "2023-08-22T15:00:24.211Z",
+          "productionYearly": 5192,
+          "remarks": "This is a remark",
+          "status": "open",
+          "unitPrice": 0.32
+        },
+        "cid_9": {
+          "basePrice": 10,
+          "consumptionYearly": 3500,
+          "creationDate": "2023-08-22T12:04:24.211Z",
+          "id": 9,
+          "nickname": "123898",
+          "presentationDate": "2023-08-22T16:00:24.211Z",
+          "productionYearly": 5192,
+          "remarks": "This is a remark, he is a good guy, but it is a bit long, so we will see how it goes, maybe does not go that well, who knows, we will see",
+          "status": "open",
+          "unitPrice": 0.32
+        }
+      },
+      "2023-08-23": {
+        "cid_1": {
+          "basePrice": 10,
+          "consumptionYearly": 3500,
+          "creationDate": "2023-08-22T12:04:24.211Z",
+          "id": 1,
+          "nickname": "john walter",
+          "presentationDate": "2023-08-22T07:00:24.211Z",
+          "productionYearly": 7192,
+          "remarks": "This is a remark",
+          "status": "done",
+          "unitPrice": 0.32
+        },
+        "cid_2": {
+          "basePrice": 10,
+          "consumptionYearly": 3500,
+          "creationDate": "2023-08-22T12:04:24.211Z",
+          "id": 2,
+          "nickname": "abc and then 123898",
+          "presentationDate": "2023-08-22T17:00:24.211Z",
+          "productionYearly": 5192,
+          "remarks": "This is a remark, he is a good guy, but it is a bit long, so we will see how it goes, maybe does not go that well, who knows, we will see",
+          "status": "open",
+          "unitPrice": 0.32
+        },
+        "cid_3": {
+          "basePrice": 10,
+          "consumptionYearly": 3500,
+          "creationDate": "2023-08-22T12:04:24.211Z",
+          "id": 3,
+          "nickname": "abc and then 123898",
+          "presentationDate": "2023-08-22T18:00:24.211Z",
+          "productionYearly": 5192,
+          "remarks": "This is a remark, he is a good guy, but it is a bit long, so we will see how it goes, maybe does not go that well, who knows, we will see",
+          "status": "open",
+          "unitPrice": 0.32
+        },
+        "cid_4": {
+          "basePrice": 20,
+          "consumptionYearly": 6500,
+          "creationDate": "2023-08-22T12:04:24.211Z",
+          "id": 4,
+          "nickname": "peter walterstein",
+          "presentationDate": "2023-08-22T08:30:24.211Z",
+          "productionYearly": 7192,
+          "remarks": "This is a remark, he is a good guy, but it is a bit long, so we will see how it goes",
+          "status": "open",
+          "unitPrice": 0.32
+        },
+        "cid_5": {
+          "basePrice": 10,
+          "consumptionYearly": 1500,
+          "creationDate": "2023-08-22T12:04:24.211Z",
+          "id": 5,
+          "nickname": "mathias jeferson walterstein",
+          "presentationDate": "2023-08-22T09:00:24.211Z",
+          "productionYearly": 3592,
+          "remarks": "This is a remark, he is a good guy, but it is a bit long, so we will see how it goes, maybe does not go that well, who knows, we will see",
+          "status": "open",
+          "unitPrice": 0.32
+        }
+      }
+    }
+  },
+  "generalParams": {
+    "electricityIncreaseRate": 1,
+    "feedInPrice": 0.08,
+    "inflationRate": 3,
+    "rent": 132,
+    "rentDiscountPeriod": 2,
+    "rentDiscountRate": 11.36,
+    "yearLimit": 25
+  }
+}

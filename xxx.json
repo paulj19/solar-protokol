@@ -1,0 +1,24 @@
+{
+    "uid_1": {
+        "2023-08-22": {
+            "cid_1": {
+                "consumptionYearly": 3500,
+                "unitPrice": 0.32,
+                "basePrice": 10,
+                "productionYearly": 7192,
+                "presentationDate": "2023-08-22T15:04:24.211Z",
+                "creationDate": "2023-08-22T12:04:24.211Z"
+            }
+        },
+        "2023-08-23": {
+            "cid_1": {
+                "consumptionYearly": 3500,
+                "unitPrice": 0.32,
+                "basePrice": 10,
+                "productionYearly": 7192,
+                "presentationDate": "2023-08-22T15:04:24.211Z",
+                "creationDate": "2023-08-22T12:04:24.211Z"
+            }
+        }
+    }
+}

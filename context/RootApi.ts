@@ -1,7 +1,7 @@
-import { createSelector } from '@reduxjs/toolkit';
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import { create } from 'domain';
-import { createScanner } from 'typescript';
+import {createSelector} from '@reduxjs/toolkit';
+import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react'
+import {create} from 'domain';
+import {createScanner} from 'typescript';
 
 let currentStartDate;
 let currentEndDate;
@@ -21,7 +21,8 @@ let currentEndDate;
 //todo single query both client and general params
 export const rootApi = createApi({
     reducerPath: 'rootApi',
-    baseQuery: fetchBaseQuery({ baseUrl: "https://solar-protokol-default-rtdb.europe-west1.firebasedatabase.app" }),
+    baseQuery: fetchBaseQuery({baseUrl: "https://solar-protokol-default-rtdb.europe-west1.firebasedatabase.app"}),
+    tagTypes: ["HighestClientId"],
     endpoints: builder => ({
         getGeneralParams: builder.query({
             query: () => ({
@@ -30,7 +31,7 @@ export const rootApi = createApi({
             })
         }),
         getClientListByPDate: builder.query({
-            query: ({ startDate, endDate }) => {
+            query: ({startDate, endDate}) => {
                 currentStartDate = startDate;
                 currentEndDate = endDate;
                 return {
@@ -43,15 +44,49 @@ export const rootApi = createApi({
                     }
                 }
             },
-        })
+        }),
+        getHighestClientId: builder.query({
+            query: (userId) => ({
+                url: `/highestClientId/${userId}.json`,
+            }),
+            transformResponse: function (response, meta, arg) {
+                return {"highestClientId": response}
+            },
+            providesTags: ["HighestClientId"],
+        }),
+        updateHighestClientId: builder.mutation({
+            query: (data) => ({
+                url: `/highestClientId.json`,
+                method: 'PATCH',
+                body: data,
+            }),
+            async onQueryStarted({...data},{ dispatch, queryFulfilled}) {
+                try {
+                    console.log("data", data);
+                    const result = await queryFulfilled;
+                    dispatch(rootApi.util.updateQueryData("getHighestClientId", "uid_1", (draft) => {
+                        Object.assign(draft, {"highestClientId": result?.data?.uid_1});
+                    }))
+                } catch (e) {
+                    console.error(e);
+                }
+            },
+        }),
+        addClient: builder.mutation({
+            query: (data) => ({
+                url: `/clientList.json`,
+                method: 'PATCH',
+                body: data,
+            })
+        }),
     })
 })
 
-export const selectClientByIdResult = rootApi.endpoints.getClientListByPDate.select({ endDate: currentEndDate, startDate: currentStartDate, });
+export const selectClientByIdResult = rootApi.endpoints.getClientListByPDate.select({endDate: currentEndDate, startDate: currentStartDate,});
 
 export const selectClientById = createSelector(
     selectClientByIdResult, (state, clientId) => clientId,
-    ({ data: clients }, clientId: string) => {
+    ({data: clients}, clientId: string) => {
         if (!clients) return {
             "basePrice": 10,
             "consumptionYearly": 3500,
@@ -69,4 +104,4 @@ export const selectClientById = createSelector(
 //     selectAllClientListToday, (state, clientId) => clientId,
 //     (client, clientId) => client[clientId])
 
-export const { useGetGeneralParamsQuery, useGetClientListByPDateQuery } = rootApi;
+export const {useGetGeneralParamsQuery, useGetClientListByPDateQuery, useAddClientMutation, useGetHighestClientIdQuery, useUpdateHighestClientIdMutation} = rootApi;

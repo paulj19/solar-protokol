@@ -105,6 +105,12 @@ a {
     color-scheme: dark;
   }
 } */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {}
+
 div#banner {
   position: absolute;
   top: 0;
@@ -224,29 +230,6 @@ option {
 
 option::after {}
 
-/* spacing */
-
-table {
-  table-layout: fixed;
-  width: 100%;
-  border-collapse: collapse;
-}
-
-thead th:nth-child(1) {
-  width: 20%;
-}
-
-thead th:nth-child(2) {
-  width: 1%;
-}
-
-thead th:nth-child(3) {
-  width: 15%;
-}
-
-thead th:nth-child(4) {
-  width: 35%;
-}
 
 th,
 td {

@@ -6,7 +6,7 @@ import { getComparisonData } from "@/utils/EnergyCostCalculator";
 import styles from './ComparisonChart.module.css'
 import Slider from '../../components/Slider';
 import { useGetGeneralParamsQuery, selectClientById, selectClientByIdResult } from '@/context/RootApi';
-import Loading from '../../Loading';
+import Loading from "@/app/components/Loading";
 import Link from 'next/link';
 import { calcPredictions } from '@/utils/ElectricityCostCalculator';
 import { CostPredictions } from '@/types/types';

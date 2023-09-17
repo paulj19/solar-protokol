@@ -31,3 +31,11 @@ export type CostPredictions = {
     electricityCost: number;
     solarCost: number;
 }
+//create type Client with all corresponding fields
+export type Client = {
+    id: string;
+    nickname: string;
+    remarks: string;
+    presentationDate: string;
+    status: string;
+}

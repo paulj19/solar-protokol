@@ -6,11 +6,11 @@ import StatsChart from "./StatsChart";
 import { ElectricityStats } from "./ElectricityStats";
 import SolarStats from "./SolarStats";
 import TotalCostSavings from "./TotalCostSavings";
-import Loading from "@/app/Loading";
 import { useGetClientParamsQuery, useGetGeneralParamsQuery } from "@/context/RootApi";
 import { getPredictionCostsAllYears } from "@/utils/EnergyCostCalculator";
 import styles from '@/app/comparison/stats/stats.module.css'
 import { useParams, useSearchParams } from "react-router-dom";
+import Loading from "@/app/components/Loading";
 
 export default function Stats() {
     const { clientId } = useParams();
