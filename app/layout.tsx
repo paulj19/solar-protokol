@@ -30,8 +30,8 @@ export default async function RootLayout({
         <ProviderProxy >
           {children}
         </ProviderProxy>
-        <div id="banner">
-          <Image id="enpal-logo" src={logo} alt="Enpal ." />
+        <div className="absolute top-0 left-0 bg-gray-100 w-full flex">
+          <Image id="enpal-logo" src={logo} alt="Enpal ." className="block w-[100px] h-[50px] mx-auto p-[5px]"/>
         </div>
       </body>
     </html>

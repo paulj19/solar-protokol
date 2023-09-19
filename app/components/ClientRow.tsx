@@ -1,24 +1,24 @@
-import { Link } from "react-router-dom";
-import {EditAttributesOutlined, EditOutlined, PlayArrow, PlayArrowOutlined} from "@mui/icons-material";
+import {Link} from "react-router-dom";
+import {DeleteOutlined, EditOutlined, PlayArrow} from "@mui/icons-material";
 import Button from '@material-ui/core/Button';
-import {Client} from "@/types/types";
-export function ClientRow({ id, nickname, remarks, presentationDate, status }: Client) {
+
+export function ClientRow({client:{ id, nickname, remarks, presentationDate, status }, setModalParams,triggerDeleteClient}) {
     return (
         <tr key={id} className="border h-[80px] shadow-sm">
             <th className="font-mono">{extractLocalTime(presentationDate)}</th>
             <td>{id}</td>
             <td>{nickname}</td>
             <td>{remarks}</td>
-            {/* <TruncatedRemark remarks={remarks} /> */}
             <td>{status}</td>
-            <td>
-                <Button variant="outlined" component={Link} to="/comparisonChart/123" color="inherit" startIcon={<PlayArrow/>}>
+            <td className="flex justify-between">
+                <Button variant="contained" component={Link} to="/comparisonChart/123" className="w-[115px]" color="inherit" startIcon={<PlayArrow/>}>
                     Present
                 </Button>
-            </td>
-            <td>
-                <Button variant="outlined" component={Link} to="/#" color="inherit" startIcon={<EditOutlined/>}>
+                <Button variant="contained" color="inherit" startIcon={<EditOutlined/>} className="w-[115px]" onClick={() => setModalParams({openModal: true,  clientIdToEdit: id})}>
                     Edit
+                </Button>
+                <Button variant="contained" color="inherit" startIcon={<DeleteOutlined/>} className="w-[115px]" onClick={() => triggerDeleteClient(presentationDate, id)}>
+                    Delete
                 </Button>
             </td>
         </tr>
@@ -36,7 +36,7 @@ const TruncatedRemark = ({ remarks }: any) => {
 };
 
 function extractLocalTime(utcTimestamp) {
+    //todo date-fns
     const date = new Date(utcTimestamp);
-    const localTime = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    return localTime;
+    return date.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'});
 }

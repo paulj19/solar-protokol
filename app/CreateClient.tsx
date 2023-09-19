@@ -1,43 +1,41 @@
 import {Alert, Button, InputAdornment, InputLabel, MenuItem, Select, Snackbar, TextField} from "@mui/material";
 import {StaticDateTimePicker} from "@mui/x-date-pickers";
-import { Controller, useForm } from "react-hook-form";
+import {Controller, useForm} from "react-hook-form";
 import {
     useAddClientMutation,
     useGetHighestClientIdQuery,
     useUpdateHighestClientIdMutation
 } from "@/context/RootApi";
-import {format} from "date-fns";
-import {useState} from "react";
+import {addHours, format, setHours} from "date-fns";
+import {useRef, useState} from "react";
 import {Typography} from "@mui/joy";
 import Loading from "@/app/components/Loading";
-import {isError} from "@jest/expect-utils";
 
-export function CreateClient({selectedDate, clientToEdit}: { selectedDate: string, clientToEdit?: any }) {
-    const {data , isLoading, isFetching, isError} = useGetHighestClientIdQuery("uid_1", {skip: clientToEdit !== undefined});
-    console.log("isFetching", isFetching, isLoading)
-    console.log("highest", data?.highestClientId)
-    const defaultValues =      {       nickname: "",
+export function CreateClient({selectedDate, clientToEdit, setModalParams}) {
+    const {data, isLoading: isIdLoading, isFetching: isIdFetching, isError} = useGetHighestClientIdQuery("uid_1", {skip: Boolean(clientToEdit)});
+    const prevPresentationDate = useRef<Date>();
+    const defaultValues = {
+        nickname: "",
         remarks: "",
         status: "Open",
-        id: data ? data.highestClientId + 1 : null,
-        presentationDate: new Date(selectedDate).setHours(10, 0, 0, 0),
         basePrice: 10,
         unitPrice: 32,
         consumptionYearly: 3500,
-        productionYearly: 7000,}
-
-    const {control, reset, formState: {errors}, handleSubmit} = useForm({
-        values: clientToEdit ?? {
+        productionYearly: 7000,
+    }
+    const [updateHighestClientId] = useUpdateHighestClientIdMutation();
+    const [addNewClient, result] = useAddClientMutation();
+    const {control, reset, formState , handleSubmit} = useForm({
+        values: clientToEdit ? {...clientToEdit, presentationDate: new Date(clientToEdit.presentationDate), unitPrice: clientToEdit.unitPrice * 100} : {
             ...defaultValues,
-            id: data ? data.highestClientId + 1 : null,
+            presentationDate: prevPresentationDate.current ? addHours(prevPresentationDate.current, 1) : setHours(new Date(selectedDate), 10),
+            id: data ? data.highestClientId + 1 : 0,
         }
     });
-    const [updateHighestClientId] = useUpdateHighestClientIdMutation();
-    const [addNewClient] = useAddClientMutation();
-    const [openSuccessSnack, setOpenSuccessSnack] = useState(false);
+    const [snackData, setSnackData] = useState({open: false, severity: null, message: null});
 
     if (!clientToEdit) {
-        if (isLoading ){
+        if (isIdLoading) {
             return <Loading/>;
         }
         if (isError) {
@@ -46,22 +44,40 @@ export function CreateClient({selectedDate, clientToEdit}: { selectedDate: strin
     }
 
     const onSubmit = async (data) => {
-        //todo sanity checks, e.g. if id is not null, presentationDate is duplicated, etc.
-        const unitPrice = data.unitPrice / 100;
-        const presentationDate = format(data.presentationDate, "yyyy-MM-dd");
+        try {
+            //todo presentationDate is duplicated, etc.
+            if (!data.id || !data.presentationDate || !data.basePrice || !data.unitPrice || !data.consumptionYearly || !data.productionYearly) {
+                setSnackData({open: true, severity: "error", message: "An error occurred, please refresh the page and try again."});
+                return;
+            }
+            const unitPrice = data.unitPrice / 100;
+            //todo check if presentationDate is in string
+            const presentationDate = format(new Date(data.presentationDate), "yyyy-MM-dd");
 
-        const newClient = {nickname: data.nickname, presentationDate: data.presentationDate, remarks: data.remarks, status: data.status, id: data.id, basePrice: data.basePrice, unitPrice: unitPrice, consumptionYearly: data.consumptionYearly, productionYearly: data.productionYearly}
-        //edit => update and close
+            const client = {nickname: data.nickname, presentationDate: data.presentationDate.toString(), remarks: data.remarks, status: data.status, id: data.id, basePrice: data.basePrice, unitPrice: unitPrice, consumptionYearly: data.consumptionYearly, productionYearly: data.productionYearly}
 
-        await addNewClient({["uid_1/" + presentationDate + "/cid_" + newClient.id]: newClient});
-        await updateHighestClientId({"uid_1": newClient.id});
+            await addNewClient({pDate: presentationDate, data: {["uid_1/" + presentationDate + "/cid_" + client.id]: client}}).unwrap()
 
-        console.log("UPDATED")
-        setOpenSuccessSnack(true);
+            if (!clientToEdit) {
+                await updateHighestClientId({"uid_1": client.id}).unwrap().catch((e) => {
+                    //todo delete client again
+                });
+                prevPresentationDate.current = data.presentationDate;
+                setSnackData({open: true, severity: "success", message: "Client creation success!"});
+            } else {
+                setSnackData({open: true, severity: "success", message: "Client edit success!"});
+                setTimeout(() => {
+                    setModalParams({openModal: false, clientIdToEdit: null});
+                }, 2000);
+            }
+        } catch (e) {
+            console.error("error on add or edit client", e);
+            setSnackData({open: true, severity: "error", message: "An error occurred, please refresh the page and try again."});
+        }
     };
 
     const handleSnackClose = () => {
-        setOpenSuccessSnack(false);
+        setSnackData({open: false, severity: null, message: null});
     };
 
     return (
@@ -111,7 +127,7 @@ export function CreateClient({selectedDate, clientToEdit}: { selectedDate: strin
                         <Controller
                             name="id"
                             control={control}
-                            render={({field}) => <TextField {...field} label="client id" disabled/>}
+                            render={({field}) => <TextField {...field} label="client id" disabled />}
                         />
                         <Controller
                             name="basePrice"
@@ -150,17 +166,17 @@ export function CreateClient({selectedDate, clientToEdit}: { selectedDate: strin
                         render={({field}) =>
                             <div className="border border-gray-400 rounded-md p-3">
                                 <InputLabel>Presentation Date</InputLabel>
-                                <StaticDateTimePicker {...field} ampm={false} />
+                                <StaticDateTimePicker {...field} ampm={false}/>
                             </div>
                         }
                     />
-                    <Button variant="outlined" type="submit">Save</Button>
-                    <Button variant="outlined" type="reset">Reset</Button>
+                    <Button variant="contained" color="inherit" type="submit">Save</Button>
+                    <Button variant="contained" color="inherit" type="reset">Reset</Button>
                 </form>
-                <Snackbar open={openSuccessSnack} autoHideDuration={6000}
+                <Snackbar open={snackData.open} autoHideDuration={3000}
                           anchorOrigin={{vertical: 'bottom', horizontal: 'center'}} onClose={handleSnackClose}>
-                    <Alert severity="success" sx={{width: '100%'}} onClose={handleSnackClose}>
-                        Client created!
+                    <Alert severity={snackData.severity ?? "info"} sx={{width: '100%'}} onClose={handleSnackClose}>
+                        {snackData.message}
                     </Alert>
                 </Snackbar>
             </div>

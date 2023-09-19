@@ -2,6 +2,7 @@ import {createSelector} from '@reduxjs/toolkit';
 import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react'
 import {create} from 'domain';
 import {createScanner} from 'typescript';
+import arg from "arg";
 
 let currentStartDate;
 let currentEndDate;
@@ -22,7 +23,7 @@ let currentEndDate;
 export const rootApi = createApi({
     reducerPath: 'rootApi',
     baseQuery: fetchBaseQuery({baseUrl: "https://solar-protokol-default-rtdb.europe-west1.firebasedatabase.app"}),
-    tagTypes: ["HighestClientId"],
+    tagTypes: ["HighestClientId", "ClientList"],
     endpoints: builder => ({
         getGeneralParams: builder.query({
             query: () => ({
@@ -44,6 +45,10 @@ export const rootApi = createApi({
                     }
                 }
             },
+            providesTags: (result, error, {startDate}) =>
+                result
+                    ? [({type: "ClientList" as const, id: startDate}), "ClientList"]
+                    : ["ClientList"],
         }),
         getHighestClientId: builder.query({
             query: (userId) => ({
@@ -60,9 +65,8 @@ export const rootApi = createApi({
                 method: 'PATCH',
                 body: data,
             }),
-            async onQueryStarted({...data},{ dispatch, queryFulfilled}) {
+            async onQueryStarted({...data}, {dispatch, queryFulfilled}) {
                 try {
-                    console.log("data", data);
                     const result = await queryFulfilled;
                     dispatch(rootApi.util.updateQueryData("getHighestClientId", "uid_1", (draft) => {
                         Object.assign(draft, {"highestClientId": result?.data?.uid_1});
@@ -73,11 +77,20 @@ export const rootApi = createApi({
             },
         }),
         addClient: builder.mutation({
-            query: (data) => ({
+            query: ({pDate, data}) => {
+                return {
                 url: `/clientList.json`,
                 method: 'PATCH',
                 body: data,
-            })
+            }},
+            invalidatesTags: (result, error, {pDate}) => [{type: "ClientList", id: pDate}]
+        }),
+        deleteClient: builder.mutation({
+            query: ({pDate, clientId}) => ({
+                url: `/clientList/uid_1/${pDate}/${clientId}.json`,
+                method: 'DELETE',
+            }),
+            invalidatesTags: (result, error, {pDate}) => [{type: "ClientList", id: pDate}]
         }),
     })
 })
@@ -104,4 +117,4 @@ export const selectClientById = createSelector(
 //     selectAllClientListToday, (state, clientId) => clientId,
 //     (client, clientId) => client[clientId])
 
-export const {useGetGeneralParamsQuery, useGetClientListByPDateQuery, useAddClientMutation, useGetHighestClientIdQuery, useUpdateHighestClientIdMutation} = rootApi;
+export const {useGetGeneralParamsQuery, useGetClientListByPDateQuery, useAddClientMutation, useGetHighestClientIdQuery, useUpdateHighestClientIdMutation, useDeleteClientMutation} = rootApi;

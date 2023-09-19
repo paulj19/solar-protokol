@@ -111,22 +111,6 @@ a {
 
 body {}
 
-div#banner {
-  position: absolute;
-  top: 0;
-  left: 0;
-  background-color: #f8f6f6;
-  width: 100%;
-}
-
-img#enpal-logo {
-  display: block;
-  width: 100px;
-  height: 50px;
-  margin: 0 auto;
-  padding: 5px;
-}
-
 input[type='range'] {
   box-sizing: border-box;
   border: 0px solid transparent;
