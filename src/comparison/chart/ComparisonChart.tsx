@@ -6,25 +6,27 @@ import { getComparisonData } from "@/utils/EnergyCostCalculator";
 import styles from './ComparisonChart.module.css'
 import Slider from '../../components/Slider';
 import { useGetGeneralParamsQuery, selectClientById, selectClientByIdResult } from '@/context/RootApi';
-import Loading from "@/app/components/Loading";
-import Link from 'next/link';
+import Loading from "@/src/components/Loading";
 import { calcPredictions } from '@/utils/ElectricityCostCalculator';
 import { CostPredictions } from '@/types/types';
 import { useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import {Link, useParams} from 'react-router-dom';
+import {Fab} from "@mui/material";
+import {ArrowForward} from "@mui/icons-material";
 
-export default function ComparisonChart() {
+export default function ComparisonChart({clientId}) {
     const [inflationRate, setInflationRate] = useState<number>(null)
     const [unitPrice, setUnitPrice] = useState<number>(null)
-    const [showSloar, setShowSolar] = useState<boolean>(false);
-    const { clientId } = useParams();
+    const [showSolar, setShowSolar] = useState<boolean>(false);
+    // const { clientId } = useParams();
 
-    //todo replace with clientId
+    //todo replace with clientId AND if not found, show navigate to home
     const clientParams = useSelector(state => selectClientById(state, "cid_1"));
     let comparisonData: Array<CostPredictions>;
     //todo why undef rendered twice
     let comparisonDataWithRange;
     const { data: generalParams, isLoading: isGeneralParamLoading, isError: isGeneralParamsError } = useGetGeneralParamsQuery(undefined);
+    console.log("generalParams", generalParams);
 
     if (!clientParams || !generalParams) {
         return <div>no data, fix me</div>
@@ -81,8 +83,8 @@ export default function ComparisonChart() {
                             </defs>
                             <Legend />
                             <Line type="linear" dataKey="electricityCost" name="Ohne PV" stroke="#FF0000" strokeWidth={1.5} activeDot={{ r: 8 }} label={CustomizedLabel} />
-                            <Line type="linear" dataKey="solarCost" name="Mit Enpal" stroke="#072543" strokeWidth={1.5} hide={!showSloar} label={CustomizedLabel} />
-                            <Area type="linear" dataKey="range" fill="url(#splitColor)" hide={!showSloar} legendType='none' tooltipType='none' />
+                            <Line type="linear" dataKey="solarCost" name="Mit Enpal" stroke="#072543" strokeWidth={1.5} hide={!showSolar} label={CustomizedLabel} />
+                            <Area type="linear" dataKey="range" fill="url(#splitColor)" hide={!showSolar} legendType='none' tooltipType='none' />
                         </ComposedChart>
                     </ResponsiveContainer>
                 </div>
@@ -96,8 +98,12 @@ export default function ComparisonChart() {
                     <Slider ticks={[3, 4, 5, 6, 7, 8]} onChangeHandler={setInflationRate} defaultValue={generalParams.inflationRate} label={"inflation rate(in %)"} step={1} />
                     <Slider ticks={[0.30, 0.40, 0.50, 0.60, 0.70, 0.80]} onChangeHandler={setUnitPrice} defaultValue={clientParams.unitPrice} label={"cost per kwh"} step={0.01} />
                 </div>
-                <Link href={'/comparison/stats/123'}> STATS </Link>
+                <Link to={'/comparison/stats/123'}> STATS </Link>
             </div >
+            <Fab variant="extended" color="primary" aria-label="add" >
+                <ArrowForward />
+                <Link to={'/comparison/stats/123'}> STATS </Link>
+            </Fab>
         </>
     );
 }

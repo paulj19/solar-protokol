@@ -4,14 +4,14 @@ import Button from '@material-ui/core/Button';
 
 export function ClientRow({client:{ id, nickname, remarks, presentationDate, status }, setModalParams,triggerDeleteClient}) {
     return (
-        <tr key={id} className="border h-[80px] shadow-sm">
+        <tr key={id} className="border h-[80px] shadow-sm ">
             <th className="font-mono">{extractLocalTime(presentationDate)}</th>
             <td>{id}</td>
             <td>{nickname}</td>
             <td>{remarks}</td>
             <td>{status}</td>
-            <td className="flex justify-between">
-                <Button variant="contained" component={Link} to="/comparisonChart/123" className="w-[115px]" color="inherit" startIcon={<PlayArrow/>}>
+            <td className="flex justify-between mt-3">
+                <Button variant="contained" component={Link} to="/comparison/chart/123" className="w-[115px]" color="inherit" startIcon={<PlayArrow/>}>
                     Present
                 </Button>
                 <Button variant="contained" color="inherit" startIcon={<EditOutlined/>} className="w-[115px]" onClick={() => setModalParams({openModal: true,  clientIdToEdit: id})}>

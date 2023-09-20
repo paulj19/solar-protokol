@@ -19,7 +19,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 3. will base price also change
 
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+You can start editing the page by modifying `app/[clientId].tsx`. The page auto-updates as you edit the file.
 
 # Domain wordings translation
 ### Client Specific

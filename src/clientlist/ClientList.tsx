@@ -1,12 +1,12 @@
 import {useDeleteClientMutation, useGetClientListByPDateQuery, useGetGeneralParamsQuery} from "@/context/RootApi";
-import {ClientRow} from "./components/ClientRow";
+import {ClientRow} from "./ClientRow";
 import {useState} from "react";
-import {DateChooser} from "./components/DateChooser";
+import {DateChooser} from "../components/DateChooser";
 import Modal from "@mui/joy/Modal";
-import {CreateClient} from "@/app/CreateClient";
+import {CreateClient} from "@/src/components/CreateClient";
 import Add from '@mui/icons-material/Add';
 import {ModalClose, ModalDialog} from "@mui/joy";
-import Loading from "@/app/components/Loading";
+import Loading from "@/src/components/Loading";
 import Button from "@material-ui/core/Button";
 import {format, startOfDay, startOfToday} from "date-fns";
 import {Client} from "@/types/types";
@@ -53,17 +53,17 @@ export default function ClientList() {
     }
 
     return (
-        <div className="flex flex-col items-center justify-around">
+        <div className="flex flex-col items-center justify-around w-full">
             <DateChooser selectedDate={selectedDate} setSelectedDate={setSelectedDate}/>
             {
                 clientList?.[selectedDate] ?
-                    <table className="w-full table-auto font-sans text-base my-5">
+                    <table className="w-full table-auto font-sans text-base my-5 text-left">
                         <thead className="">
                         <tr className="border h-[50px] bg-gray-500 shadow-lg text-gray-200 font-mono">
                             <th className="">Termin Zeit</th>
                             <th className="">ID</th>
-                            <th className="">Nickname</th>
-                            <th className="w-[30%]">Bemerkungen</th>
+                            <th className="w-[20%]">Nickname</th>
+                            <th className="w-[35%]">Bemerkungen</th>
                             <th className="">Status</th>
                             <th className="w-[20%]"></th>
                         </tr>

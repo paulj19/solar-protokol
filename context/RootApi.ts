@@ -23,13 +23,22 @@ let currentEndDate;
 export const rootApi = createApi({
     reducerPath: 'rootApi',
     baseQuery: fetchBaseQuery({baseUrl: "https://solar-protokol-default-rtdb.europe-west1.firebasedatabase.app"}),
-    tagTypes: ["HighestClientId", "ClientList"],
+    tagTypes: ["HighestClientId", "ClientList", "GeneralParams"],
     endpoints: builder => ({
         getGeneralParams: builder.query({
             query: () => ({
                 url: "/generalParams.json",
                 method: "get",
-            })
+            }),
+            providesTags: ["GeneralParams"],
+        }),
+        updateGeneralParams: builder.mutation({
+            query: (data) => ({
+                url: `/generalParams.json`,
+                method: 'PATCH',
+                body: data,
+            }),
+            invalidatesTags: (result, error, {pDate}) => { return !error && ["GeneralParams"]},
         }),
         getClientListByPDate: builder.query({
             query: ({startDate, endDate}) => {
@@ -79,10 +88,11 @@ export const rootApi = createApi({
         addClient: builder.mutation({
             query: ({pDate, data}) => {
                 return {
-                url: `/clientList.json`,
-                method: 'PATCH',
-                body: data,
-            }},
+                    url: `/clientList.json`,
+                    method: 'PATCH',
+                    body: data,
+                }
+            },
             invalidatesTags: (result, error, {pDate}) => [{type: "ClientList", id: pDate}]
         }),
         deleteClient: builder.mutation({
@@ -117,4 +127,4 @@ export const selectClientById = createSelector(
 //     selectAllClientListToday, (state, clientId) => clientId,
 //     (client, clientId) => client[clientId])
 
-export const {useGetGeneralParamsQuery, useGetClientListByPDateQuery, useAddClientMutation, useGetHighestClientIdQuery, useUpdateHighestClientIdMutation, useDeleteClientMutation} = rootApi;
+export const {useGetGeneralParamsQuery, useGetClientListByPDateQuery, useAddClientMutation, useGetHighestClientIdQuery, useUpdateHighestClientIdMutation, useDeleteClientMutation, useUpdateGeneralParamsMutation} = rootApi;

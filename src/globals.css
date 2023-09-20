@@ -109,8 +109,6 @@ a {
 @tailwind components;
 @tailwind utilities;
 
-body {}
-
 input[type='range'] {
   box-sizing: border-box;
   border: 0px solid transparent;
@@ -213,7 +211,6 @@ option {
 }
 
 option::after {}
-
 
 th,
 td {

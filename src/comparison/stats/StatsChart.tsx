@@ -1,4 +1,4 @@
-import styles from '@/app/comparison/stats/stats.module.css'
+import styles from '@/src/comparison/stats/stats.module.css'
 import { PredictionParams } from '@/types/types';
 import { calcElectricityCostMonthly, calcSolarCostMonthly } from '@/utils/ElectricityCostCalculator';
 import { XAxis, BarChart, Bar, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, LabelList } from 'recharts';

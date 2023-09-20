@@ -9,7 +9,7 @@ import {
 import {addHours, format, setHours} from "date-fns";
 import {useRef, useState} from "react";
 import {Typography} from "@mui/joy";
-import Loading from "@/app/components/Loading";
+import Loading from "@/src/components/Loading";
 
 export function CreateClient({selectedDate, clientToEdit, setModalParams}) {
     const {data, isLoading: isIdLoading, isFetching: isIdFetching, isError} = useGetHighestClientIdQuery("uid_1", {skip: Boolean(clientToEdit)});

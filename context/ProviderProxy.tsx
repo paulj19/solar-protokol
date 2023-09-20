@@ -1,7 +1,7 @@
 'use client'
 
 import { Provider } from "react-redux";
-import store from "@/app/store"
+import store from "@/src/store"
 import { worker } from "@/mocks/browser";
 
 if (process.env.NODE_ENV === 'development') {
