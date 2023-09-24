@@ -1,7 +1,3 @@
-import {Home} from "@/src/Home";
+const HomePageProxy = () =><></>
 
-import dynamic from 'next/dynamic'
-
-const HomePage  = () => <Home/>
-
-export default HomePage
+export default HomePageProxy

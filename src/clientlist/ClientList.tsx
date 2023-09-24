@@ -1,4 +1,9 @@
-import {useDeleteClientMutation, useGetClientListByPDateQuery, useGetGeneralParamsQuery} from "@/context/RootApi";
+import {
+    useDeleteClientMutation,
+    useGetClientListByPDateQuery,
+    useGetClientQuery,
+    useGetGeneralParamsQuery
+} from "@/context/RootApi";
 import {ClientRow} from "./ClientRow";
 import {useState} from "react";
 import {DateChooser} from "../components/DateChooser";
@@ -86,7 +91,7 @@ export default function ClientList() {
                             // )
                         }
                         </tbody>
-                    </table> : <p className="p-[50vw]">no entries yet, add new</p>
+                    </table> : <p className="p-5">no entries yet, add new</p>
 
             }
             <Button

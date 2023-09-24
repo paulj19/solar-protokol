@@ -112,7 +112,9 @@ input:checked+.slider:before {
 }
 
 .sliderTitle {
+    display: flex;
+    justify-content: center;
     margin: 0 auto;
-    width: 50%;
+    width: 80%;
     color: rgb(49, 49, 49);
 }

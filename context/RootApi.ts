@@ -23,7 +23,7 @@ let currentEndDate;
 export const rootApi = createApi({
     reducerPath: 'rootApi',
     baseQuery: fetchBaseQuery({baseUrl: "https://solar-protokol-default-rtdb.europe-west1.firebasedatabase.app"}),
-    tagTypes: ["HighestClientId", "ClientList", "GeneralParams"],
+    tagTypes: ["HighestClientId", "ClientList", "GeneralParams", "Client"],
     endpoints: builder => ({
         getGeneralParams: builder.query({
             query: () => ({
@@ -38,7 +38,9 @@ export const rootApi = createApi({
                 method: 'PATCH',
                 body: data,
             }),
-            invalidatesTags: (result, error, {pDate}) => { return !error && ["GeneralParams"]},
+            invalidatesTags: (result, error, {pDate}) => {
+                return !error && ["GeneralParams"]
+            },
         }),
         getClientListByPDate: builder.query({
             query: ({startDate, endDate}) => {
@@ -58,6 +60,24 @@ export const rootApi = createApi({
                 result
                     ? [({type: "ClientList" as const, id: startDate}), "ClientList"]
                     : ["ClientList"],
+        }),
+        getClient: builder.query({
+            query: ({pDate, clientId}) => ({
+                url: `/clientList/uid_1/${pDate}/cid_${clientId}.json`,
+                method: "get",
+            }),
+            providesTags: (result, error, {clientId}) =>
+                result ? [{type: "Client" as const, id: clientId}] : null,
+        }),
+        addClient: builder.mutation({
+            query: ({pDate, data}) => {
+                return {
+                    url: `/clientList.json`,
+                    method: 'PATCH',
+                    body: data,
+                }
+            },
+            invalidatesTags: (result, error, {pDate, data}) => ([{type: "ClientList", id: pDate}, {type: "Client", id: Object.values(data)[0].id}])
         }),
         getHighestClientId: builder.query({
             query: (userId) => ({
@@ -85,16 +105,6 @@ export const rootApi = createApi({
                 }
             },
         }),
-        addClient: builder.mutation({
-            query: ({pDate, data}) => {
-                return {
-                    url: `/clientList.json`,
-                    method: 'PATCH',
-                    body: data,
-                }
-            },
-            invalidatesTags: (result, error, {pDate}) => [{type: "ClientList", id: pDate}]
-        }),
         deleteClient: builder.mutation({
             query: ({pDate, clientId}) => ({
                 url: `/clientList/uid_1/${pDate}/${clientId}.json`,
@@ -102,14 +112,27 @@ export const rootApi = createApi({
             }),
             invalidatesTags: (result, error, {pDate}) => [{type: "ClientList", id: pDate}]
         }),
+        updateClientStats: builder.mutation({
+            query: (data) => ({
+                url: `/clientList.json`,
+                method: 'PATCH',
+                body: data,
+            }),
+            invalidatesTags: (result, error, {pDate}) => [{type: "ClientList", id: pDate}]
+        }),
     })
 })
 
-export const selectClientByIdResult = rootApi.endpoints.getClientListByPDate.select({endDate: currentEndDate, startDate: currentStartDate,});
+export const selectClientByIdResult = rootApi.endpoints.getClientListByPDate.select({
+    endDate: currentEndDate,
+    startDate: currentStartDate,
+});
 
 export const selectClientById = createSelector(
     selectClientByIdResult, (state, clientId) => clientId,
     ({data: clients}, clientId: string) => {
+
+        console.log("clients", clients)
         if (!clients) return {
             "basePrice": 10,
             "consumptionYearly": 3500,
@@ -127,4 +150,14 @@ export const selectClientById = createSelector(
 //     selectAllClientListToday, (state, clientId) => clientId,
 //     (client, clientId) => client[clientId])
 
-export const {useGetGeneralParamsQuery, useGetClientListByPDateQuery, useAddClientMutation, useGetHighestClientIdQuery, useUpdateHighestClientIdMutation, useDeleteClientMutation, useUpdateGeneralParamsMutation} = rootApi;
+export const {
+    useGetGeneralParamsQuery,
+    useGetClientListByPDateQuery,
+    useAddClientMutation,
+    useGetHighestClientIdQuery,
+    useUpdateHighestClientIdMutation,
+    useDeleteClientMutation,
+    useUpdateGeneralParamsMutation,
+    useUpdateClientStatsMutation,
+    useGetClientQuery,
+} = rootApi;

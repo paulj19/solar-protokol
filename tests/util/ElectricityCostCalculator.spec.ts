@@ -1,6 +1,21 @@
-import { describe } from "node:test";
-import { calculationMetrics, normalizedMonthlyConsumption, normalizedMonthlyProduction, calcResidualConsumption, calcResidualConsumptionCostMonthly, getFeedInGeneration, calcFeedInTariffMonthly, calcConsumptionCostMonthly, calcElectricityCostMonthly, calcSolarCostMonthly, round, calcPredictions, calcTotalSaved } from "@/utils/ElectricityCostCalculator";
-import { PredictionParams } from "@/types/types";
+import {describe} from "node:test";
+import {
+    calcConsumptionCostMonthly,
+    calcElectricityCostMonthly,
+    calcFeedInTariffMonthly,
+    calcPredictions,
+    calcResidualConsumption,
+    calcResidualConsumptionCostMonthly,
+    calcSolarCostMonthly,
+    calcTotalSaved,
+    calculationMetrics, getConsumptionMonthly,
+    getFeedInGeneration,
+    getGenerationMonthly,
+    normalizedMonthlyConsumption,
+    normalizedMonthlyProduction, GenerationConsumParam,
+    round, getGenerationConsumParam
+} from "@/utils/ElectricityCostCalculator";
+import {PredictionParams} from "@/types/types";
 
 describe("ElectricityCostCalculator", () => {
     it("should caluculate exact electricity cost", () => {
@@ -12,7 +27,7 @@ describe("ElectricityCostCalculator", () => {
         });
     });
 
-    it("should calculate solar production", () => {
+    it("should calculate solar generation", () => {
         const productionYearly = 7192;
         const solarProduction = [396, 467, 633, 719, 705, 806, 827, 719, 626, 575, 396, 324]
         solarProduction.forEach((result, index) => {
@@ -154,5 +169,39 @@ describe("ElectricityCostCalculator", () => {
         const expectedTotalSaved = 27696;
         const resultTotalSaved = calcTotalSaved(params);
         expect(resultTotalSaved).toEqual(expectedTotalSaved);
+    });
+
+    it('should calculate generation monthly', () => {
+        const productionYearly = 7192;
+        const expectedGeneration = [396, 467, 633, 719, 705, 806, 827, 719, 626, 575, 396, 324];
+        const resultGeneration = getGenerationMonthly(productionYearly);
+        expect(resultGeneration).toEqual(expectedGeneration);
+    });
+
+    it('should calculate consumption monthly', () => {
+        const consumptionYearly = 3500;
+        const expectedConsumption = [345, 295, 327, 282, 268, 253, 265, 271, 279, 294, 302, 318];
+        const resultConsumption = getConsumptionMonthly(consumptionYearly);
+        expect(resultConsumption).toEqual(expectedConsumption);
+    });
+    it('should calculate GenerationConsumParam', () => {
+        const consumptionYearly = 3500;
+        const productionYearly = 7192;
+        const expectedGenerationConsumption: Array<GenerationConsumParam> = [
+            {month: "JANUARY", generation: 396, consumption: 345 },
+            {month: "FEBRUARY", generation: 467, consumption: 295 },
+            {month: "MARCH", generation: 633, consumption: 327 },
+            {month: "APRIL", generation: 719, consumption: 282 },
+            {month: "MAY", generation: 705, consumption: 268 },
+            {month: "JUNE", generation: 806, consumption: 253 },
+            {month: "JULY", generation: 827, consumption: 265 },
+            {month: "AUGUST", generation: 719, consumption: 271 },
+            {month: "SEPTEMBER", generation: 626, consumption: 279 },
+            {month: "OCTOBER", generation: 575, consumption: 294 },
+            {month: "NOVEMBER", generation: 396, consumption: 302 },
+            {month: "DECEMBER", generation: 324, consumption: 318 },
+        ];
+        const resultGenerationConsumption = getGenerationConsumParam(productionYearly, consumptionYearly);
+        expect(resultGenerationConsumption).toEqual(expectedGenerationConsumption);
     });
 });

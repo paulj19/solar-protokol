@@ -1,4 +1,4 @@
-import styles from '@/src/comparison/stats/stats.module.css'
+import styles from '@/src/stats/stats.module.css'
 import { PredictionParams } from '@/types/types';
 import { calcPredictions, calcTotalSaved } from '@/utils/ElectricityCostCalculator';
 

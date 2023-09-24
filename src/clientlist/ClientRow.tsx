@@ -1,6 +1,7 @@
 import {Link} from "react-router-dom";
 import {DeleteOutlined, EditOutlined, PlayArrow} from "@mui/icons-material";
 import Button from '@material-ui/core/Button';
+import {format} from "date-fns";
 
 export function ClientRow({client:{ id, nickname, remarks, presentationDate, status }, setModalParams,triggerDeleteClient}) {
     return (
@@ -11,7 +12,7 @@ export function ClientRow({client:{ id, nickname, remarks, presentationDate, sta
             <td>{remarks}</td>
             <td>{status}</td>
             <td className="flex justify-between mt-3">
-                <Button variant="contained" component={Link} to="/comparison/chart/123" className="w-[115px]" color="inherit" startIcon={<PlayArrow/>}>
+                <Button variant="contained" component={Link} to={"/solarElecChart/" + format(new Date(presentationDate), 'yyyy-MM-dd') + "/" + id} className="w-[115px]" color="inherit" startIcon={<PlayArrow/>}>
                     Present
                 </Button>
                 <Button variant="contained" color="inherit" startIcon={<EditOutlined/>} className="w-[115px]" onClick={() => setModalParams({openModal: true,  clientIdToEdit: id})}>
