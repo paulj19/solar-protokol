@@ -2,12 +2,12 @@
 const nextConfig = {}
 
 module.exports = {
-    // async rewrites() {
-    //     return [
-    //         {
-    //             source: '/:path*',
-    //             destination: '/',
-    //         },
-    //     ];
-    // },
+    async rewrites() {
+        return [
+            {
+                source: '/:path*',
+                destination: '/',
+            },
+        ];
+    },
 };

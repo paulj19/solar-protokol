@@ -6,7 +6,7 @@ import {format} from "date-fns";
 export function ClientRow({client:{ id, nickname, remarks, presentationDate, status }, setModalParams,triggerDeleteClient}) {
     return (
         <tr key={id} className="border h-[80px] shadow-sm ">
-            <th className="font-mono">{extractLocalTime(presentationDate)}</th>
+            <th className="font-mono">{format(new Date(presentationDate), "HH:mm")}</th>
             <td>{id}</td>
             <td>{nickname}</td>
             <td>{remarks}</td>

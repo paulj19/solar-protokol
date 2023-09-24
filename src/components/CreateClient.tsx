@@ -166,7 +166,7 @@ export function CreateClient({selectedDate, clientToEdit, setModalParams}) {
                         render={({field}) =>
                             <div className="border border-gray-400 rounded-md p-3">
                                 <InputLabel>Presentation Date</InputLabel>
-                                <StaticDateTimePicker {...field} ampm={false}/>
+                                <StaticDateTimePicker {...field} ampm={false}  slotProps={{ actionBar: { actions: [] } }} />
                             </div>
                         }
                     />

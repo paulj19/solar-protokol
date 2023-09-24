@@ -3,6 +3,9 @@ import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react'
 import {create} from 'domain';
 import {createScanner} from 'typescript';
 import arg from "arg";
+import {ResultType} from "@remix-run/router/utils";
+import {BaseQueryMeta, BaseQueryResult} from "@reduxjs/toolkit/src/query/baseQueryTypes";
+import {isEmpty} from "@/utils/util";
 
 let currentStartDate;
 let currentEndDate;
@@ -55,6 +58,14 @@ export const rootApi = createApi({
                         endAt: `"${endDate}"`,
                     }
                 }
+            },
+            transformResponse(result, meta, arg) {
+                if(!isEmpty(result)) {
+                    const clients = Object.assign({}, ...Object.values(result));
+                    return Object.values(clients).sort((a, b) => {
+                        return a.presentationDate.localeCompare(b.presentationDate)});
+                }
+                return [];
             },
             providesTags: (result, error, {startDate}) =>
                 result

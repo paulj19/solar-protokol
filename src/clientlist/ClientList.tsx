@@ -61,7 +61,7 @@ export default function ClientList() {
         <div className="flex flex-col items-center justify-around w-full">
             <DateChooser selectedDate={selectedDate} setSelectedDate={setSelectedDate}/>
             {
-                clientList?.[selectedDate] ?
+                clientList?.length ?
                     <table className="w-full table-auto font-sans text-base my-5 text-left">
                         <thead className="">
                         <tr className="border h-[50px] bg-gray-500 shadow-lg text-gray-200 font-mono">
@@ -79,7 +79,7 @@ export default function ClientList() {
                             //     return (
                             //         <>
                             //             {
-                            Object.values(clientList[selectedDate]).map((client: Client) => {
+                            clientList.map((client: Client) => {
                                 return (
                                     <ClientRow key={client.id} {...{client, setModalParams, triggerDeleteClient}} />
                                 )
@@ -112,7 +112,7 @@ export default function ClientList() {
                 >
                     <ModalClose/>
                     <CreateClient selectedDate={selectedDate} setModalParams={setModalParams}
-                                  clientToEdit={modalParams.clientIdToEdit ? clientList[selectedDate]["cid_" + modalParams.clientIdToEdit] : null}/>
+                                  clientToEdit={modalParams.clientIdToEdit ? clientList.find((client) => client.id === modalParams.clientIdToEdit) : null}/>
                 </ModalDialog>
             </Modal>
             <Dialog
