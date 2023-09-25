@@ -2,6 +2,7 @@
     display: grid;
     grid-template-rows: repeat(20, 1fr);
     height: 88vh;
+    width: 80%;
 }
 
 .yearHeading {
@@ -101,17 +102,6 @@
     padding-left: 10px;
 }
 
-
-.costSum {
-    display: flex;
-    flex-direction: row;
-    align-items: flex-end;
-}
-
-.costElements {
-    flex: 1;
-}
-
 .costNumber {
     display: flex;
     justify-content: center;
@@ -123,9 +113,4 @@
 .costLabel {
     font-size: small;
     padding: 10px;
-}
-
-.costAddition {
-    font-size: x-large;
-    padding: 20px;
 }
