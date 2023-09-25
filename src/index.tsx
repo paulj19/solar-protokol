@@ -18,7 +18,6 @@ export const metadata: Metadata = {
 if (process.env.NODE_ENV === 'development') {
   // worker.listen({ onUnhandledRequest: 'bypass' })
 }
-console.log('RootLayoutXXXXXXXXXXXX')
 
 export default async function RootLayout({
   children

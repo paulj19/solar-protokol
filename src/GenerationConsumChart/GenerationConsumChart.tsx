@@ -25,6 +25,7 @@ import {ArrowBack, ArrowForward} from "@mui/icons-material";
 import {Tooltip as MuiToolTip} from '@mui/material';
 import {format} from "date-fns";
 import Loading from "@/src/components/Loading";
+import Error from "@/src/components/Error";
 
 export default function GenerationConsumChart(): ReactElement {
     const {clientId, pDate} = useParams();
@@ -43,7 +44,7 @@ export default function GenerationConsumChart(): ReactElement {
     }
     //todo why undef rendered twice
     if (isClientParamError) {
-        return <div>no data, fix me</div>
+        return <Error />
     }
 
     const generationConsumParams: Array<GenerationConsumParam> = getGenerationConsumParam(clientParams.productionYearly, clientParams.consumptionYearly);

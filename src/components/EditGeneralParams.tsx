@@ -1,15 +1,10 @@
-import {Alert, Button, InputAdornment, InputLabel, MenuItem, Select, Snackbar, TextField} from "@mui/material";
-import {StaticDateTimePicker} from "@mui/x-date-pickers";
+import {Alert, Button, InputAdornment, Snackbar, TextField} from "@mui/material";
 import {Controller, useForm} from "react-hook-form";
-import {
-    useAddClientMutation, useGetGeneralParamsQuery,
-    useGetHighestClientIdQuery, useUpdateGeneralParamsMutation,
-    useUpdateHighestClientIdMutation
-} from "@/context/RootApi";
-import {addHours, format, setHours} from "date-fns";
-import {useRef, useState} from "react";
+import {useGetGeneralParamsQuery, useUpdateGeneralParamsMutation} from "@/context/RootApi";
+import {useState} from "react";
 import {Typography} from "@mui/joy";
 import Loading from "@/src/components/Loading";
+import Error from "@/src/components/Error";
 
 export function EditGeneralParams({setOpenModal}) {
     const {data: values, isLoading: isGeneralParamLoading, isError: isGeneralParamQueryError} = useGetGeneralParamsQuery(undefined);
@@ -21,7 +16,7 @@ export function EditGeneralParams({setOpenModal}) {
         return <Loading/>;
     }
     if (isGeneralParamQueryError) {
-        return <div>error, fix me</div>;
+        return <Error/>
     }
 
     const onSubmit = async (data) => {

@@ -12,6 +12,7 @@ import {CreateClient} from "@/src/components/CreateClient";
 import Add from '@mui/icons-material/Add';
 import {ModalClose, ModalDialog} from "@mui/joy";
 import Loading from "@/src/components/Loading";
+import Error from "@/src/components/Error";
 import Button from "@material-ui/core/Button";
 import {format, startOfDay, startOfToday} from "date-fns";
 import {Client} from "@/types/types";
@@ -31,7 +32,7 @@ export default function ClientList() {
         return <Loading/>;
     }
     if (isClientListError && isGeneralParamsError) {
-        return <div>error, fix me</div>;
+        return <Error/>
     }
 
     function onDeleteClientClose() {

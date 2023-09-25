@@ -1,5 +1,3 @@
-'use client'
-
 import React, {useState} from 'react';
 import {
     Line,
@@ -17,9 +15,9 @@ import styles from './ComparisonChart.module.css'
 import Slider from '../components/Slider';
 import {useGetGeneralParamsQuery, selectClientById, selectClientByIdResult, useGetClientQuery} from '@/context/RootApi';
 import Loading from "@/src/components/Loading";
+import Error from "@/src/components/Error";
 import {calcPredictions} from '@/utils/ElectricityCostCalculator';
 import {CostPredictions} from '@/types/types';
-import {useSelector} from 'react-redux';
 import {Link, useNavigate, useParams} from 'react-router-dom';
 import {Fab} from "@mui/material";
 import {ArrowForward} from "@mui/icons-material";
@@ -41,7 +39,7 @@ export default function SolarElecChart() {
     }
     //todo why undef rendered twice
     if (isClientParamError || isGeneralParamsError) {
-        return <div>no data, fix me</div>
+        return <Error />
     }
     let comparisonData: Array<CostPredictions>; //todo memoize?
     let comparisonDataWithRange;
@@ -88,7 +86,7 @@ export default function SolarElecChart() {
                         >
                             <CartesianGrid strokeDasharray="3 3"/>
                             <XAxis dataKey="year"/>
-                            <YAxis ticks={[0, 100, 200, 300, 400, 500, 600, 700]}/>
+                            <YAxis ticks={getYAxisTicks(comparisonDataWithRange)}/>
                             <Tooltip/>
                             <defs>
                                 <linearGradient id="splitColor">
@@ -127,6 +125,15 @@ export default function SolarElecChart() {
             </div>
         </>
     );
+}
+
+function getYAxisTicks(comparisonDataWithRange):Array<number> {
+    const highestYValue = comparisonDataWithRange[comparisonDataWithRange.length - 1].electricityCost;
+    const ticks = [0, 100, 200, 300, 400, 500, 600, 700]
+    for (let i = 800; (i-100) <= highestYValue; i += 100) {
+        ticks.push(i);
+    }
+    return ticks;
 }
 
 function intersect(x1, y1, x2, y2, x3, y3, x4, y4) {
