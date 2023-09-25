@@ -20,23 +20,25 @@ export function EditGeneralParams({setOpenModal}) {
     }
 
     const onSubmit = async (data) => {
-            try {
-                if(!data.feedInPrice || !data.rent || !data.inflationRate || !data.electricityIncreaseRate || !data.rentDiscountRate || !data.rentDiscountPeriod || !data.yearLimit){
-                    setSnackData({open: true, severity: "error", message: "An error occurred, please refresh the page and try again."});
-                    return;
-                }
-                const feedInPrice = data.feedInPrice / 100;
-                const generalParams = {feedInPrice: feedInPrice, rent: parseInt(data.rent),
-                    inflationRate: parseInt(data.inflationRate), electricityIncreaseRate: parseInt(data.electricityIncreaseRate),
-                    rentDiscountRate: parseInt(data.rentDiscountRate), rentDiscountPeriod: parseInt(data.rentDiscountPeriod),
-                    yearLimit: parseInt(data.yearLimit)};
-                await updateGeneralParams(generalParams).unwrap()
-                setSnackData({open: true, severity: "success", message: "General Params edit success!"});
-                setTimeout(() => setOpenModal(false), 1500);
-            } catch (e) {
+        try {
+            if (!data.feedInPrice || !data.rent || !data.inflationRate || !data.electricityIncreaseRate || !data.rentDiscountRate || !data.rentDiscountPeriod || !data.yearLimit) {
                 setSnackData({open: true, severity: "error", message: "An error occurred, please refresh the page and try again."});
-                console.error("error on edit general params", e);
+                return;
             }
+            const feedInPrice = data.feedInPrice / 100;
+            const generalParams = {
+                feedInPrice: feedInPrice, rent: parseInt(data.rent),
+                inflationRate: parseInt(data.inflationRate), electricityIncreaseRate: parseInt(data.electricityIncreaseRate),
+                rentDiscountRate: parseInt(data.rentDiscountRate), rentDiscountPeriod: parseInt(data.rentDiscountPeriod),
+                yearLimit: parseInt(data.yearLimit)
+            };
+            await updateGeneralParams(generalParams).unwrap()
+            setSnackData({open: true, severity: "success", message: "General Params edit success!"});
+            setTimeout(() => setOpenModal(false), 1500);
+        } catch (e) {
+            setSnackData({open: true, severity: "error", message: "An error occurred, please refresh the page and try again."});
+            console.error("error on edit general params", e);
+        }
     };
 
     const handleSnackClose = () => {
@@ -115,7 +117,7 @@ export function EditGeneralParams({setOpenModal}) {
                 </form>
                 <Snackbar open={snackData.open} autoHideDuration={3000}
                           anchorOrigin={{vertical: 'bottom', horizontal: 'center'}} onClose={handleSnackClose}>
-                    <Alert severity={snackData.severity ?? "info"} sx={{width: '100%'}} onClose={handleSnackClose}>
+                    <Alert severity={snackData.severity ?? "info"} sx={{width: '100%'}}>
                         {snackData.message}
                     </Alert>
                 </Snackbar>

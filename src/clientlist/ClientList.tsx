@@ -139,7 +139,7 @@ export default function ClientList() {
             </Dialog>
             <Snackbar open={snackData.open} autoHideDuration={3000}
                       anchorOrigin={{vertical: 'bottom', horizontal: 'center'}} onClose={handleSnackClose}>
-                <Alert severity={snackData.severity ?? "info"} sx={{width: '100%'}} onClose={handleSnackClose}>
+                <Alert severity={snackData.severity ?? "info"} sx={{width: '100%'}}>
                     {snackData.message}
                 </Alert>
             </Snackbar>
