@@ -1,31 +1,34 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import Slider from "../components/Slider";
 import StatsChart from "./StatsChart";
 import {ElectricityStats} from "./ElectricityStats";
 import SolarStats from "./SolarStats";
 import TotalCostSavings from "./TotalCostSavings";
-import {useGetClientQuery, useGetGeneralParamsQuery} from "@/context/RootApi";
+import {useGetClientQuery, useGetGeneralParamsQuery} from "@/src/context/RootApi";
 import styles from '@/src/stats/stats.module.css'
 import Loading from "@/src/components/Loading";
 import {Fab} from "@mui/material";
 import {ArrowBack, ArrowForward} from "@mui/icons-material";
 import Tooltip from '@mui/material/Tooltip';
-import {Link, useNavigate, useParams} from 'react-router-dom';
+import {Link, useNavigate, useParams, useSearchParams} from 'react-router-dom';
 import Error from "@/src/components/Error";
 
 export default function SolarElecStats() {
-    const {clientId, pDate} = useParams();
     const navigate = useNavigate();
-    if (!clientId || !pDate) {
-        navigate('/');
-    }
+    const [searchParams] = useSearchParams();
+    const clientId = searchParams.get('clientId');
+    const pDate = searchParams.get('pDate');
+    useEffect(() => {
+        if (!clientId || !pDate) {
+            navigate('/');
+        }
+    }, []);
     const [year, setYear] = useState<number>(0);
     const {
         data: generalParams,
         isLoading: isGeneralParamLoading,
         isError: isGeneralParamsError
     } = useGetGeneralParamsQuery(undefined);
-    // const clientParams = useSelector(state => selectClientById(undefined, "cid_1"));
     const {data: clientParams, isLoading: isClientParamLoading, isError: isClientParamError} = useGetClientQuery({
         pDate,
         clientId
@@ -59,7 +62,7 @@ export default function SolarElecStats() {
             </div>
             <div className="absolute bottom-7 left-7">
                 <Tooltip title="comparison chart" arrow>
-                    <Fab variant="circular" color="inherit" component={Link} to={`/solarElecChart/${pDate}/${clientId}`}
+                    <Fab variant="circular" color="inherit" component={Link} to={`/solarElecChart?pDate=${pDate}&clientId=${clientId}`}
                          aria-label="add">
                         <ArrowBack/>
                     </Fab>
@@ -68,7 +71,7 @@ export default function SolarElecStats() {
             <div className="absolute bottom-7 right-7">
                 <Tooltip title="generation consumption chart" arrow>
                     <Fab variant="circular" color="inherit" component={Link}
-                         to={`/generationConsumChart/${pDate}/${clientId}`}
+                         to={`/generationConsumChart?pDate=${pDate}&clientId=${clientId}`}
                          aria-label="add">
                         <ArrowForward/>
                     </Fab>

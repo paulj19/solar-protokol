@@ -1,5 +1,5 @@
 import { rest } from 'msw'
-import { URL_GENERAL_PARAMS, URL_CLIENT_PARAMS } from '@/utils/Urls';
+import { URL_GENERAL_PARAMS, URL_CLIENT_PARAMS } from 'utils/Urls';
 
 export const handlers = [
     rest.get(URL_GENERAL_PARAMS, (req, res, ctx) => {

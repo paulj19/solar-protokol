@@ -1,6 +1,6 @@
 import {Alert, Button, InputAdornment, Snackbar, TextField} from "@mui/material";
 import {Controller, useForm} from "react-hook-form";
-import {useGetGeneralParamsQuery, useUpdateGeneralParamsMutation} from "@/context/RootApi";
+import {useGetGeneralParamsQuery, useUpdateGeneralParamsMutation} from "@/src/context/RootApi";
 import {useState} from "react";
 import {Typography} from "@mui/joy";
 import Loading from "@/src/components/Loading";

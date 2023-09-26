@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
     Line,
     XAxis,
@@ -13,21 +13,30 @@ import {
 import Tooltip from '@mui/material/Tooltip';
 import styles from './ComparisonChart.module.css'
 import Slider from '../components/Slider';
-import {useGetGeneralParamsQuery, selectClientById, selectClientByIdResult, useGetClientQuery} from '@/context/RootApi';
+import {
+    useGetGeneralParamsQuery,
+    selectClientById,
+    selectClientByIdResult,
+    useGetClientQuery
+} from '@/src/context/RootApi';
 import Loading from "@/src/components/Loading";
 import Error from "@/src/components/Error";
 import {calcPredictions} from '@/utils/ElectricityCostCalculator';
 import {CostPredictions} from '@/types/types';
-import {Link, useNavigate, useParams} from 'react-router-dom';
+import {Link, Navigate, useNavigate, useParams, useSearchParams} from 'react-router-dom';
 import {Fab} from "@mui/material";
 import {ArrowForward} from "@mui/icons-material";
 
 export default function SolarElecChart() {
-    const { clientId, pDate } = useParams();
     const navigate = useNavigate();
-    if (!clientId || !pDate) {
-        navigate('/');
-    }
+    const [searchParams] = useSearchParams();
+    const clientId = searchParams.get('clientId');
+    const pDate = searchParams.get('pDate');
+    useEffect(() => {
+        if (!clientId || !pDate) {
+            navigate('/');
+        }
+    }, []);
     const [inflationRate, setInflationRate] = useState<number>(null)
     const [unitPrice, setUnitPrice] = useState<number>(null)
     const [showSolar, setShowSolar] = useState<boolean>(false);
@@ -39,15 +48,13 @@ export default function SolarElecChart() {
     }
     //todo why undef rendered twice
     if (isClientParamError || isGeneralParamsError) {
-        return <Error />
+        return <Error/>
     }
-    let comparisonData: Array<CostPredictions>; //todo memoize?
-    let comparisonDataWithRange;
     //todo no direct url calls with cid, then have to handle loading and error conditions of query
 
-    comparisonData = calcPredictions({year: undefined, clientParams: {...clientParams, unitPrice: unitPrice ?? clientParams.unitPrice}, generalParams: {...generalParams, inflationRate: inflationRate ?? generalParams.inflationRate}});
+    const comparisonData: Array<CostPredictions> = calcPredictions({year: undefined, clientParams: {...clientParams, unitPrice: unitPrice ?? clientParams.unitPrice}, generalParams: {...generalParams, inflationRate: inflationRate ?? generalParams.inflationRate}});
     let xx = false;
-    comparisonDataWithRange = comparisonData.reduce((acc, item, i, array) => {
+    const comparisonDataWithRange = comparisonData.reduce((acc, item, i, array) => {
         if (i % 5 !== 0) {
             return acc;
         }
@@ -71,10 +78,9 @@ export default function SolarElecChart() {
 
     return (
         <>
-            <div className={styles.chartContainer}>
+            <div className={styles.chartContainer} data-testid="solar-elec-chart">
                 <div className={styles.chart}>
                     <ResponsiveContainer className={styles.responseChart}>
-                        {/* <LineChart */}
                         <ComposedChart
                             data={comparisonDataWithRange}
                             margin={{
@@ -103,34 +109,36 @@ export default function SolarElecChart() {
                         </ComposedChart>
                     </ResponsiveContainer>
                 </div>
-                <div className={styles.toggle}>
+                <div className={styles.toggle} data-testid="solar-toggle">
                     <label className={styles.switch}>
                         <input type="checkbox" onChange={(e) => setShowSolar(e.target.checked)}/>
                         <span className={styles.slider + " " + styles.round}></span>
                     </label>
                 </div>
-                <div className={styles.rangeSelectors}>
+                <div className={styles.rangeSelectors} data-testid="inflation-unitPrice-slider">
                     <Slider ticks={[3, 4, 5, 6, 7, 8]} onChangeHandler={setInflationRate}
                             defaultValue={generalParams.inflationRate} label={"inflation rate(in %)"} step={1}/>
                     <Slider ticks={[0.30, 0.40, 0.50, 0.60, 0.70, 0.80]} onChangeHandler={setUnitPrice}
                             defaultValue={clientParams.unitPrice} label={"cost per kwh"} step={0.01}/>
                 </div>
             </div>
-            <div className="absolute bottom-7 right-7">
+            <div className="absolute bottom-7 right-7" data-testid="forward-fab">
                 <Tooltip title="comparison stat" arrow>
-                <Fab variant="circular" color="inherit" component={Link} to={`/solarElecStats/${pDate}/${clientId}`} aria-label="add">
-                    <ArrowForward/>
-                </Fab>
+                    <Fab variant="circular" color="inherit" component={Link}
+                         to={`/solarElecStats?pDate=${pDate}&clientId=${clientId}`}
+                         aria-label="add">
+                        <ArrowForward/>
+                    </Fab>
                 </Tooltip>
             </div>
         </>
     );
 }
 
-function getYAxisTicks(comparisonDataWithRange):Array<number> {
+function getYAxisTicks(comparisonDataWithRange): Array<number> {
     const highestYValue = comparisonDataWithRange[comparisonDataWithRange.length - 1].electricityCost;
     const ticks = [0, 100, 200, 300, 400, 500, 600, 700]
-    for (let i = 800; (i-100) <= highestYValue; i += 100) {
+    for (let i = 800; (i - 100) <= highestYValue; i += 100) {
         ticks.push(i);
     }
     return ticks;

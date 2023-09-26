@@ -3,22 +3,26 @@ import {DeleteOutlined, EditOutlined, PlayArrow} from "@mui/icons-material";
 import Button from '@material-ui/core/Button';
 import {format} from "date-fns";
 
-export function ClientRow({client:{ id, nickname, remarks, presentationDate, status }, setModalParams,triggerDeleteClient}) {
+export function ClientRow({client: {id, nickname, remarks, presentationDate, status}, setModalParams, triggerDeleteClient}) {
     return (
         <tr key={id} className="border h-[80px] shadow-sm ">
-            <th className="font-mono">{format(new Date(presentationDate), "HH:mm")}</th>
+            <td className="font-mono font-bold">{format(new Date(presentationDate), "HH:mm")}</td>
             <td>{id}</td>
             <td>{nickname}</td>
             <td>{remarks}</td>
             <td>{status}</td>
             <td className="flex justify-between mt-3">
-                <Button variant="contained" component={Link} to={"/solarElecChart/" + format(new Date(presentationDate), 'yyyy-MM-dd') + "/" + id} className="w-[115px]" color="inherit" startIcon={<PlayArrow/>}>
+                <Button variant="contained" component={Link}
+                        to={"/solarElecChart/" + format(new Date(presentationDate), 'yyyy-MM-dd') + "/" + id}
+                        className="w-[115px]" color="inherit" startIcon={<PlayArrow/>}>
                     Present
                 </Button>
-                <Button variant="contained" color="inherit" startIcon={<EditOutlined/>} className="w-[115px]" onClick={() => setModalParams({openModal: true,  clientIdToEdit: id})}>
+                <Button variant="contained" color="inherit" startIcon={<EditOutlined/>} className="w-[115px]"
+                        onClick={() => setModalParams({openModal: true, clientIdToEdit: id})}>
                     Edit
                 </Button>
-                <Button variant="contained" color="inherit" startIcon={<DeleteOutlined/>} className="w-[115px]" onClick={() => triggerDeleteClient(presentationDate, id)}>
+                <Button variant="contained" color="inherit" startIcon={<DeleteOutlined/>} className="w-[115px]" aria-label="delete-client-button"
+                        onClick={() => triggerDeleteClient(presentationDate, id)} autoFocus={false}>
                     Delete
                 </Button>
             </td>
@@ -26,7 +30,7 @@ export function ClientRow({client:{ id, nickname, remarks, presentationDate, sta
     );
 }
 
-const TruncatedRemark = ({ remarks }: any) => {
+const TruncatedRemark = ({remarks}: any) => {
     const maxLength = 60;
     if (remarks?.length > maxLength) {
         // If the text is longer than the maxLength, truncate it and add ellipsis

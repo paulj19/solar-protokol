@@ -4,9 +4,9 @@ import {calcSolarCostMonthly} from '@/utils/ElectricityCostCalculator';
 
 export default function SolarStats(params: PredictionParams) {
     return (
-        <fieldset className="border-black border-2 rounded-sm">
+        <fieldset className="border-black border-2 rounded-sm" data-testid="solar-stats">
             <legend className={styles.headingLegend}>Mit Enpal</legend>
-            <ElectricityCosts {...params} />
+            <SolarCosts {...params} />
             {/* <div className={styles.costMonthly}>
                 <div className={styles.costSolar}>{"Enpal monatlich"}</div>
                 <div className={styles.costNumber}>{params.year < 20 ? params.externParams.priceEnpalMonthly + "€" : "0€"}</div>
@@ -16,7 +16,7 @@ export default function SolarStats(params: PredictionParams) {
     )
 }
 
-function ElectricityCosts(params: PredictionParams) {
+function SolarCosts(params: PredictionParams) {
     const {
         rent,
         residualConsumptionCostMonthly,

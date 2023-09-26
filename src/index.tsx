@@ -5,8 +5,8 @@ import { Inter } from 'next/font/google'
 import Image from 'next/image'
 import logo from '@/public/enpal-logo.svg'
 import { URL_GENERAL_PARAMS } from '@/utils/Urls'
-import { worker } from '@/mocks/browser'
-import ProviderProxy from '@/context/ProviderProxy'
+import { worker } from '@/src/mocks/browser'
+import ProviderProxy from '@/src/context/ProviderProxy'
 
 const inter = Inter({ subsets: ['latin'] })
 

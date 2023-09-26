@@ -188,18 +188,18 @@ describe("ElectricityCostCalculator", () => {
         const consumptionYearly = 3500;
         const productionYearly = 7192;
         const expectedGenerationConsumption: Array<GenerationConsumParam> = [
-            {month: "JANUARY", generation: 396, consumption: 345 },
-            {month: "FEBRUARY", generation: 467, consumption: 295 },
-            {month: "MARCH", generation: 633, consumption: 327 },
-            {month: "APRIL", generation: 719, consumption: 282 },
-            {month: "MAY", generation: 705, consumption: 268 },
-            {month: "JUNE", generation: 806, consumption: 253 },
-            {month: "JULY", generation: 827, consumption: 265 },
-            {month: "AUGUST", generation: 719, consumption: 271 },
-            {month: "SEPTEMBER", generation: 626, consumption: 279 },
-            {month: "OCTOBER", generation: 575, consumption: 294 },
-            {month: "NOVEMBER", generation: 396, consumption: 302 },
-            {month: "DECEMBER", generation: 324, consumption: 318 },
+            {month: "January", generation: 396, consumption: 345 },
+            {month: "February", generation: 467, consumption: 295 },
+            {month: "March", generation: 633, consumption: 327 },
+            {month: "April", generation: 719, consumption: 282 },
+            {month: "May", generation: 705, consumption: 268 },
+            {month: "June", generation: 806, consumption: 253 },
+            {month: "July", generation: 827, consumption: 265 },
+            {month: "August", generation: 719, consumption: 271 },
+            {month: "September", generation: 626, consumption: 279 },
+            {month: "October", generation: 575, consumption: 294 },
+            {month: "November", generation: 396, consumption: 302 },
+            {month: "December", generation: 324, consumption: 318 },
         ];
         const resultGenerationConsumption = getGenerationConsumParam(productionYearly, consumptionYearly);
         expect(resultGenerationConsumption).toEqual(expectedGenerationConsumption);

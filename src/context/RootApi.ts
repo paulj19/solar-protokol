@@ -123,7 +123,7 @@ export const rootApi = createApi({
             }),
             invalidatesTags: (result, error, {pDate}) => [{type: "ClientList", id: pDate}]
         }),
-        updateClientStats: builder.mutation({
+        updateClientStatus: builder.mutation({
             query: (data) => ({
                 url: `/clientList.json`,
                 method: 'PATCH',
@@ -169,6 +169,6 @@ export const {
     useUpdateHighestClientIdMutation,
     useDeleteClientMutation,
     useUpdateGeneralParamsMutation,
-    useUpdateClientStatsMutation,
+    useUpdateClientStatusMutation,
     useGetClientQuery,
 } = rootApi;

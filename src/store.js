@@ -1,4 +1,4 @@
-import { rootApi } from "@/context/RootApi";
+import { rootApi } from "@/src/context/RootApi";
 import { configureStore } from "@reduxjs/toolkit";
 
 const store = configureStore({

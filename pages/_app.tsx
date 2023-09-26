@@ -11,6 +11,7 @@ import {AdapterDateFns} from "@mui/x-date-pickers/AdapterDateFns";
 import {LocalizationProvider} from "@mui/x-date-pickers";
 import Home from "@/src/Home";
 import GenerationConsumChart from "@/src/GenerationConsumChart/GenerationConsumChart";
+import {NotFound} from "next/dist/client/components/error";
 
 export default function SolarProtokol() {
     return (
@@ -21,9 +22,10 @@ export default function SolarProtokol() {
                         <Layout>
                             <Routes>
                                 <Route path="/" element={<Home/>}/>
-                                <Route path="/solarElecChart/:pDate/:clientId" element={<SolarElecChart/>}/>
-                                <Route path="/solarElecStats/:pDate/:clientId" element={<SolarElecStats/>}/>
-                                <Route path="/generationConsumChart/:pDate/:clientId" element={<GenerationConsumChart/>}/>
+                                <Route path="/solarElecChart" element={<SolarElecChart/>}/>
+                                <Route path="/solarElecStats" element={<SolarElecStats/>}/>
+                                <Route path="/generationConsumChart" element={<GenerationConsumChart/>}/>
+                                <Route path="*" element={<NotFound/>}/>
                             </Routes>
                         </Layout>
                     </BrowserRouter>

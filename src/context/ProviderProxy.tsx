@@ -1,6 +1,6 @@
 import { Provider } from "react-redux";
 import store from "@/src/store"
-import { worker } from "@/mocks/browser";
+import { worker } from "@/src/mocks/browser";
 
 if (process.env.NODE_ENV === 'development') {
     // worker.listen({ onUnhandledRequest: 'bypass' })

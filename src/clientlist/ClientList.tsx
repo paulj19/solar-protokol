@@ -1,9 +1,4 @@
-import {
-    useDeleteClientMutation,
-    useGetClientListByPDateQuery,
-    useGetClientQuery,
-    useGetGeneralParamsQuery
-} from "@/context/RootApi";
+import {useDeleteClientMutation, useGetClientListByPDateQuery} from "../context/RootApi";
 import {ClientRow} from "./ClientRow";
 import {useState} from "react";
 import {DateChooser} from "../components/DateChooser";
@@ -14,7 +9,7 @@ import {ModalClose, ModalDialog} from "@mui/joy";
 import Loading from "@/src/components/Loading";
 import Error from "@/src/components/Error";
 import Button from "@material-ui/core/Button";
-import {format, startOfDay, startOfToday} from "date-fns";
+import {format, startOfToday} from "date-fns";
 import {Client} from "@/types/types";
 import {Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle} from "@material-ui/core";
 import {Alert, Snackbar} from "@mui/material";
@@ -22,16 +17,15 @@ import {Alert, Snackbar} from "@mui/material";
 export default function ClientList() {
     const [modalParams, setModalParams] = useState<{ openModal: boolean, clientIdToEdit: string }>({openModal: false, clientIdToEdit: null});
     const [selectedDate, setSelectedDate] = useState<string>(format(startOfToday(), 'yyyy-MM-dd'))
-    const {data: clientList, isLoading: isClientListLoading, isError: isClientListError} = useGetClientListByPDateQuery({startDate: selectedDate, endDate: selectedDate});
-    const {data: generalParams, isLoading: isGeneralParamLoading, isError: isGeneralParamsError} = useGetGeneralParamsQuery(undefined);
-    const [deleteClient] = useDeleteClientMutation();
     const [deleteData, setDeleteDate] = useState({openDeleteDialog: false, pDate: null, clientId: null});
     const [snackData, setSnackData] = useState({open: false, severity: null, message: null});
+    const {data: clientList, isLoading: isClientListLoading, isError: isClientListError} = useGetClientListByPDateQuery({startDate: selectedDate, endDate: selectedDate});
+    const [deleteClient] = useDeleteClientMutation();
 
-    if (isGeneralParamLoading && isClientListLoading) {
+    if (isClientListLoading) {
         return <Loading/>;
     }
-    if (isClientListError && isGeneralParamsError) {
+    if (isClientListError) {
         return <Error/>
     }
 
@@ -63,33 +57,25 @@ export default function ClientList() {
             <DateChooser selectedDate={selectedDate} setSelectedDate={setSelectedDate}/>
             {
                 clientList?.length ?
-                    <table className="w-full table-auto font-sans text-base my-5 text-left">
-                        <thead className="">
+                    <table className="w-full table-auto font-sans text-base my-5 text-left"
+                           data-testid="client-list-table">
+                        <thead>
                         <tr className="border h-[50px] bg-gray-500 shadow-lg text-gray-200 font-mono">
-                            <th className="">Termin Zeit</th>
-                            <th className="">ID</th>
+                            <th>Termin Zeit</th>
+                            <th>ID</th>
                             <th className="w-[20%]">Nickname</th>
                             <th className="w-[35%]">Bemerkungen</th>
-                            <th className="">Status</th>
+                            <th>Status</th>
                             <th className="w-[20%]"></th>
                         </tr>
                         </thead>
                         <tbody>
                         {
-                            // Array.from(clientList[selectedDate]).map((value) => {
-                            //     return (
-                            //         <>
-                            //             {
                             clientList.map((client: Client) => {
                                 return (
                                     <ClientRow key={client.id} {...{client, setModalParams, triggerDeleteClient}} />
                                 )
                             })
-                            //             }
-                            //         </>
-                            //     )
-                            // }
-                            // )
                         }
                         </tbody>
                     </table> : <p className="p-5">no entries yet, add new</p>
@@ -100,12 +86,15 @@ export default function ClientList() {
                 color="inherit"
                 startIcon={<Add/>}
                 size="medium"
+                aria-label="add-client-button"
                 onClick={() => setModalParams({openModal: true, clientIdToEdit: null})}
             >
                 New Client
             </Button>
             <Modal open={modalParams.openModal}
-                   onClose={() => setModalParams({openModal: false, clientIdToEdit: null})}>
+                   onClose={() => setModalParams({openModal: false, clientIdToEdit: null})}
+                   aria-label="create-client-modal"
+            >
                 <ModalDialog
                     color="neutral"
                     variant="outlined"
@@ -119,7 +108,7 @@ export default function ClientList() {
             <Dialog
                 open={deleteData.openDeleteDialog}
                 onClose={onDeleteClientClose}
-                aria-labelledby="alert-dialog-title"
+                aria-labelledby="delete-client-dialog"
                 aria-describedby="alert-dialog-description"
             >
                 <DialogTitle id="alert-dialog-title">
@@ -132,7 +121,7 @@ export default function ClientList() {
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={onDeleteClientClose}>Cancel</Button>
-                    <Button onClick={handleDeleteClient} autoFocus>
+                    <Button onClick={handleDeleteClient} autoFocus aria-label="delete-client-confirm">
                         Delete
                     </Button>
                 </DialogActions>

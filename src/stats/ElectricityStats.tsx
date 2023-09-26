@@ -5,7 +5,7 @@ import { calcElectricityCostMonthly, calcSolarCostMonthly } from '@/utils/Electr
 export function ElectricityStats(params: PredictionParams) {
 
     return (
-        <fieldset className={styles.fieldset}>
+        <fieldset className={styles.fieldset} data-testid="electricity-stats">
             <legend className={styles.headingLegend}>Ohne Enpal</legend>
             <ElectricityCosts {...params} />
         </fieldset>

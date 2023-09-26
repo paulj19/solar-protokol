@@ -9,7 +9,7 @@ export function DateChooser({ selectedDate, setSelectedDate }) {
     const buttonStyleSelected = { fontSize: "1.1em", color: "#f2f2ed", background: "gray" }
 
     return (
-        <ButtonGroup variant="outlined" aria-label="outlined button group" className="text-sm">
+        <ButtonGroup variant="outlined" aria-label="client-list-dateChooser" className="text-sm">
             <Button style={dateToday === selectedDate ? {...buttonStyleSelected} : {...buttonStyle}}
                     onClick={() => setSelectedDate(dateToday)}>Heute</Button>
             <Button style={dateTomorrow === selectedDate ? {...buttonStyleSelected} : {...buttonStyle}}
