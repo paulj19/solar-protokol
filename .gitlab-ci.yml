@@ -1,0 +1,19 @@
+stages:
+  - test
+
+#cache:
+#  key: ${CI_COMMIT_REF_SLUG}
+#  paths:
+#    - node_modules/
+#    - .npm/
+
+test:
+  image: cypress/browsers:node18.12.0-chrome106-ff106
+  stage: test
+  script:
+    # install dependencies
+    - npm ci
+    # start the server in the background
+    - npm start &
+    # run Cypress tests
+    - npx cypress run --browser firefox
