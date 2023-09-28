@@ -25,7 +25,7 @@ let currentEndDate;
 //todo single query both client and general params
 export const rootApi = createApi({
     reducerPath: 'rootApi',
-    baseQuery: fetchBaseQuery({baseUrl: "https://solar-protokol-default-rtdb.europe-west1.firebasedatabase.app"}),
+    baseQuery: fetchBaseQuery({baseUrl: process.env.NEXT_PUBLIC_FIREBASE_URL}),
     tagTypes: ["HighestClientId", "ClientList", "GeneralParams", "Client"],
     endpoints: builder => ({
         getGeneralParams: builder.query({

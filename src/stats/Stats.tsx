@@ -13,7 +13,7 @@ import Tooltip from '@mui/material/Tooltip';
 import {Link, useNavigate, useParams, useSearchParams} from 'react-router-dom';
 import Error from "@/src/components/Error";
 
-export default function SolarElecStats() {
+export default function Stats() {
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
     const clientId = searchParams.get('clientId');
@@ -47,7 +47,7 @@ export default function SolarElecStats() {
     const predictionParams = {year, clientParams, generalParams};
     return (
         <>
-            <div className={styles.statsContainer}>
+            <div className={styles.statsContainer} data-testid="stats">
                 <h1 className={styles.yearHeading}>{"In " + (new Date().getFullYear() + year)}</h1>
                 <div className={styles.statsSection}>
                     <ElectricityStats {...predictionParams} />
@@ -60,7 +60,7 @@ export default function SolarElecStats() {
                             step={1}/>
                 </div>
             </div>
-            <div className="absolute bottom-7 left-7">
+            <div className="absolute bottom-7 left-7" data-testid="backward-fab">
                 <Tooltip title="comparison chart" arrow>
                     <Fab variant="circular" color="inherit" component={Link} to={`/solarElecChart?pDate=${pDate}&clientId=${clientId}`}
                          aria-label="add">
@@ -68,7 +68,7 @@ export default function SolarElecStats() {
                     </Fab>
                 </Tooltip>
             </div>
-            <div className="absolute bottom-7 right-7">
+            <div className="absolute bottom-7 right-7" data-testid="forward-fab">
                 <Tooltip title="generation consumption chart" arrow>
                     <Fab variant="circular" color="inherit" component={Link}
                          to={`/generationConsumChart?pDate=${pDate}&clientId=${clientId}`}

@@ -5,7 +5,6 @@ import "@/src/mocks/CommonMocks";
 import {mockData} from "@/src/setupTests";
 import '@testing-library/jest-dom'
 
-
 describe('ClientList', () => {
     it('should render ClientList', () => {
         renderWithWrappers(<ClientList/>)

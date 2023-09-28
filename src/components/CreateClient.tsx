@@ -17,7 +17,7 @@ export function CreateClient({selectedDate, clientToEdit, setModalParams}) {
     const defaultValues = {
         nickname: "",
         remarks: "",
-        status: "Open",
+        status: "open",
         basePrice: 10,
         unitPrice: 32,
         consumptionYearly: 3500,
@@ -25,7 +25,7 @@ export function CreateClient({selectedDate, clientToEdit, setModalParams}) {
     }
     const [updateHighestClientId] = useUpdateHighestClientIdMutation();
     const [addNewClient, result] = useAddClientMutation();
-    const {control, reset, formState , handleSubmit} = useForm({
+    const {control, reset, formState, handleSubmit} = useForm({
         values: clientToEdit ? {...clientToEdit, presentationDate: new Date(clientToEdit.presentationDate), unitPrice: clientToEdit.unitPrice * 100} : {
             ...defaultValues,
             presentationDate: prevPresentationDate.current ? addHours(prevPresentationDate.current, 1) : setHours(new Date(selectedDate), 10),
@@ -88,7 +88,7 @@ export function CreateClient({selectedDate, clientToEdit, setModalParams}) {
                 textColor="inherit"
                 fontWeight="sm"
                 textAlign="center"
-                pb={6}
+                pb={3}
             >
                 Create New Client
             </Typography>
@@ -108,26 +108,36 @@ export function CreateClient({selectedDate, clientToEdit, setModalParams}) {
                             render={({field}) => <TextField {...field} label="Remarks" minRows={5} multiline
                                                             inputProps={{maxLength: 128}}/>}
                         />
+                        <InputLabel id="select-label">Status</InputLabel>
                         <Controller
                             name="status"
                             control={control}
                             render={({field}) => (
-                                <div>
-                                    <InputLabel id="select-label">Status</InputLabel>
-                                    <Select {...field}
-                                            value="Open"
-                                            label="status"
-                                            className="w-35">
-                                        <MenuItem value="Open">Open</MenuItem>
-                                        <MenuItem value="Done">Done</MenuItem>
-                                    </Select>
-                                </div>
+                                <Select {...field}
+                                        sx={{width: 150}}
+                                >
+                                    <MenuItem value="open">open</MenuItem>
+                                    <MenuItem value="completed">completed</MenuItem>
+                                </Select>
                             )}
                         />
+                        {/*<Controller*/}
+                        {/*    name="status"*/}
+                        {/*    control={control}*/}
+                        {/*    render={({field}) => (*/}
+                        {/*        <div>*/}
+                        {/*            <Select {...field}*/}
+                        {/*                    value="open"*/}
+                        {/*                    label="status"*/}
+                        {/*                    className="w-35">*/}
+                        {/*            </Select>*/}
+                        {/*        </div>*/}
+                        {/*    )}*/}
+                        {/*/>*/}
                         <Controller
                             name="id"
                             control={control}
-                            render={({field}) => <TextField {...field} label="client id" disabled />}
+                            render={({field}) => <TextField {...field} label="client id" disabled/>}
                         />
                         <Controller
                             name="basePrice"
@@ -166,14 +176,14 @@ export function CreateClient({selectedDate, clientToEdit, setModalParams}) {
                         render={({field}) =>
                             <div className="border border-gray-400 rounded-md p-3">
                                 <InputLabel>Presentation Date</InputLabel>
-                                <StaticDateTimePicker {...field} ampm={false}  slotProps={{ actionBar: { actions: [] } }} />
+                                <StaticDateTimePicker {...field} ampm={false} slotProps={{actionBar: {actions: []}}}/>
                             </div>
                         }
                     />
                     <Button variant="contained" color="inherit" type="submit">Save</Button>
                     <Button variant="contained" color="inherit" type="reset">Reset</Button>
                 </form>
-                <Snackbar open={snackData.open} autoHideDuration={3000}
+                <Snackbar open={snackData.open} autoHideDuration={3000} aria-label="clientCreate-snackbar"
                           anchorOrigin={{vertical: 'bottom', horizontal: 'center'}} onClose={handleSnackClose}>
                     <Alert severity={snackData.severity ?? "info"} sx={{width: '100%'}}>
                         {snackData.message}

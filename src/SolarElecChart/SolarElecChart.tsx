@@ -125,7 +125,7 @@ export default function SolarElecChart() {
             <div className="absolute bottom-7 right-7" data-testid="forward-fab">
                 <Tooltip title="comparison stat" arrow>
                     <Fab variant="circular" color="inherit" component={Link}
-                         to={`/solarElecStats?pDate=${pDate}&clientId=${clientId}`}
+                         to={`/stats?pDate=${pDate}&clientId=${clientId}`}
                          aria-label="add">
                         <ArrowForward/>
                     </Fab>

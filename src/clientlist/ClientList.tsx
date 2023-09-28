@@ -17,7 +17,7 @@ import {Alert, Snackbar} from "@mui/material";
 export default function ClientList() {
     const [modalParams, setModalParams] = useState<{ openModal: boolean, clientIdToEdit: string }>({openModal: false, clientIdToEdit: null});
     const [selectedDate, setSelectedDate] = useState<string>(format(startOfToday(), 'yyyy-MM-dd'))
-    const [deleteData, setDeleteDate] = useState({openDeleteDialog: false, pDate: null, clientId: null});
+    const [deleteData, setDeleteData] = useState({openDeleteDialog: false, pDate: null, clientId: null});
     const [snackData, setSnackData] = useState({open: false, severity: null, message: null});
     const {data: clientList, isLoading: isClientListLoading, isError: isClientListError} = useGetClientListByPDateQuery({startDate: selectedDate, endDate: selectedDate});
     const [deleteClient] = useDeleteClientMutation();
@@ -30,7 +30,7 @@ export default function ClientList() {
     }
 
     function onDeleteClientClose() {
-        setDeleteDate({openDeleteDialog: false, pDate: null, clientId: null});
+        setDeleteData({openDeleteDialog: false, pDate: null, clientId: null});
     }
 
     const handleSnackClose = () => {
@@ -38,7 +38,7 @@ export default function ClientList() {
     };
 
     async function triggerDeleteClient(pDate, clientId) {
-        setDeleteDate({openDeleteDialog: true, pDate: pDate, clientId: clientId});
+        setDeleteData({openDeleteDialog: true, pDate: pDate, clientId: clientId});
     }
 
     async function handleDeleteClient() {
@@ -78,7 +78,7 @@ export default function ClientList() {
                             })
                         }
                         </tbody>
-                    </table> : <p className="p-5">no entries yet, add new</p>
+                    </table> : <p className="p-5" data-testid="no-client-msg">no entries yet, add new</p>
 
             }
             <Button
@@ -86,7 +86,8 @@ export default function ClientList() {
                 color="inherit"
                 startIcon={<Add/>}
                 size="medium"
-                aria-label="add-client-button"
+                aria-label="add-client"
+                autoFocus={false}
                 onClick={() => setModalParams({openModal: true, clientIdToEdit: null})}
             >
                 New Client
@@ -100,7 +101,7 @@ export default function ClientList() {
                     variant="outlined"
                     className="h-[75%] w-[80%] justify-center"
                 >
-                    <ModalClose/>
+                    <ModalClose aria-label="modal-close"/>
                     <CreateClient selectedDate={selectedDate} setModalParams={setModalParams}
                                   clientToEdit={modalParams.clientIdToEdit ? clientList.find((client) => client.id === modalParams.clientIdToEdit) : null}/>
                 </ModalDialog>
@@ -121,13 +122,13 @@ export default function ClientList() {
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={onDeleteClientClose}>Cancel</Button>
-                    <Button onClick={handleDeleteClient} autoFocus aria-label="delete-client-confirm">
+                    <Button onClick={handleDeleteClient} aria-label="deleteClient-confirm">
                         Delete
                     </Button>
                 </DialogActions>
             </Dialog>
             <Snackbar open={snackData.open} autoHideDuration={3000}
-                      anchorOrigin={{vertical: 'bottom', horizontal: 'center'}} onClose={handleSnackClose}>
+                      anchorOrigin={{vertical: 'bottom', horizontal: 'center'}} onClose={handleSnackClose}  aria-label="deleteClient-snackbar">
                 <Alert severity={snackData.severity ?? "info"} sx={{width: '100%'}}>
                     {snackData.message}
                 </Alert>

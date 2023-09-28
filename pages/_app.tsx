@@ -5,7 +5,7 @@ import NoSSR from 'react-no-ssr';
 import '@/src/globals.css'
 import {BrowserRouter, Route, Routes} from 'react-router-dom';
 import SolarElecChart from "@/src/SolarElecChart/SolarElecChart";
-import SolarElecStats from "@/src/stats/SolarElecStats";
+import Stats from "@/src/stats/Stats";
 import React from "react";
 import {AdapterDateFns} from "@mui/x-date-pickers/AdapterDateFns";
 import {LocalizationProvider} from "@mui/x-date-pickers";
@@ -23,7 +23,7 @@ export default function SolarProtokol() {
                             <Routes>
                                 <Route path="/" element={<Home/>}/>
                                 <Route path="/solarElecChart" element={<SolarElecChart/>}/>
-                                <Route path="/solarElecStats" element={<SolarElecStats/>}/>
+                                <Route path="/stats" element={<Stats/>}/>
                                 <Route path="/generationConsumChart" element={<GenerationConsumChart/>}/>
                                 <Route path="*" element={<NotFound/>}/>
                             </Routes>

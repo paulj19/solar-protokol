@@ -95,16 +95,16 @@ export default function GenerationConsumChart(): ReactElement {
                     </ComposedChart>
                 </ResponsiveContainer>
             </div>
-            <div className="absolute bottom-7 left-7" data-testid="fab-forward">
+            <div className="absolute bottom-7 left-7" data-testid="backward-fab">
                 <MuiToolTip title="comparison stat" arrow>
                     <Fab variant="circular" color="inherit" component={Link}
-                         to={`/solarElecStats?pDate=${pDate}&clientId=${clientId}`}
+                         to={`/stats?pDate=${pDate}&clientId=${clientId}`}
                          aria-label="add">
                         <ArrowBack/>
                     </Fab>
                 </MuiToolTip>
             </div>
-            <div className="absolute bottom-7 right-7" data-testid="fab-backward">
+            <div className="absolute bottom-7 right-7" data-testid="end-fab">
                 <MuiToolTip title="back to home" arrow>
                     <Fab variant="extended" color="inherit" component={Link} to='/'
                          onClick={() => handleUpdateClientStatus()} aria-label="add">

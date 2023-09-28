@@ -23,7 +23,7 @@ export default function Layout({children}) {
                 <Image id="enpal-logo" src={logo} alt="Enpal ." className="block w-[100px] h-[50px] mx-auto p-[5px]"/>
             </div>
             <main className="flex flex-col justify-between items-center p-24 h-screen w-screen">{children}</main>
-            <div className="absolute top-2 right-1 ">
+            <div className="absolute top-2 right-1" data-testid="right-menu">
                 <Dropdown>
                     <MenuButton
                         variant="plain" startDecorator={<MenuIcon/>}>
@@ -31,13 +31,13 @@ export default function Layout({children}) {
                     <Menu
                         variant="outlined"
                         placement="bottom-end">
-                        <MenuItem component={Link} to="/">
+                        <MenuItem component={Link} to="/" aria-label="clientList-item">
                             <ListItemDecorator>
                                 <HomeIcon/>
                             </ListItemDecorator>
                             Client List
                         </MenuItem>
-                        <MenuItem onClick={() => setOpenModal(true)}>
+                        <MenuItem onClick={() => setOpenModal(true)} aria-label="generalParams-item">
                             <ListItemDecorator>
                                 <Settings/>
                             </ListItemDecorator>
@@ -53,7 +53,7 @@ export default function Layout({children}) {
                     variant="outlined"
                     className="h-[60%] w-[60%] justify-center"
                 >
-                    <ModalClose/>
+                    <ModalClose aria-label="modalClose-generalParamsEdit"/>
                     <EditGeneralParams setOpenModal={setOpenModal}/>
                 </ModalDialog>
             </Modal>

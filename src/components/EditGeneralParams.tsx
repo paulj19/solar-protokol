@@ -57,13 +57,12 @@ export function EditGeneralParams({setOpenModal}) {
             >
                 Edit General Params
             </Typography>
-            <div className="flex justify-center items-center">
+            <div className="flex justify-center items-center" data-testid="modal-editGeneralParams">
                 <form onSubmit={handleSubmit(onSubmit)} onReset={() => reset()}
                       className="grid grid-cols-2 gap-3 w-[70%]">
                     <Controller
                         name="feedInPrice"
                         control={control}
-
                         render={({field}) => <TextField {...field} label="FeedIn Price" InputProps={{
                             endAdornment: <InputAdornment position="start">Cents</InputAdornment>, type: 'number',
                         }}/>}
