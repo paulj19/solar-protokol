@@ -14,7 +14,8 @@ function deleteClient() {
 }
 
 function createClient() {
-    cy.get('button[aria-label="add-client"]').click({force: true})
+    cy.wait(3000)
+    cy.get('button[aria-label="add-client"]').click()
     cy.get('input[name="nickname"]').type('test nickname')
     cy.get('textarea[name="remarks"]').type('test remarks')
     // cy.get('input[name="id"]').should('have.value', '1')
@@ -83,15 +84,15 @@ describe('CLIENT CRUD', () => {
 
     it('create client', () => {
         cy.visit('/')
-        assertListIsEmpty()
         setDate()
+        assertListIsEmpty()
         createClient()
         deleteClient()
     })
     it('edit client', () => {
         cy.visit('/')
-        assertListIsEmpty()
         setDate()
+        assertListIsEmpty()
         createClient()
         cy.get('[aria-label="edit-client"]').click()
         cy.get('input[name="nickname"]').clear().type('test nickname edited')
@@ -128,6 +129,7 @@ describe('CLIENT CRUD', () => {
 
     it('present client', () => {
         cy.visit('/')
+        setDate()
         assertListIsEmpty()
         createClient()
         cy.get('[aria-label="present-client"]').click()
@@ -138,12 +140,14 @@ describe('CLIENT CRUD', () => {
         generationConsumChart()
         cy.get('[data-testid="end-fab"]').click()
         cy.url().should('eq', Cypress.config().baseUrl + '/')
+        setDate()
         cy.get('table tbody tr td').eq(4).should('contain', 'completed')
         deleteClient()
     })
 
     it('traverse back and forth', () => {
         cy.visit('/')
+        setDate()
         assertListIsEmpty()
         createClient()
 
@@ -159,10 +163,12 @@ describe('CLIENT CRUD', () => {
         solarElecChart()
 
         goToClientList()
+        setDate()
         deleteClient()
     })
     it('edit generalParams', () => {
         cy.visit('/')
+        setDate()
         assertListIsEmpty()
         createClient()
 
@@ -208,7 +214,7 @@ describe('CLIENT CRUD', () => {
         deleteClient()
     })
 
-    afterEach(() => {
+    // afterEach(() => {
         // request to set url to null
 
         // cy.get('delete-client').should('exist').then(() => {
@@ -216,5 +222,5 @@ describe('CLIENT CRUD', () => {
         //     cy.get('button[aria-label="deleteClient-confirm"]').click()
         //     cy.get('[aria-label="deleteClient-snackbar"]').should('be.visible');
         // });
-    })
+    // })
 })
