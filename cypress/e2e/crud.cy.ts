@@ -14,8 +14,7 @@ function deleteClient() {
 }
 
 function createClient() {
-    cy.wait(3000)
-    cy.get('button[aria-label="add-client"]').click()
+    cy.get('button[aria-label="add-client"]').click({force: true})
     cy.get('input[name="nickname"]').type('test nickname')
     cy.get('textarea[name="remarks"]').type('test remarks')
     // cy.get('input[name="id"]').should('have.value', '1')
@@ -211,6 +210,7 @@ describe('CLIENT CRUD', () => {
 
         cy.get('[aria-label="modalClose-generalParamsEdit"]').click()
         goToClientList()
+        setDate()
         deleteClient()
     })
 
