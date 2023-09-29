@@ -36,5 +36,5 @@ jobs:
         if: always()
         with:
           name: cypress-snapshots
-          path: cypress/snapshots
+          path: /home/runner/work/solar-protokol/solar-protokol/cypress/screenshots
 
