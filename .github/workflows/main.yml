@@ -1,5 +1,7 @@
-name: Chrome
+name: cypress e2e tests
 on: push
+env:
+  NODE_ENV: test
 jobs:
   chrome:
     runs-on: ubuntu-22.04
