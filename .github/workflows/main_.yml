@@ -38,7 +38,7 @@ jobs:
         with:
           name: build
           if-no-files-found: error
-          path: build
+          path: .next
 
   test-run:
     runs-on: ubuntu-22.04
@@ -47,14 +47,18 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: unit test
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+          cache: 'npm'
+          run: npm install && npm run test
+
       - name: Download the build folder
         uses: actions/download-artifact@v3
         with:
           name: build
-          path: build
-
-      - name: unit test
-        run: npm test
+          path: .next
 
       - name: Cypress run
         uses: cypress-io/github-action@v6
