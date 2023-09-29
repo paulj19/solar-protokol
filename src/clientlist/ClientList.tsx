@@ -32,6 +32,9 @@ export default function ClientList() {
     function onDeleteClientClose() {
         setDeleteData({openDeleteDialog: false, pDate: null, clientId: null});
     }
+    console.log("clientList", clientList)
+    console.log("selectedDate", selectedDate)
+    console.log("environment", process.env.NODE_ENV)
 
     const handleSnackClose = () => {
         setSnackData({open: false, severity: null, message: null});
