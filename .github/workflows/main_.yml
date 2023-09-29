@@ -51,7 +51,6 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '20'
-          cache: 'npm'
           run: npm install && npm run test
 
       - name: Download the build folder
