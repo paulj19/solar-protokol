@@ -1,7 +1,7 @@
 name: Cypress Tests
-
+env:
+  NODE_ENV: test 
 on: push
-
 jobs:
   cypress-run:
     runs-on: ubuntu-22.04
@@ -13,3 +13,4 @@ jobs:
         with:
           build: npm run build
           start: npm start
+          browser: chrome
