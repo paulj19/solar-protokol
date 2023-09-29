@@ -13,3 +13,12 @@ jobs:
           build: npm run build
           start: npm start
           browser: chrome
+      - uses: actions/upload-artifact@latest
+        with:
+            name: cypress-snapshots
+            path: cypress/snapshots
+      - uses: actions/upload-artifact@v1
+        if: always()
+        with:
+          name: cypress-videos
+          path: cypress/videos
