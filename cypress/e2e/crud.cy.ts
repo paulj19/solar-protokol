@@ -1,6 +1,8 @@
 import {selector} from "postcss-selector-parser";
 import {screen} from "@testing-library/react";
 import {be} from "date-fns/locale";
+import * as process from "process";
+import {not} from "rxjs/internal/util/not";
 
 function assertListIsEmpty() {
     cy.get('table tbody tr').should('have.length', 0);
@@ -50,6 +52,7 @@ function solarElecChart() {
     cy.get('[data-testid="solar-elec-chart"]').should('be.visible')
     cy.get('[data-testid="solar-toggle"]').should('be.visible')
 }
+
 function stats() {
     cy.url().then((url) => {
         expect(url).to.match(/.*?\/stats\?pDate=\d{4}-\d{2}-\d{2}&clientId=\d+$/);
@@ -70,17 +73,38 @@ function goToClientList() {
 
     cy.url().should('eq', Cypress.config().baseUrl + '/')
 }
+
 function openGeneralParamsEdit() {
     cy.get('[data-testid="right-menu"]').click()
     cy.get('[aria-label="generalParams-item"]').click()
     cy.get(`[data-testid="modal-editGeneralParams"]`).should('be.visible');
 }
+
 function setDate() {
     cy.get('[data-testid="clientList-datePicker"]').type('12.12.2023')
 }
 
 describe('CLIENT CRUD', () => {
-
+    before(() => {
+        cy.request('GET', Cypress.env('NEXT_PUBLIC_FIREBASE_URL') + '/generalParams.json').should((response) => {
+            expect(response.status).to.eq(200)
+            const generalParams = response.body
+            expect(generalParams.feedInPrice).not.to.be.null
+            expect(generalParams.rent).not.to.be.null
+            expect(generalParams.inflationRate).not.to.be.null
+            expect(generalParams.electricityIncreaseRate).not.to.be.null
+            expect(generalParams.rentDiscountRate).not.to.be.null
+            expect(generalParams.rentDiscountPeriod).not.to.be.null
+            expect(generalParams.yearLimit).not.to.be.null
+        });
+        cy.request('GET', Cypress.env('NEXT_PUBLIC_FIREBASE_URL') + '/highestClientId.json').should((response) => {
+            expect(response.status).to.eq(200)
+            expect(response.body.uid_1).not.to.be.null
+        });
+    })
+    beforeEach(() => {
+        cy.request('DELETE', Cypress.env('NEXT_PUBLIC_FIREBASE_URL_TEST') + '/clientList/uid_1.json')
+    })
     it('create client', () => {
         cy.visit('/')
         setDate()
@@ -110,8 +134,8 @@ describe('CLIENT CRUD', () => {
         setDate()
 
         cy.get('[aria-label="edit-client"]').click()
-        cy.get('input[name="nickname"]').should('have.value','test nickname edited')
-        cy.get('textarea[name="remarks"]').should('have.value','test remarks edited')
+        cy.get('input[name="nickname"]').should('have.value', 'test nickname edited')
+        cy.get('textarea[name="remarks"]').should('have.value', 'test remarks edited')
 
         cy.get('[name="basePrice"]').should('have.value', 25);
         cy.get('[name="unitPrice"]').should('have.value', 50);
@@ -215,12 +239,12 @@ describe('CLIENT CRUD', () => {
     })
 
     // afterEach(() => {
-        // request to set url to null
+    // request to set url to null
 
-        // cy.get('delete-client').should('exist').then(() => {
-        //     cy.get('button[aria-label="delete-client"]').click()
-        //     cy.get('button[aria-label="deleteClient-confirm"]').click()
-        //     cy.get('[aria-label="deleteClient-snackbar"]').should('be.visible');
-        // });
+    // cy.get('delete-client').should('exist').then(() => {
+    //     cy.get('button[aria-label="delete-client"]').click()
+    //     cy.get('button[aria-label="deleteClient-confirm"]').click()
+    //     cy.get('[aria-label="deleteClient-snackbar"]').should('be.visible');
+    // });
     // })
 })

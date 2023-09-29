@@ -13,13 +13,13 @@ describe('ClientList', () => {
         expect(screen.getAllByRole('columnheader')).toHaveLength(6);
         expect(screen.getAllByRole('row')).toHaveLength(mockData.length + 1);
         expect(screen.getAllByRole('cell')).toHaveLength(6 * mockData.length);
-        expect(screen.getByLabelText('add-client-button')).toBeInTheDocument();
+        expect(screen.getByLabelText('add-client')).toBeInTheDocument();
     });
     it('should render open create client modal', () => {
         renderWithWrappers(<ClientList/>)
-        expect(screen.getByLabelText('add-client-button')).toBeInTheDocument();
+        expect(screen.getByLabelText('add-client')).toBeInTheDocument();
         act(() => {
-            screen.getByLabelText('add-client-button').click();
+            screen.getByLabelText('add-client').click();
         });
         expect(screen.getByLabelText('create-client-modal')).toBeInTheDocument();
     });

@@ -7,7 +7,7 @@ describe('GenerationConsumChart', () => {
     it('should render GenerationConsumChart', () => {
         renderWithWrappers(<GenerationConsumChart/>)
         expect(screen.getByTestId('generationConsum-chart')).toBeInTheDocument();
-        expect(screen.getByTestId('fab-backward')).toBeInTheDocument();
-        expect(screen.getByTestId('fab-forward')).toBeInTheDocument();
+        expect(screen.getByTestId('backward-fab')).toBeInTheDocument();
+        expect(screen.getByTestId('end-fab')).toBeInTheDocument();
     });
 });
