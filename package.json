@@ -6,7 +6,6 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "ci": "npm ci --legacy-peer-deps",
     "lint": "next lint",
     "test-watch": "jest --watch",
     "test": "jest",
