@@ -13,7 +13,7 @@ jobs:
           build: npm run build
           start: npm start
           browser: chrome
-      - uses: actions/upload-artifact@latest
+      - uses: actions/upload-artifact@v3
         with:
             name: cypress-snapshots
             path: cypress/snapshots
