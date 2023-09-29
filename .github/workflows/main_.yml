@@ -51,7 +51,9 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '20'
-          run: npm install && npm run test
+
+      - run: npm install
+      - run: npm test
 
       - name: Download the build folder
         uses: actions/download-artifact@v3
