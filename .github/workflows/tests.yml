@@ -5,7 +5,6 @@ env:
 jobs:
   unit_tests:
     runs-on: ubuntu-22.04
-    needs: install
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -35,6 +34,8 @@ jobs:
     runs-on: ubuntu-22.04
     needs: install
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
       - name: Download the build folder
         uses: actions/download-artifact@v3
         with:
