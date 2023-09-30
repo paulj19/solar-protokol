@@ -20,4 +20,7 @@ module.exports = {
         // !! WARN !!
         ignoreBuildErrors: true,
     },
+    images: {
+        unoptimized: true
+    }
 };
