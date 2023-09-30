@@ -11,7 +11,7 @@ import {Fab} from "@mui/material";
 import {ArrowBack, ArrowForward} from "@mui/icons-material";
 import Tooltip from '@mui/material/Tooltip';
 import {Link, useNavigate, useParams, useSearchParams} from 'react-router-dom';
-import Error from "@/src/components/Error";
+import ErrorScreen from "@/src/components/ErrorScreen";
 
 export default function Stats() {
     const navigate = useNavigate();
@@ -39,7 +39,7 @@ export default function Stats() {
     }
     //todo why undef rendered twice
     if (isClientParamError || isGeneralParamsError) {
-        return <Error/>
+        return <ErrorScreen/>
     }
     //isError -> error page, put in rootApi, if undefined show error
     //do all error checks

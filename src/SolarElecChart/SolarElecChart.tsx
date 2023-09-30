@@ -20,7 +20,7 @@ import {
     useGetClientQuery
 } from '@/src/context/RootApi';
 import Loading from "@/src/components/Loading";
-import Error from "@/src/components/Error";
+import ErrorScreen from "@/src/components/ErrorScreen";
 import {calcPredictions} from '@/utils/ElectricityCostCalculator';
 import {CostPredictions} from '@/types/types';
 import {Link, Navigate, useNavigate, useParams, useSearchParams} from 'react-router-dom';
@@ -48,7 +48,7 @@ export default function SolarElecChart() {
     }
     //todo why undef rendered twice
     if (isClientParamError || isGeneralParamsError) {
-        return <Error/>
+        return <ErrorScreen/>
     }
     //todo no direct url calls with cid, then have to handle loading and error conditions of query
 

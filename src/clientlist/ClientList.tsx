@@ -7,7 +7,7 @@ import {CreateClient} from "@/src/components/CreateClient";
 import Add from '@mui/icons-material/Add';
 import {ModalClose, ModalDialog} from "@mui/joy";
 import Loading from "@/src/components/Loading";
-import Error from "@/src/components/Error";
+import ErrorScreen from "@/src/components/ErrorScreen";
 import Button from "@material-ui/core/Button";
 import {format, startOfToday} from "date-fns";
 import {Client} from "@/types/types";
@@ -26,7 +26,7 @@ export default function ClientList() {
         return <Loading/>;
     }
     if (isClientListError) {
-        return <Error/>
+        return <ErrorScreen/>
     }
 
     function onDeleteClientClose() {
@@ -42,11 +42,12 @@ export default function ClientList() {
 
     async function handleDeleteClient() {
         try {
+            throw new Error("with new error")
             await deleteClient({pDate: format(new Date(deleteData.pDate), "yyyy-MM-dd"), clientId: "cid_" + deleteData.clientId}).unwrap();
             setSnackData({open: true, severity: "success", message: "Client deleted successfully."});
         } catch (e) {
             setSnackData({open: true, severity: "error", message: "An error occurred, please refresh the page and try again."});
-            console.error("error deleting client", e);
+            console.error("error deleting client", e)
         }
         onDeleteClientClose();
     }

@@ -4,7 +4,7 @@ import {useGetGeneralParamsQuery, useUpdateGeneralParamsMutation} from "@/src/co
 import {useState} from "react";
 import {Typography} from "@mui/joy";
 import Loading from "@/src/components/Loading";
-import Error from "@/src/components/Error";
+import ErrorScreen from "@/src/components/ErrorScreen";
 
 export function EditGeneralParams({setOpenModal}) {
     const {data: values, isLoading: isGeneralParamLoading, isError: isGeneralParamQueryError} = useGetGeneralParamsQuery(undefined);
@@ -16,7 +16,7 @@ export function EditGeneralParams({setOpenModal}) {
         return <Loading/>;
     }
     if (isGeneralParamQueryError) {
-        return <Error/>
+        return <ErrorScreen/>
     }
     const onSubmit = async (data) => {
         try {

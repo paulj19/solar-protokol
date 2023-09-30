@@ -25,7 +25,7 @@ import {ArrowBack, ArrowForward} from "@mui/icons-material";
 import {Tooltip as MuiToolTip} from '@mui/material';
 import {format} from "date-fns";
 import Loading from "@/src/components/Loading";
-import Error from "@/src/components/Error";
+import ErrorScreen from "@/src/components/ErrorScreen";
 
 export default function GenerationConsumChart(): ReactElement {
     const navigate = useNavigate();
@@ -48,7 +48,7 @@ export default function GenerationConsumChart(): ReactElement {
     }
     //todo why undef rendered twice
     if (isClientParamError) {
-        return <Error/>
+        return <ErrorScreen/>
     }
 
     const generationConsumParams: Array<GenerationConsumParam> = getGenerationConsumParam(clientParams.productionYearly, clientParams.consumptionYearly);
@@ -115,7 +115,7 @@ export default function GenerationConsumChart(): ReactElement {
             <Snackbar open={snackOpen} autoHideDuration={3000}
                       anchorOrigin={{vertical: 'bottom', horizontal: 'center'}} onClose={() => handleSnackClose()}>
                 <Alert severity={"error"} sx={{width: '100%'}}>
-                    {"Error while updating client status, update in home page."}
+                    {"ErrorScreen while updating client status, update in home page."}
                 </Alert>
             </Snackbar>
         </>
