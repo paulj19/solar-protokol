@@ -29,19 +29,3 @@ export function ClientRow({client: {id, nickname, remarks, presentationDate, sta
         </tr>
     );
 }
-
-const TruncatedRemark = ({remarks}: any) => {
-    const maxLength = 60;
-    if (remarks?.length > maxLength) {
-        // If the text is longer than the maxLength, truncate it and add ellipsis
-        const truncatedText = remarks.substring(0, maxLength) + '...';
-        return <td>{truncatedText}</td>;
-    }
-    return <td>{remarks}</td>;
-};
-
-function extractLocalTime(utcTimestamp) {
-    //todo date-fns
-    const date = new Date(utcTimestamp);
-    return date.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'});
-}

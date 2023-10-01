@@ -10,6 +10,7 @@ import {addHours, format, setHours} from "date-fns";
 import {useRef, useState} from "react";
 import {Typography} from "@mui/joy";
 import Loading from "@/src/components/Loading";
+import ErrorScreen from "@/src/components/ErrorScreen";
 
 export function CreateClient({selectedDate, clientToEdit, setModalParams}) {
     const {data, isLoading: isIdLoading, isFetching: isIdFetching, isError} = useGetHighestClientIdQuery("uid_1", {skip: Boolean(clientToEdit)});
@@ -39,7 +40,7 @@ export function CreateClient({selectedDate, clientToEdit, setModalParams}) {
             return <Loading/>;
         }
         if (isError) {
-            return <div>error, fix me</div>;
+            return <ErrorScreen/>
         }
     }
 
@@ -121,19 +122,6 @@ export function CreateClient({selectedDate, clientToEdit, setModalParams}) {
                                 </Select>
                             )}
                         />
-                        {/*<Controller*/}
-                        {/*    name="status"*/}
-                        {/*    control={control}*/}
-                        {/*    render={({field}) => (*/}
-                        {/*        <div>*/}
-                        {/*            <Select {...field}*/}
-                        {/*                    value="open"*/}
-                        {/*                    label="status"*/}
-                        {/*                    className="w-35">*/}
-                        {/*            </Select>*/}
-                        {/*        </div>*/}
-                        {/*    )}*/}
-                        {/*/>*/}
                         <Controller
                             name="id"
                             control={control}

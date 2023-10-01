@@ -23,7 +23,6 @@ export default function MenuListComposition() {
         ) {
             return;
         }
-
         setOpen(false);
     };
 
