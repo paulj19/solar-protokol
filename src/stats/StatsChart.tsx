@@ -6,7 +6,6 @@ import { XAxis, BarChart, Bar, YAxis, CartesianGrid, Tooltip, Legend, Responsive
 const renderCustomizedLabel = (props) => {
     const { x, y, width, height, value } = props;
     const radius = 10;
-    console.log("PROPS", props)
 
     return (
         <g>

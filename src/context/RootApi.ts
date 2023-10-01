@@ -143,7 +143,6 @@ export const selectClientById = createSelector(
     selectClientByIdResult, (state, clientId) => clientId,
     ({data: clients}, clientId: string) => {
 
-        console.log("clients", clients)
         if (!clients) return {
             "basePrice": 10,
             "consumptionYearly": 3500,
