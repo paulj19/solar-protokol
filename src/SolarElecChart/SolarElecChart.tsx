@@ -47,8 +47,9 @@ export default function SolarElecChart() {
         return <Loading/>;
     }
     //todo why undef rendered twice
-    // if (isClientParamError || isGeneralParamsError) {
-        if (true) {
+    if (isClientParamError || isGeneralParamsError) {
+        console.error("error screen")
+        console.trace()
         return <ErrorScreen/>
     }
     //todo no direct url calls with cid, then have to handle loading and error conditions of query
