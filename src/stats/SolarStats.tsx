@@ -27,7 +27,7 @@ function SolarCosts(params: PredictionParams) {
     return (
         <div>
             <div className={styles.costHeading}>{"Ihre Neu Strom kosten:"}</div>
-            <div className="flex justify-around pt-6 items-center">
+            <div className="flex justify-around pt-6 items-center gap-1">
                 <div className="flex flex-col gap-4 border-gray-300 border-2 rounded-md p-3">
                     <div className={styles.costElements}>
                         <div className={styles.costLabel}>{"Grundpreis"}</div>

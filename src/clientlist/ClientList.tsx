@@ -42,12 +42,10 @@ export default function ClientList() {
 
     async function handleDeleteClient() {
         try {
-            throw new Error("NEW VERSION")
             await deleteClient({pDate: format(new Date(deleteData.pDate), "yyyy-MM-dd"), clientId: "cid_" + deleteData.clientId}).unwrap();
             setSnackData({open: true, severity: "success", message: "Client deleted successfully."});
         } catch (e) {
             setSnackData({open: true, severity: "error", message: "An error occurred, please refresh the page and try again."});
-            console.log("NORMAL LOG")
             console.error("error deleting client", e)
         }
         onDeleteClientClose();
@@ -58,7 +56,7 @@ export default function ClientList() {
             <DateChooser selectedDate={selectedDate} setSelectedDate={setSelectedDate}/>
             {
                 clientList?.length ?
-                    <table className="w-full table-auto font-sans text-base my-5 text-left"
+                    <table className="w-full table-auto font-sans text-sm my-5 text-left"
                            data-testid="client-list-table">
                         <thead>
                         <tr className="border h-[50px] bg-gray-500 shadow-lg text-gray-200 font-mono">
@@ -67,7 +65,7 @@ export default function ClientList() {
                             <th className="w-[20%]">Nickname</th>
                             <th className="w-[35%]">Bemerkungen</th>
                             <th>Status</th>
-                            <th className="w-[20%]"></th>
+                            <th className="w-[22%]"></th>
                         </tr>
                         </thead>
                         <tbody>
@@ -100,7 +98,7 @@ export default function ClientList() {
                 <ModalDialog
                     color="neutral"
                     variant="outlined"
-                    className="h-[75%] w-[80%] justify-center"
+                    className="h-fit w-[70%] justify-center"
                 >
                     <ModalClose aria-label="modal-close"/>
                     <CreateClient selectedDate={selectedDate} setModalParams={setModalParams}

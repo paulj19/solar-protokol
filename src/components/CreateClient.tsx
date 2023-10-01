@@ -89,13 +89,12 @@ export function CreateClient({selectedDate, clientToEdit, setModalParams}) {
                 textColor="inherit"
                 fontWeight="sm"
                 textAlign="center"
-                pb={3}
             >
                 Create New Client
             </Typography>
-            <div className="flex justify-center items-center">
+            <div className="flex justify-center items-center pt-10 pb-7">
                 <form onSubmit={handleSubmit(onSubmit)} onReset={() => reset()}
-                      className="grid grid-cols-2 gap-3 w-[70%]">
+                      className="grid grid-cols-2 gap-3 w-[80%]">
                     <div className="flex flex-col justify-between gap-3">
                         <Controller
                             name="nickname"

@@ -17,6 +17,7 @@
 .statsSection {
     display: flex;
     flex-direction: row;
+    gap: 2px;
     grid-row: 2/17;
 }
 

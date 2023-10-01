@@ -74,7 +74,7 @@ export default function GenerationConsumChart(): ReactElement {
 
     return (
         <>
-            <div data-testid="generationConsum-chart" className="w-[80%] h-[90%]">
+            <div data-testid="generationConsum-chart" className="w-[80%] h-[90%] ">
                 <ResponsiveContainer>
                     <ComposedChart
                         data={generationConsumParams}

@@ -2,7 +2,8 @@
     /*border: 1px solid rgb(197, 197, 197);*/
     display: flex;
     flex-direction: column;
-    width: 90%;
+    width: 80%;
+    justify-content: center;
     margin: 10px auto;
 }
 
@@ -17,7 +18,7 @@
 
 .responseChart {
     height: 100%;
-    min-height: 800px;
+    min-height: 700px;
     width: 100%;
 }
 
