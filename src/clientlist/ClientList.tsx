@@ -28,7 +28,6 @@ export default function ClientList() {
     if (isClientListError) {
         return <ErrorScreen/>
     }
-    console.error("error XXXX XXXX xXXX")
 
     function onDeleteClientClose() {
         setDeleteData({openDeleteDialog: false, pDate: null, clientId: null});
@@ -43,11 +42,12 @@ export default function ClientList() {
 
     async function handleDeleteClient() {
         try {
-            throw new Error("xxxwith new errorxxx")
+            throw new Error("NEW VERSION")
             await deleteClient({pDate: format(new Date(deleteData.pDate), "yyyy-MM-dd"), clientId: "cid_" + deleteData.clientId}).unwrap();
             setSnackData({open: true, severity: "success", message: "Client deleted successfully."});
         } catch (e) {
             setSnackData({open: true, severity: "error", message: "An error occurred, please refresh the page and try again."});
+            console.log("NORMAL LOG")
             console.error("error deleting client", e)
         }
         onDeleteClientClose();
