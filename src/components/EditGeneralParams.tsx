@@ -18,7 +18,6 @@ export function EditGeneralParams({setOpenModal}) {
     if (isGeneralParamQueryError) {
         return <ErrorScreen/>
     }
-    console.error("generalParam error")
     const onSubmit = async (data) => {
         try {
             if (!data.feedInPrice || !data.rent || !data.inflationRate || !data.electricityIncreaseRate || !data.rentDiscountRate || !data.rentDiscountPeriod || !data.yearLimit) {
