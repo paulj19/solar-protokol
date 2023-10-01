@@ -9,8 +9,8 @@ import ErrorScreen from "@/src/components/ErrorScreen";
 export function EditGeneralParams({setOpenModal}) {
     const {data: values, isLoading: isGeneralParamLoading, isError: isGeneralParamQueryError} = useGetGeneralParamsQuery(undefined);
     const [updateGeneralParams] = useUpdateGeneralParamsMutation();
-    const {control, reset, formState, handleSubmit} = useForm({values: {...values, feedInPrice: values.feedInPrice * 100,}});
     const [snackData, setSnackData] = useState({open: false, severity: null, message: null});
+    const {control, reset, formState, handleSubmit} = useForm({values: {...values, feedInPrice: values?.feedInPrice * 100,}});
 
     if (isGeneralParamLoading) {
         return <Loading/>;
@@ -18,6 +18,7 @@ export function EditGeneralParams({setOpenModal}) {
     if (isGeneralParamQueryError) {
         return <ErrorScreen/>
     }
+    console.error("generalParam error")
     const onSubmit = async (data) => {
         try {
             if (!data.feedInPrice || !data.rent || !data.inflationRate || !data.electricityIncreaseRate || !data.rentDiscountRate || !data.rentDiscountPeriod || !data.yearLimit) {

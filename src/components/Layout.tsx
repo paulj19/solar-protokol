@@ -51,7 +51,7 @@ export default function Layout({children}) {
                 <ModalDialog
                     color="neutral"
                     variant="outlined"
-                    className="h-[60%] w-[60%] justify-center"
+                    className="h-[50%] w-[50%] justify-center"
                 >
                     <ModalClose aria-label="modalClose-generalParamsEdit"/>
                     <EditGeneralParams setOpenModal={setOpenModal}/>
