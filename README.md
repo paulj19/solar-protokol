@@ -34,7 +34,7 @@ You can start editing the page by modifying `app/[clientId].tsx`. The page auto-
 2. infaltion rate -> inflationRate
 3. Erhöhung strompreis -> electricityIncreaseRate
 4. Solar Rabatt dauer -> rentDiscountPeriod
-5. Solar Rabatt prozent -> rentDiscountRate
+5. Solar Rabatt prozent -> rentDiscountAmount
 
 ### Other Terms
 

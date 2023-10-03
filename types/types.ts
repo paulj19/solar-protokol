@@ -1,7 +1,7 @@
 export type GeneralParams = {
     rent: number;
     rentDiscountPeriod: number;
-    rentDiscountRate: number;
+    rentDiscountAmount: number;
     feedInPrice: number;
     inflationRate: number;
     electricityIncreaseRate: number;

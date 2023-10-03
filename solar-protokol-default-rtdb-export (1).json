@@ -205,7 +205,7 @@
     "inflationRate": 3,
     "rent": 132,
     "rentDiscountPeriod": 2,
-    "rentDiscountRate": 11.36,
+    "rentDiscountAmount": 15,
     "yearLimit": 25
   }
 }

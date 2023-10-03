@@ -16,7 +16,7 @@ jest.mock('../src/context/RootApi', () => ({
         data: {
             rent: 132,
             rentDiscountPeriod: 2,
-            rentDiscountRate: 11.36,
+            rentDiscountAmount: 15,
             feedInPrice: 0.08,
             inflationRate: 3,
             electricityIncreaseRate: 1,

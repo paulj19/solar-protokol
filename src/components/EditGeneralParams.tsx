@@ -20,15 +20,22 @@ export function EditGeneralParams({setOpenModal}) {
     }
     const onSubmit = async (data) => {
         try {
-            if (!data.feedInPrice || !data.rent || !data.inflationRate || !data.electricityIncreaseRate || !data.rentDiscountRate || !data.rentDiscountPeriod || !data.yearLimit) {
+            if (!data.feedInPrice || !data.rent || !data.inflationRate || !data.electricityIncreaseRate || !data.rentDiscountAmount || !data.rentDiscountPeriod || !data.yearLimit) {
                 setSnackData({open: true, severity: "error", message: "An error occurred, please refresh the page and try again."});
+                return;
+            }
+            //todo convert to watch
+            if (parseInt(data.rentDiscountAmount) > parseInt(data.rent)) {
+                setSnackData({open: true, severity: "error", message: "Rent Discount Amount cannot be greater than Rent!"});
                 return;
             }
             const feedInPrice = data.feedInPrice / 100;
             const generalParams = {
                 feedInPrice: feedInPrice, rent: parseInt(data.rent),
-                inflationRate: parseInt(data.inflationRate), electricityIncreaseRate: parseInt(data.electricityIncreaseRate),
-                rentDiscountRate: parseInt(data.rentDiscountRate), rentDiscountPeriod: parseInt(data.rentDiscountPeriod),
+                inflationRate: parseInt(data.inflationRate),
+                electricityIncreaseRate: parseInt(data.electricityIncreaseRate),
+                rentDiscountAmount : parseInt(data.rentDiscountAmount),
+                rentDiscountPeriod: parseInt(data.rentDiscountPeriod),
                 yearLimit: parseInt(data.yearLimit)
             };
             await updateGeneralParams(generalParams).unwrap()
@@ -70,7 +77,7 @@ export function EditGeneralParams({setOpenModal}) {
                         name="rent"
                         control={control}
                         render={({field}) => <TextField {...field} label="Rent" InputProps={{
-                            endAdornment: <InputAdornment position="start">Euros</InputAdornment>, type: 'number',
+                            endAdornment: <InputAdornment position="start">Euro</InputAdornment>, type: 'number',
                         }}/>}
                     />
                     <Controller
@@ -89,10 +96,10 @@ export function EditGeneralParams({setOpenModal}) {
                     />
                     <div className="flex justify-between col-span-2 gap-2">
                         <Controller
-                            name="rentDiscountRate"
+                            name="rentDiscountAmount"
                             control={control}
                             render={({field}) => <TextField {...field} label="Rent Discount Rate" InputProps={{
-                                endAdornment: <InputAdornment position="start">Percent</InputAdornment>, type: 'number',
+                                endAdornment: <InputAdornment position="start">Euro/monat</InputAdornment>, type: 'number',
                             }}/>}
                         />
                         <Controller

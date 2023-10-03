@@ -131,12 +131,12 @@ function calcFeedInPrice({year, generalParams: {feedInPrice, inflationRate, elec
     return priceIncrease(feedInPrice, inflationRate + electricityIncreaseRate, year);
 }
 
-function calcRent({year, generalParams: {rent, rentDiscountPeriod, rentDiscountRate}}: PredictionParams): number {
+function calcRent({year, generalParams: {rent, rentDiscountPeriod, rentDiscountAmount}}: PredictionParams): number {
     if (year > 20) {
         return 0;
     }
     if (year < rentDiscountPeriod) {
-        return round(rent * (1 - (rentDiscountRate * 0.01)));
+        return round(rent - rentDiscountAmount);
     }
     return rent;
 }

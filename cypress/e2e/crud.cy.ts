@@ -94,7 +94,7 @@ describe('CLIENT CRUD', () => {
             expect(generalParams.rent).not.to.be.null
             expect(generalParams.inflationRate).not.to.be.null
             expect(generalParams.electricityIncreaseRate).not.to.be.null
-            expect(generalParams.rentDiscountRate).not.to.be.null
+            expect(generalParams.rentDiscountAmount).not.to.be.null
             expect(generalParams.rentDiscountPeriod).not.to.be.null
             expect(generalParams.yearLimit).not.to.be.null
         });
@@ -207,7 +207,7 @@ describe('CLIENT CRUD', () => {
         cy.get('textarea[name="rent"]').should('not.be.empty')
         cy.get('textarea[name="inflationRate"]').should('not.be.empty')
         cy.get('textarea[name="electricityIncreaseRate"]').should('not.be.empty')
-        cy.get('textarea[name="rentDiscountRate"]').should('not.be.empty')
+        cy.get('textarea[name="rentDiscountAmount"]').should('not.be.empty')
         cy.get('textarea[name="rentDiscountPeriod"]').should('not.be.empty')
         cy.get('textarea[name="yearLimit"]').should('not.be.empty')
 
@@ -215,7 +215,7 @@ describe('CLIENT CRUD', () => {
         cy.get('[name="rent"]').clear().type('140')
         cy.get('[name="inflationRate"]').clear().type('4')
         cy.get('[name="electricityIncreaseRate"]').clear().type('2')
-        cy.get('[name="rentDiscountRate"]').clear().type('12')
+        cy.get('[name="rentDiscountAmount"]').clear().type('12')
         cy.get('[name="rentDiscountPeriod"]').clear().type('3')
         cy.get('[name="yearLimit"]').clear().type('25')
 
@@ -229,7 +229,7 @@ describe('CLIENT CRUD', () => {
         cy.get('[name="rent"]').should('have.value', 140)
         cy.get('[name="inflationRate"]').should('have.value', 4)
         cy.get('[name="electricityIncreaseRate"]').should('have.value', 2)
-        cy.get('[name="rentDiscountRate"]').should('have.value', 12)
+        cy.get('[name="rentDiscountAmount"]').should('have.value', 12)
         cy.get('[name="rentDiscountPeriod"]').should('have.value', 3)
         cy.get('[name="yearLimit"]').should('have.value', 25)
 
