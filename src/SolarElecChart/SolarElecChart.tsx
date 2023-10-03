@@ -38,7 +38,7 @@ export default function SolarElecChart() {
         }
     }, []);
     const [inflationRate, setInflationRate] = useState<number>(null)
-    const [unitPrice, setUnitPrice] = useState<number>(null)
+    const [elecIncreaseRate, setElecIncreaseRate] = useState<number>(null)
     const [showSolar, setShowSolar] = useState<boolean>(false);
     const {data: clientParams, isLoading: isClientParamLoading, isError: isClientParamError} = useGetClientQuery({pDate, clientId});
     const {data: generalParams, isLoading: isGeneralParamLoading, isError: isGeneralParamsError} = useGetGeneralParamsQuery(undefined);
@@ -52,7 +52,7 @@ export default function SolarElecChart() {
     }
     //todo no direct url calls with cid, then have to handle loading and error conditions of query
 
-    const comparisonData: Array<CostPredictions> = calcPredictions({year: undefined, clientParams: {...clientParams, unitPrice: unitPrice ?? clientParams.unitPrice}, generalParams: {...generalParams, inflationRate: inflationRate ?? generalParams.inflationRate}});
+    const comparisonData: Array<CostPredictions> = calcPredictions({year: undefined, clientParams: {...clientParams}, generalParams: {...generalParams, inflationRate: inflationRate ?? generalParams.inflationRate, electricityIncreaseRate: elecIncreaseRate ?? generalParams.electricityIncreaseRate}});
     let xx = false;
     const comparisonDataWithRange = comparisonData.reduce((acc, item, i, array) => {
         if (i % 5 !== 0) {
@@ -115,11 +115,11 @@ export default function SolarElecChart() {
                         <span className={styles.slider + " " + styles.round}></span>
                     </label>
                 </div>
-                <div className={styles.rangeSelectors} data-testid="inflation-unitPrice-slider">
+                <div className={styles.rangeSelectors} data-testid="inflation-elec-slider">
                     <Slider ticks={[3, 4, 5, 6, 7, 8]} onChangeHandler={setInflationRate}
-                            defaultValue={generalParams.inflationRate} label={"inflation rate(in %)"} step={1}/>
-                    <Slider ticks={[0.30, 0.40, 0.50, 0.60, 0.70, 0.80]} onChangeHandler={setUnitPrice}
-                            defaultValue={clientParams.unitPrice} label={"cost per kwh"} step={0.01}/>
+                            defaultValue={generalParams.inflationRate} label={"inflation rate(%)"} step={1}/>
+                    <Slider ticks={[1, 2, 3, 4, 5, 6]} onChangeHandler={setElecIncreaseRate}
+                            defaultValue={generalParams.electricityIncreaseRate} label={"strom increase rate(%)"} step={1}/>
                 </div>
             </div>
             <div className="absolute bottom-7 right-7" data-testid="forward-fab">
