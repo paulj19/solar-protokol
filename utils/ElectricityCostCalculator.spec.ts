@@ -147,11 +147,11 @@ describe("ElectricityCostCalculator", () => {
             { year: 18, electricityCost: 209, solarCost: 102 },
             { year: 19, electricityCost: 218, solarCost: 101 },
             { year: 20, electricityCost: 227, solarCost: 100 },
-            { year: 21, electricityCost: 236, solarCost: 0 },
-            { year: 22, electricityCost: 245, solarCost: 0 },
-            { year: 23, electricityCost: 255, solarCost: 0 },
-            { year: 24, electricityCost: 265, solarCost: 0 },
-            { year: 25, electricityCost: 276, solarCost: 0 }
+            { year: 21, electricityCost: 236, solarCost: -33 },
+            { year: 22, electricityCost: 245, solarCost: -34 },
+            { year: 23, electricityCost: 255, solarCost: -36 },
+            { year: 24, electricityCost: 265, solarCost: -37 },
+            { year: 25, electricityCost: 276, solarCost: -39 }
         ]
         const resultFeedInTariff = calcPredictions(params);
         expect(resultFeedInTariff).toEqual(expectedFeedInTarrif);
@@ -166,7 +166,7 @@ describe("ElectricityCostCalculator", () => {
 
     it("should calculate total saved for 25 year", () => {
         const params: PredictionParams = { year: 25, clientParams: { consumptionYearly: 3500, unitPrice: 0.32, basePrice: 10, productionYearly: 7192 }, generalParams: { rent: 132, rentDiscountPeriod: 2, rentDiscountAmount: 15, feedInPrice: 0.08, inflationRate: 3, electricityIncreaseRate: 1 } };
-        const expectedTotalSaved = 27696;
+        const expectedTotalSaved = 29844;
         const resultTotalSaved = calcTotalSaved(params);
         expect(resultTotalSaved).toEqual(expectedTotalSaved);
     });

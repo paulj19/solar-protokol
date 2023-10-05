@@ -10,6 +10,7 @@ import {
     Area,
     ComposedChart
 } from 'recharts';
+import {Tooltip as RechartToolTop} from 'recharts';
 import Tooltip from '@mui/material/Tooltip';
 import styles from './ComparisonChart.module.css'
 import Slider from '../components/Slider';
@@ -55,9 +56,9 @@ export default function SolarElecChart() {
     const comparisonData: Array<CostPredictions> = calcPredictions({year: undefined, clientParams: {...clientParams}, generalParams: {...generalParams, inflationRate: inflationRate ?? generalParams.inflationRate, electricityIncreaseRate: elecIncreaseRate ?? generalParams.electricityIncreaseRate}});
     let xx = false;
     const comparisonDataWithRange = comparisonData.reduce((acc, item, i, array) => {
-        if (i % 5 !== 0) {
-            return acc;
-        }
+        // if (i % 5 !== 0) {
+        //     return acc;
+        // }
         if (item.electricityCost >= item.solarCost) {
             if (i >= 1 && xx === false) {
                 const intersectionResut = intersect(array[i - 1].year, array[i - 1].solarCost, item.year, item.solarCost, array[i - 1].year, array[i - 1].electricityCost, item.year, item.electricityCost);
@@ -91,9 +92,10 @@ export default function SolarElecChart() {
                             }}
                         >
                             <CartesianGrid strokeDasharray="3 3"/>
-                            <XAxis dataKey="year"/>
+                            {/*<XAxis dataKey="year" ticks={[2023, 2028, 2033, 2038, 2043, 2048]} />*/}
+                            <XAxis dataKey="year" ticks={[0, 5, 10, 15, 20, 25]} />
                             <YAxis ticks={getYAxisTicks(comparisonDataWithRange)}/>
-                            <Tooltip/>
+                            <RechartToolTop/>
                             <defs>
                                 <linearGradient id="splitColor">
                                     <stop offset="1" stopColor="#bff593" stopOpacity={1}/>
@@ -101,9 +103,9 @@ export default function SolarElecChart() {
                             </defs>
                             <Legend/>
                             <Line type="linear" dataKey="electricityCost" name="Ohne PV" stroke="#FF0000"
-                                  strokeWidth={1.5} activeDot={{r: 8}} label={CustomizedLabel}/>
+                                  strokeWidth={1.5} activeDot={{r: 8}} />
                             <Line type="linear" dataKey="solarCost" name="Mit Enpal" stroke="#072543" strokeWidth={1.5}
-                                  hide={!showSolar} label={CustomizedLabel}/>
+                                  hide={!showSolar} />
                             <Area type="linear" dataKey="range" fill="url(#splitColor)" hide={!showSolar}
                                   legendType='none' tooltipType='none'/>
                         </ComposedChart>
@@ -137,8 +139,10 @@ export default function SolarElecChart() {
 
 function getYAxisTicks(comparisonDataWithRange): Array<number> {
     const highestYValue = comparisonDataWithRange[comparisonDataWithRange.length - 1].electricityCost;
-    const ticks = [0, 100, 200, 300, 400, 500, 600, 700]
-    for (let i = 800; (i - 100) <= highestYValue; i += 100) {
+    const lowestYValue = Math.min(...comparisonDataWithRange.map(item => item.solarCost));
+    const roundedToLowerHundreds = Math.floor(lowestYValue/100)*100;
+    const ticks = []
+    for (let i = roundedToLowerHundreds; (i - 100) <= highestYValue; i += 100) {
         ticks.push(i);
     }
     return ticks;

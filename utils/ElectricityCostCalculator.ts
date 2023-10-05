@@ -42,7 +42,7 @@ export function calcPredictions(params: PredictionParams): Array<CostPredictions
         electricityCost = calcElectricityCostMonthly({...params, year: i});
         solarCost = calcSolarCostMonthly({...params, year: i}).solarCost;
         costPredictions.push({
-            year: i, electricityCost, solarCost: solarCost > 0 ? solarCost : 0
+            year: i, electricityCost, solarCost
         });
     }
     return costPredictions;
