@@ -48,14 +48,18 @@ export function calcPredictions(params: PredictionParams): Array<CostPredictions
     return costPredictions;
 }
 
-export function calcTotalSaved(params: PredictionParams): number {
+export function calcTotalSaved(params: PredictionParams): any {
     const predictedCosts = calcPredictions(params);
-
     let totalSaved = 0;
+    let totalElecCost = 0;
+    let totalSolarCost = 0;
+
     for (let i = 0; i <= params.year; i++) {
+        totalElecCost += predictedCosts[i].electricityCost;
+        totalSolarCost += predictedCosts[i].solarCost;
         totalSaved += (predictedCosts[i].electricityCost - predictedCosts[i].solarCost) * 12;
     }
-    return totalSaved;
+    return {totalSaved, totalElecCost, totalSolarCost};
 }
 
 export function calcElectricityCostMonthly(params: PredictionParams): number {

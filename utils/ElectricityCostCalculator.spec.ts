@@ -160,15 +160,23 @@ describe("ElectricityCostCalculator", () => {
     it("should calculate total saved for 1 year", () => {
         const params: PredictionParams = { year: 0, clientParams: { consumptionYearly: 3500, unitPrice: 0.32, basePrice: 10, productionYearly: 7192 }, generalParams: { rent: 132, rentDiscountPeriod: 2, rentDiscountAmount: 15, feedInPrice: 0.08, inflationRate: 3, electricityIncreaseRate: 1 } };
         const expectedTotalSaved = 12;
-        const resultTotalSaved = calcTotalSaved(params);
-        expect(resultTotalSaved).toEqual(expectedTotalSaved);
+        const expectedElecTotalSaved = 103;
+        const expectedSolarTotalSaved = 102;
+        const {totalSaved, totalElecCost, totalSolarCost} = calcTotalSaved(params);
+        expect(totalSaved).toEqual(expectedTotalSaved);
+        expect(totalElecCost).toEqual(expectedElecTotalSaved );
+        expect(totalSolarCost).toEqual(expectedSolarTotalSaved );
     });
 
     it("should calculate total saved for 25 year", () => {
         const params: PredictionParams = { year: 25, clientParams: { consumptionYearly: 3500, unitPrice: 0.32, basePrice: 10, productionYearly: 7192 }, generalParams: { rent: 132, rentDiscountPeriod: 2, rentDiscountAmount: 15, feedInPrice: 0.08, inflationRate: 3, electricityIncreaseRate: 1 } };
         const expectedTotalSaved = 29844;
-        const resultTotalSaved = calcTotalSaved(params);
-        expect(resultTotalSaved).toEqual(expectedTotalSaved);
+        const expectedElecTotalSaved = 4581;
+        const expectedSolarTotalSaved = 2094;
+        const {totalSaved, totalElecCost, totalSolarCost} = calcTotalSaved(params);
+        expect(totalSaved).toEqual(expectedTotalSaved);
+        expect(totalElecCost).toEqual(expectedElecTotalSaved );
+        expect(totalSolarCost).toEqual(expectedSolarTotalSaved );
     });
 
     it('should calculate generation monthly', () => {

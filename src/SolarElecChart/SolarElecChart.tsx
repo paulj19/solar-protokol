@@ -8,7 +8,7 @@ import {
     ResponsiveContainer,
     AreaChart,
     Area,
-    ComposedChart
+    ComposedChart, Label
 } from 'recharts';
 import {Tooltip as RechartToolTop} from 'recharts';
 import Tooltip from '@mui/material/Tooltip';
@@ -26,13 +26,16 @@ import {calcPredictions} from '@/utils/ElectricityCostCalculator';
 import {CostPredictions} from '@/types/types';
 import {Link, Navigate, useNavigate, useParams, useSearchParams} from 'react-router-dom';
 import {Fab} from "@mui/material";
-import {ArrowForward} from "@mui/icons-material";
+import {ArrowForward, Title} from "@mui/icons-material";
+import {right} from "@popperjs/core";
 
 export default function SolarElecChart() {
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
     const clientId = searchParams.get('clientId');
     const pDate = searchParams.get('pDate');
+    // const clientId = "873"
+    // const pDate = "2021-10-03"
     useEffect(() => {
         if (!clientId || !pDate) {
             navigate('/');
@@ -80,6 +83,7 @@ export default function SolarElecChart() {
     return (
         <>
             <div className={styles.chartContainer} data-testid="solar-elec-chart">
+                <h1 className="font-bold text-3xl font-sans text-cyan-900 m-auto pb-4">STROM SOLAR VERGLEICH </h1>
                 <div className={styles.chart}>
                     <ResponsiveContainer className={styles.responseChart}>
                         <ComposedChart
@@ -92,20 +96,29 @@ export default function SolarElecChart() {
                             }}
                         >
                             <CartesianGrid strokeDasharray="3 3"/>
-                            {/*<XAxis dataKey="year" ticks={[2023, 2028, 2033, 2038, 2043, 2048]} />*/}
-                            <XAxis dataKey="year" ticks={[0, 5, 10, 15, 20, 25]} />
-                            <YAxis ticks={getYAxisTicks(comparisonDataWithRange)}/>
+                            <XAxis dataKey="year" ticks={[0, 5, 10, 15, 20, 25]} tickFormatter={formatXAxisTicks} tick={{fill: 'green'}} tickSize={8} tickMargin={15} strokeWidth={0.7}/>
+                            <YAxis ticks={getYAxisTicks(comparisonDataWithRange)} tickFormatter={formatYAxisTicks} tick={{fill: 'green'}} tickSize={8} tickMargin={15} width={80} strokeWidth={0.7}>
+                                <Label
+                                    style={{
+                                        textAnchor: "middle",
+                                        fontSize: "1.4em",
+                                        fill: "#072543",
+                                    }}
+                                    dx={-50}
+                                    angle={270}
+                                    value={"Miete Pro Monat"} />
+                            </YAxis >
                             <RechartToolTop/>
                             <defs>
                                 <linearGradient id="splitColor">
                                     <stop offset="1" stopColor="#bff593" stopOpacity={1}/>
                                 </linearGradient>
                             </defs>
-                            <Legend/>
+                            <Legend layout="horizontal" verticalAlign="top" align="right"/>
                             <Line type="linear" dataKey="electricityCost" name="Ohne PV" stroke="#FF0000"
-                                  strokeWidth={1.5} activeDot={{r: 8}} />
-                            <Line type="linear" dataKey="solarCost" name="Mit Enpal" stroke="#072543" strokeWidth={1.5}
-                                  hide={!showSolar} />
+                                  strokeWidth={3.5} activeDot={{r: 8}} dot={<CustomizedDot />}/>
+                            <Line type="linear" dataKey="solarCost" name="Mit Enpal" stroke="#072543" strokeWidth={3.5}
+                                  hide={!showSolar} dot={<CustomizedDot />}/>
                             <Area type="linear" dataKey="range" fill="url(#splitColor)" hide={!showSolar}
                                   legendType='none' tooltipType='none'/>
                         </ComposedChart>
@@ -179,10 +192,35 @@ function intersect(x1, y1, x2, y2, x3, y3, x4, y4) {
     return {x, y, line1isHigher, line1isHigherNext};
 }
 
-function CustomizedLabel({x, y, stroke, value}) {
+function LineLabel({x, y, stroke, value}) {
     return (
         <text x={x} y={y} dy={-4} fill={stroke} fontSize={10} className='custom-label' textAnchor="middle">
             {value + "€"}
         </text>
     );
 }
+
+function formatYAxisTicks(value) {
+    return value + '€';
+}
+
+function formatXAxisTicks(value) {
+    return value + 2013;
+}
+
+const CustomizedDot = (props) => {
+    const { cx, cy, stroke, payload, value } = props;
+
+    if (payload.year % 5 === 0) {
+        return (
+            <svg x={cx - 4} y={cy - 4} width={8} height={8} fill="white">
+                <g transform="translate(4 4)">
+                    <circle r="4" fill={stroke} />
+                    <circle r="2" fill="white" />
+                </g>
+            </svg>
+        );
+    }
+
+    return null;
+};

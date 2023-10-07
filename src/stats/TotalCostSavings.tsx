@@ -3,7 +3,7 @@ import { PredictionParams } from '@/types/types';
 import { calcPredictions, calcTotalSaved } from '@/utils/ElectricityCostCalculator';
 
 export default function TotalCostSavings(params: PredictionParams) {
-    const totalSaved = calcTotalSaved(params);
+    const {totalSaved, totalElecCost, totalSolarCost} = calcTotalSaved(params);
 
     return (
         <div className={styles.totalCostSavings}>
