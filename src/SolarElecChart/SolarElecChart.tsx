@@ -1,33 +1,29 @@
 import React, {useEffect, useState} from 'react';
 import {
-    Line,
-    XAxis,
-    YAxis,
-    CartesianGrid,
-    Legend,
-    ResponsiveContainer,
-    AreaChart,
     Area,
-    ComposedChart, Label
+    CartesianGrid,
+    ComposedChart,
+    Label,
+    Legend,
+    Line,
+    ResponsiveContainer,
+    Tooltip as RechartToolTop,
+    XAxis,
+    YAxis
 } from 'recharts';
-import {Tooltip as RechartToolTop} from 'recharts';
 import Tooltip from '@mui/material/Tooltip';
 import styles from './ComparisonChart.module.css'
-import Slider from '../components/Slider';
-import {
-    useGetGeneralParamsQuery,
-    selectClientById,
-    selectClientByIdResult,
-    useGetClientQuery
-} from '@/src/context/RootApi';
+import {useGetClientQuery, useGetGeneralParamsQuery} from '@/src/context/RootApi';
 import Loading from "@/src/components/Loading";
 import ErrorScreen from "@/src/components/ErrorScreen";
 import {calcPredictions} from '@/utils/ElectricityCostCalculator';
 import {CostPredictions} from '@/types/types';
-import {Link, Navigate, useNavigate, useParams, useSearchParams} from 'react-router-dom';
+import {Link, useNavigate, useSearchParams} from 'react-router-dom';
 import {Fab} from "@mui/material";
-import {ArrowForward, Title} from "@mui/icons-material";
-import {right} from "@popperjs/core";
+import {ArrowForward} from "@mui/icons-material";
+import {styled} from "@mui/material/styles";
+import {Mark} from "@mui/base";
+import Slider from "@mui/joy/Slider";
 
 export default function SolarElecChart() {
     const navigate = useNavigate();
@@ -44,8 +40,15 @@ export default function SolarElecChart() {
     const [inflationRate, setInflationRate] = useState<number>(null)
     const [elecIncreaseRate, setElecIncreaseRate] = useState<number>(null)
     const [showSolar, setShowSolar] = useState<boolean>(false);
-    const {data: clientParams, isLoading: isClientParamLoading, isError: isClientParamError} = useGetClientQuery({pDate, clientId});
-    const {data: generalParams, isLoading: isGeneralParamLoading, isError: isGeneralParamsError} = useGetGeneralParamsQuery(undefined);
+    const {data: clientParams, isLoading: isClientParamLoading, isError: isClientParamError} = useGetClientQuery({
+        pDate,
+        clientId
+    });
+    const {
+        data: generalParams,
+        isLoading: isGeneralParamLoading,
+        isError: isGeneralParamsError
+    } = useGetGeneralParamsQuery(undefined);
     // const clientParams = useSelector(state => selectClientById(state, "cid_1"));
     if (isClientParamLoading || isGeneralParamLoading) {
         return <Loading/>;
@@ -56,7 +59,15 @@ export default function SolarElecChart() {
     }
     //todo no direct url calls with cid, then have to handle loading and error conditions of query
 
-    const comparisonData: Array<CostPredictions> = calcPredictions({year: undefined, clientParams: {...clientParams}, generalParams: {...generalParams, inflationRate: inflationRate ?? generalParams.inflationRate, electricityIncreaseRate: elecIncreaseRate ?? generalParams.electricityIncreaseRate}});
+    const comparisonData: Array<CostPredictions> = calcPredictions({
+        year: undefined,
+        clientParams: {...clientParams},
+        generalParams: {
+            ...generalParams,
+            inflationRate: inflationRate ?? generalParams.inflationRate,
+            electricityIncreaseRate: elecIncreaseRate ?? generalParams.electricityIncreaseRate
+        }
+    });
     let xx = false;
     const comparisonDataWithRange = comparisonData.reduce((acc, item, i, array) => {
         // if (i % 5 !== 0) {
@@ -82,59 +93,90 @@ export default function SolarElecChart() {
 
     return (
         <>
-            <div className={styles.chartContainer} data-testid="solar-elec-chart">
-                <h1 className="font-bold text-3xl font-sans text-cyan-900 m-auto pb-4">STROM SOLAR VERGLEICH </h1>
-                <div className={styles.chart}>
-                    <ResponsiveContainer className={styles.responseChart}>
-                        <ComposedChart
-                            data={comparisonDataWithRange}
-                            margin={{
-                                top: 5,
-                                right: 30,
-                                left: 20,
-                                bottom: 5,
-                            }}
-                        >
-                            <CartesianGrid strokeDasharray="3 3"/>
-                            <XAxis dataKey="year" ticks={[0, 5, 10, 15, 20, 25]} tickFormatter={formatXAxisTicks} tick={{fill: 'green'}} tickSize={8} tickMargin={15} strokeWidth={0.7}/>
-                            <YAxis ticks={getYAxisTicks(comparisonDataWithRange)} tickFormatter={formatYAxisTicks} tick={{fill: 'green'}} tickSize={8} tickMargin={15} width={80} strokeWidth={0.7}>
-                                <Label
-                                    style={{
-                                        textAnchor: "middle",
-                                        fontSize: "1.4em",
-                                        fill: "#072543",
-                                    }}
-                                    dx={-50}
-                                    angle={270}
-                                    value={"Miete Pro Monat"} />
-                            </YAxis >
-                            <RechartToolTop/>
-                            <defs>
-                                <linearGradient id="splitColor">
-                                    <stop offset="1" stopColor="#bff593" stopOpacity={1}/>
-                                </linearGradient>
-                            </defs>
-                            <Legend layout="horizontal" verticalAlign="top" align="right"/>
-                            <Line type="linear" dataKey="electricityCost" name="Ohne PV" stroke="#FF0000"
-                                  strokeWidth={3.5} activeDot={{r: 8}} dot={<CustomizedDot />}/>
-                            <Line type="linear" dataKey="solarCost" name="Mit Enpal" stroke="#072543" strokeWidth={3.5}
-                                  hide={!showSolar} dot={<CustomizedDot />}/>
-                            <Area type="linear" dataKey="range" fill="url(#splitColor)" hide={!showSolar}
-                                  legendType='none' tooltipType='none'/>
-                        </ComposedChart>
-                    </ResponsiveContainer>
+            <div className="flex flex-row w-[100%] gap-5">
+                <div className="flex flex-col w-full justify-center m-auto gap-3" data-testid="solar-elec-chart">
+                    <h1 className="font-bold text-3xl font-sans text-cyan-900 m-auto pb-2">STROM SOLAR VERGLEICH </h1>
+                    <div>
+                        <ResponsiveContainer className="h-full w-full min-h-[750px]">
+                            <ComposedChart
+                                data={comparisonDataWithRange}
+                                margin={{
+                                    top: 5,
+                                    right: 30,
+                                    left: 20,
+                                    bottom: 5,
+                                }}
+                            >
+                                <CartesianGrid strokeDasharray="3 3"/>
+                                <XAxis dataKey="year" ticks={[0, 5, 10, 15, 20, 25]} tickFormatter={formatXAxisTicks}
+                                       tick={{fill: 'green'}} tickSize={8} tickMargin={15} strokeWidth={0.7}/>
+                                <YAxis ticks={getYAxisTicks(comparisonDataWithRange)} tickFormatter={formatYAxisTicks}
+                                       tick={{fill: 'green'}} tickSize={8} tickMargin={15} width={80} strokeWidth={0.7}>
+                                    <Label
+                                        style={{
+                                            textAnchor: "middle",
+                                            fontSize: "1.4em",
+                                            fill: "#072543",
+                                        }}
+                                        dx={-50}
+                                        angle={270}
+                                        value={"Miete Pro Monat"}/>
+                                </YAxis>
+                                <RechartToolTop/>
+                                <defs>
+                                    <linearGradient id="splitColor">
+                                        <stop offset="1" stopColor="#bff593" stopOpacity={1}/>
+                                    </linearGradient>
+                                </defs>
+                                <Legend layout="horizontal" verticalAlign="top" align="right"/>
+                                <Line type="linear" dataKey="electricityCost" name="Ohne PV" stroke="#FF0000"
+                                      strokeWidth={3.5} activeDot={{r: 8}} dot={<CustomizedDot/>}/>
+                                <Line type="linear" dataKey="solarCost" name="Mit Enpal" stroke="#072543"
+                                      strokeWidth={3.5}
+                                      hide={!showSolar} dot={<CustomizedDot/>}/>
+                                <Area type="linear" dataKey="range" fill="url(#splitColor)" hide={!showSolar}
+                                      legendType='none' tooltipType='none'/>
+                            </ComposedChart>
+                        </ResponsiveContainer>
+                    </div>
+                    <div className="m-auto h-fit flex items-center pt-4" data-testid="solar-toggle">
+                        <label className={styles.switch}>
+                            <input type="checkbox" onChange={(e) => setShowSolar(e.target.checked)}/>
+                            <span className={styles.slider + " " + styles.round}></span>
+                        </label>
+                    </div>
+                    {/*<div className={styles.rangeSelectors} data-testid="inflation-elec-slider">*/}
+                        {/*<Slider ticks={[3, 4, 5, 6, 7, 8]} onChangeHandler={setInflationRate}*/}
+                        {/*        defaultValue={generalParams.inflationRate} label={"inflation rate(%)"} step={1}/>*/}
+                        {/*<Slider ticks={[1, 2, 3, 4, 5, 6]} onChangeHandler={setElecIncreaseRate}*/}
+                        {/*        defaultValue={generalParams.electricityIncreaseRate} label={"strom increase rate(%)"} step={1}/>*/}
+                    {/*</div>*/}
                 </div>
-                <div className={styles.toggle} data-testid="solar-toggle">
-                    <label className={styles.switch}>
-                        <input type="checkbox" onChange={(e) => setShowSolar(e.target.checked)}/>
-                        <span className={styles.slider + " " + styles.round}></span>
-                    </label>
-                </div>
-                <div className={styles.rangeSelectors} data-testid="inflation-elec-slider">
-                    <Slider ticks={[3, 4, 5, 6, 7, 8]} onChangeHandler={setInflationRate}
-                            defaultValue={generalParams.inflationRate} label={"inflation rate(%)"} step={1}/>
-                    <Slider ticks={[1, 2, 3, 4, 5, 6]} onChangeHandler={setElecIncreaseRate}
-                            defaultValue={generalParams.electricityIncreaseRate} label={"strom increase rate(%)"} step={1}/>
+                <div className="flex flex-col gap-8 h-[400px] pl-10 pt-20">
+                    <Slider
+                        orientation="vertical"
+                        color="neutral"
+                        aria-label="inflationRate-slider"
+                        defaultValue={generalParams.inflationRate}
+                        min={generalParams.inflationRate}
+                        max={generalParams.inflationRate + 5}
+                        step={1}
+                        marks={getSliderMarks(generalParams.inflationRate)}
+                        valueLabelDisplay="off"
+                        onChange={(e, value) => setInflationRate(Number(value))}
+                    />
+                    <Slider
+                        orientation="vertical"
+                        color="neutral"
+                        aria-label="elecIncreaseRate-slider"
+                        defaultValue={generalParams.electricityIncreaseRate}
+                        min={generalParams.electricityIncreaseRate}
+                        max={generalParams.electricityIncreaseRate + 5}
+                        step={1}
+                        marks={getSliderMarks(generalParams.electricityIncreaseRate )}
+                        valueLabelDisplay="off"
+                        onChange={(e, value) => setElecIncreaseRate(Number(value))}
+                    />
                 </div>
             </div>
             <div className="absolute bottom-7 right-7" data-testid="forward-fab">
@@ -153,7 +195,7 @@ export default function SolarElecChart() {
 function getYAxisTicks(comparisonDataWithRange): Array<number> {
     const highestYValue = comparisonDataWithRange[comparisonDataWithRange.length - 1].electricityCost;
     const lowestYValue = Math.min(...comparisonDataWithRange.map(item => item.solarCost));
-    const roundedToLowerHundreds = Math.floor(lowestYValue/100)*100;
+    const roundedToLowerHundreds = Math.floor(lowestYValue / 100) * 100;
     const ticks = []
     for (let i = roundedToLowerHundreds; (i - 100) <= highestYValue; i += 100) {
         ticks.push(i);
@@ -209,14 +251,14 @@ function formatXAxisTicks(value) {
 }
 
 const CustomizedDot = (props) => {
-    const { cx, cy, stroke, payload, value } = props;
+    const {cx, cy, stroke, payload, value} = props;
 
     if (payload.year % 5 === 0) {
         return (
             <svg x={cx - 4} y={cy - 4} width={8} height={8} fill="white">
                 <g transform="translate(4 4)">
-                    <circle r="4" fill={stroke} />
-                    <circle r="2" fill="white" />
+                    <circle r="4" fill={stroke}/>
+                    <circle r="2" fill="white"/>
                 </g>
             </svg>
         );
@@ -224,3 +266,24 @@ const CustomizedDot = (props) => {
 
     return null;
 };
+
+const CustomSlider = styled(Slider)(({theme}) => ({
+    color: "#072543", //color of the slider between thumbs
+    "& .MuiSlider-thumb": {
+        backgroundColor: "#072543" //color of thumbs
+    },
+    "& .MuiSlider-rail": {
+        color: "#595959" ////color of the slider outside  teh area between thumbs
+    },
+    '& input[type="range"]': {
+        WebkitAppearance: 'slider-vertical',
+    },
+}));
+
+function getSliderMarks(currentRate: number): Array<Mark> {
+    const marks = [];
+    for (let i = currentRate; i <= currentRate + 5; i++) {
+        marks.push({value: i, label: i.toString()});
+    }
+    return marks;
+}
