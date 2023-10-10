@@ -152,7 +152,7 @@ export default function SolarElecChart() {
                         {/*        defaultValue={generalParams.electricityIncreaseRate} label={"strom increase rate(%)"} step={1}/>*/}
                     {/*</div>*/}
                 </div>
-                <div className="flex flex-col gap-8 h-[400px] pl-10 pt-20">
+                <div className="flex flex-col gap-8 h-[400px] pl-10 pt-20" data-testid="inflation-elec-slider">
                     <Slider
                         orientation="vertical"
                         color="neutral"

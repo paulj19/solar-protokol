@@ -9,12 +9,12 @@ import {
 import {GenerationConsumParam, getGenerationConsumParam} from "@/utils/ElectricityCostCalculator";
 import {
     Area,
-    Bar,
+    Bar, CartesianAxis,
     CartesianGrid,
     ComposedChart,
     Legend,
     Line,
-    ResponsiveContainer, Scatter,
+    ResponsiveContainer, Scatter, Surface, Symbols,
     Tooltip,
     XAxis,
     YAxis
@@ -74,6 +74,7 @@ export default function GenerationConsumChart(): ReactElement {
 
     return (
         <>
+            <h1 className="font-bold text-3xl font-sans text-cyan-900 m-auto pb-2">ERTRAGSPROGNOSE</h1>
             <div data-testid="generationConsum-chart" className="w-[80%] h-[90%] ">
                 <ResponsiveContainer>
                     <ComposedChart
@@ -85,13 +86,14 @@ export default function GenerationConsumChart(): ReactElement {
                             left: 20,
                         }}
                     >
-                        <CartesianGrid stroke="#f5f5f5"/>
+                        <CartesianGrid stroke="#000000" vertical={false} strokeWidth={0.1} strokeOpacity={1}/>
                         <XAxis dataKey="month"/>
-                        <YAxis/>
+                        <YAxis axisLine={false}  tick={{fill: 'green'}} tickLine={false} tickMargin={15}/>
                         <Tooltip/>
-                        <Legend/>
-                        <Bar dataKey="consumption" barSize={30} fill="#413ea0"/>
-                        <Line type="monotone" strokeWidth={2.5} dataKey="generation" stroke="#ff7300"/>
+                        <Legend layout="radial" verticalAlign="top" align="center" content={XXX}/>
+                        {/*<Legend iconType="circle" wrapperStyle={{ top: 300 }} content={CusomizedLegend} />*/}
+                        <Bar dataKey="generation" barSize={30} fill="#413ea0"/>
+                        <Line type="monotone" strokeWidth={2.5} dataKey="consumption" stroke="#ff7300"/>
                     </ComposedChart>
                 </ResponsiveContainer>
             </div>
@@ -120,4 +122,58 @@ export default function GenerationConsumChart(): ReactElement {
             </Snackbar>
         </>
     )
+}
+function getYAxisTicks(generationConsumParams): Array<number> {
+    const maxValue = Math.min(...comparisonDataWithRange.map(item => item.solarCost));
+    const roundedToLowerHundreds = Math.floor(lowestYValue / 100) * 100;
+    const ticks = []
+    for (let i = roundedToLowerHundreds; (i - 100) <= highestYValue; i += 100) {
+        ticks.push(i);
+    }
+    return ticks;
+}
+
+const CusomizedLegend = (props) => {
+    const { payload } = props
+    return (
+        <div className="pt-20 m-auto">
+            {
+                payload.map((entry) => {
+                    const { dataKey, color } = entry
+                    let style = {}
+                    // if (dataKey == this.state.active) {
+                    //     style = { backgroundColor: color , color: '#fff'}
+                    // }
+                    return (
+                        // <OverlayTrigger
+                        //     onClick={this.handleClick}
+                        //     key={`overlay-${dataKey}`}
+                        //     trigger={["hover", "focus"]}
+                        //     placement="top"
+                        //     overlay={this.renderPopoverTop(dataKey)}
+                        // >
+                <span className="legend-item"  style={style}>
+                  <Surface width={10} height={10} viewBox="0 0 10 10" >
+                    <Symbols cx={5} cy={5} type="square" size={50} fill={color}  />
+                  </Surface>
+                  <span >{dataKey}</span>
+                </span>
+                        // </OverlayTrigger>
+                    )
+                })
+            }
+        </div>
+    )
+}
+
+function XXX(props) {
+    const { payload } = props
+    console.log(payload)
+    return (<span className="legend-item">
+
+                  <Surface width={10} height={10} viewBox="0 0 10 10" >
+                    <Symbols cx={5} cy={5} type="square" size={50} fill={"red"}  />
+                  </Surface>
+                  <span >XXX</span>
+                </span>)
 }
