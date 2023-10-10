@@ -1,29 +1,22 @@
 import React, {ReactElement, useEffect, useState} from "react";
-import {useSelector} from "react-redux";
-import {
-    selectClientById,
-    useGetClientQuery,
-    useGetGeneralParamsQuery,
-    useUpdateClientStatusMutation
-} from "@/src/context/RootApi";
+import {useGetClientQuery, useUpdateClientStatusMutation} from "@/src/context/RootApi";
 import {GenerationConsumParam, getGenerationConsumParam} from "@/utils/ElectricityCostCalculator";
 import {
-    Area,
-    Bar, CartesianAxis,
+    Bar,
     CartesianGrid,
     ComposedChart,
     Legend,
     Line,
-    ResponsiveContainer, Scatter, Surface, Symbols,
+    ResponsiveContainer,
+    Surface,
+    Symbols,
     Tooltip,
     XAxis,
     YAxis
 } from "recharts";
-import {Alert, Fab, Snackbar} from "@mui/material";
-import {Link, useNavigate, useParams, useSearchParams} from "react-router-dom";
-import {ArrowBack, ArrowForward} from "@mui/icons-material";
-import {Tooltip as MuiToolTip} from '@mui/material';
-import {format} from "date-fns";
+import {Alert, Fab, Snackbar, Tooltip as MuiToolTip} from "@mui/material";
+import {Link, useNavigate, useSearchParams} from "react-router-dom";
+import {ArrowBack} from "@mui/icons-material";
 import Loading from "@/src/components/Loading";
 import ErrorScreen from "@/src/components/ErrorScreen";
 
@@ -87,12 +80,15 @@ export default function GenerationConsumChart(): ReactElement {
                         }}
                     >
                         <CartesianGrid stroke="#000000" vertical={false} strokeWidth={0.1} strokeOpacity={1}/>
-                        <XAxis dataKey="month"/>
-                        <YAxis axisLine={false}  tick={{fill: 'green'}} tickLine={false} tickMargin={15}/>
+                        <XAxis dataKey="month" tick={{fill: 'rgb(22 78 99 / var(--tw-text-opacity))'}} />
+                        <YAxis axisLine={false} tick={{fill: 'rgb(22 78 99 / var(--tw-text-opacity))'}} tickLine={false} tickMargin={15} ticks={getYAxisTicks(generationConsumParams)}/>
                         <Tooltip/>
-                        <Legend layout="radial" verticalAlign="top" align="center" content={XXX}/>
+                        <Legend layout="centric" verticalAlign="top" align="right" iconSize={30}
+                                formatter={(value) => LegendFormatter(value, clientParams.productionYearly, clientParams.consumptionYearly)}/>
+                        {/*<Legend layout="horizontal" verticalAlign="top" align="left" iconSize={30} />*/}
+                        {/*<Legend layout="radial" verticalAlign="top" align="right" content={XXX}/>*/}
                         {/*<Legend iconType="circle" wrapperStyle={{ top: 300 }} content={CusomizedLegend} />*/}
-                        <Bar dataKey="generation" barSize={30} fill="#413ea0"/>
+                        <Bar dataKey="generation" barSize={30} fill="rgb(22, 101, 52)"/>
                         <Line type="monotone" strokeWidth={2.5} dataKey="consumption" stroke="#ff7300"/>
                     </ComposedChart>
                 </ResponsiveContainer>
@@ -123,57 +119,51 @@ export default function GenerationConsumChart(): ReactElement {
         </>
     )
 }
-function getYAxisTicks(generationConsumParams): Array<number> {
-    const maxValue = Math.min(...comparisonDataWithRange.map(item => item.solarCost));
-    const roundedToLowerHundreds = Math.floor(lowestYValue / 100) * 100;
-    const ticks = []
-    for (let i = roundedToLowerHundreds; (i - 100) <= highestYValue; i += 100) {
-        ticks.push(i);
-    }
-    return ticks;
-}
 
-const CusomizedLegend = (props) => {
-    const { payload } = props
+function XXX(props) {
+    const {payload} = props
+    console.log(payload)
     return (
-        <div className="pt-20 m-auto">
-            {
-                payload.map((entry) => {
-                    const { dataKey, color } = entry
-                    let style = {}
-                    // if (dataKey == this.state.active) {
-                    //     style = { backgroundColor: color , color: '#fff'}
-                    // }
-                    return (
-                        // <OverlayTrigger
-                        //     onClick={this.handleClick}
-                        //     key={`overlay-${dataKey}`}
-                        //     trigger={["hover", "focus"]}
-                        //     placement="top"
-                        //     overlay={this.renderPopoverTop(dataKey)}
-                        // >
-                <span className="legend-item"  style={style}>
-                  <Surface width={10} height={10} viewBox="0 0 10 10" >
-                    <Symbols cx={5} cy={5} type="square" size={50} fill={color}  />
-                  </Surface>
-                  <span >{dataKey}</span>
-                </span>
-                        // </OverlayTrigger>
-                    )
-                })
-            }
+        <div className="flex flex-row gap-2 align-middle">
+            {payload.map(item => {
+                console.log(item)
+                return (<><Surface width={10} height={10}>
+                        <Symbols cx={5} cy={5} type="" size={190}/>
+                    </Surface>
+                        <span>{item.value}</span></>
+                )
+            })}
         </div>
     )
 }
 
-function XXX(props) {
-    const { payload } = props
-    console.log(payload)
-    return (<span className="legend-item">
+function LegendFormatter(value, productionYearly, consumptionYearly) {
+    if (value === "generation") {
+        return (
+            <span>
+            <div className="inline-flex flex-col">
+                <div className="text-green-800 font-sans text-md font-medium">STROMPRODUKTION</div>
+                <div
+                    className="text-green-800 font-sans text-md font-medium text-start">{productionYearly + "KwH pro Jahr"}</div>
+            </div>
+        </span>)
+    } else if (value === "consumption") {
+        return (
+            <span>
+            <div className="inline-flex flex-col">
+                <div className="text-[#ff7300] font-sans text-md font-medium">STROMVERBRAUCH</div>
+                <div
+                    className="text-[#ff7300] font-sans text-md font-medium text-start">{consumptionYearly + " KwH pro Jahr"}</div>
+            </div>
+        </span>)
+    }
+}
 
-                  <Surface width={10} height={10} viewBox="0 0 10 10" >
-                    <Symbols cx={5} cy={5} type="square" size={50} fill={"red"}  />
-                  </Surface>
-                  <span >XXX</span>
-                </span>)
+function getYAxisTicks(generationConsumParams: Array<GenerationConsumParam>): Array<number> {
+    const highestYValue = Math.max(...generationConsumParams.map(item => item.generation), ...generationConsumParams.map(item => item.consumption));
+    const ticks = []
+    for (let i = 0; (i - 100) < highestYValue; i += 100) {
+        ticks.push(i);
+    }
+    return ticks;
 }
