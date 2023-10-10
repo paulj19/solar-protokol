@@ -88,7 +88,7 @@ export default function GenerationConsumChart(): ReactElement {
                         {/*<Legend layout="horizontal" verticalAlign="top" align="left" iconSize={30} />*/}
                         {/*<Legend layout="radial" verticalAlign="top" align="right" content={XXX}/>*/}
                         {/*<Legend iconType="circle" wrapperStyle={{ top: 300 }} content={CusomizedLegend} />*/}
-                        <Bar dataKey="generation" barSize={30} fill="rgb(22, 101, 52)"/>
+                        <Bar dataKey="generation" barSize={30} fill="rgb(22, 101, 52)" label={renderCustomizedLabel} />
                         <Line type="monotone" strokeWidth={2.5} dataKey="consumption" stroke="#ff7300"/>
                     </ComposedChart>
                 </ResponsiveContainer>
@@ -167,3 +167,15 @@ function getYAxisTicks(generationConsumParams: Array<GenerationConsumParam>): Ar
     }
     return ticks;
 }
+const renderCustomizedLabel = (props) => {
+    const { x, y, width, value } = props;
+    const radius = 10;
+
+    return (
+        <g>
+            <text x={x + width / 2} y={y - radius} fill="rgb(22 78 99 / var(--tw-text-opacity))" textAnchor="middle" className="font-serif text-sm font-md">
+                {value + "€"}
+            </text>
+        </g>
+    );
+};
