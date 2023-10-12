@@ -20,8 +20,8 @@ export default function ComparisonstatsChart(params: PredictionParams) {
     const { solarCost } = calcSolarCostMonthly(params);
 
     return (
-        <div className={styles.statsChart} data-testid="comparisonStats-chart">
-            <ResponsiveContainer >
+        <div className="min-w-[400px]" data-testid="comparisonStats-chart">
+            <ResponsiveContainer>
                 <BarChart
                     data={[{ energyCost: electricityCost, solarCost }]}
                     margin={{

@@ -2,14 +2,14 @@
 const nextConfig = {}
 
 module.exports = {
-    async rewrites() {
-        return [
-            {
-                source: '/:path*',
-                destination: '/',
-            },
-        ];
-    },
+    // async rewrites() {
+    //     return [
+    //         {
+    //             source: '/:path*',
+    //             destination: '/',
+    //         },
+    //     ];
+    // },
     eslint: {
         ignoreDuringBuilds: true,
     },
@@ -22,7 +22,7 @@ module.exports = {
     },
     images: {
         unoptimized: true
-    }
+    },
 };
 
 

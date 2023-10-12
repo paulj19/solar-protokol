@@ -13,22 +13,34 @@ import Home from "@/src/Home";
 import GenerationConsumChart from "@/src/GenerationConsumChart/GenerationConsumChart";
 import {NotFound} from "next/dist/client/components/error";
 
-export default function SolarProtokol() {
+// export default function SolarProtokol() {
+//     return (
+//         <NoSSR>
+//             <Provider store={store}>
+//                 <LocalizationProvider dateAdapter={AdapterDateFns}>
+//                     <BrowserRouter>
+//                         <Layout>
+//                             <Routes>
+//                                 <Route path="/" element={<Home/>}/>
+//                                 <Route path="/solarElecChart" element={<SolarElecChart/>}/>
+//                                 <Route path="/stats" element={<Stats/>}/>
+//                                 <Route path="/generationConsumChart" element={<GenerationConsumChart/>}/>
+//                                 <Route path="*" element={<NotFound/>}/>
+//                             </Routes>
+//                         </Layout>
+//                     </BrowserRouter>
+//                 </LocalizationProvider>
+//             </Provider>
+//         </NoSSR>
+//     )
+// }
+export default function SolarProtokol({Component, pageProps}) {
     return (
         <NoSSR>
             <Provider store={store}>
                 <LocalizationProvider dateAdapter={AdapterDateFns}>
-                    <BrowserRouter>
-                        <Layout>
-                            <Routes>
-                                <Route path="/" element={<Home/>}/>
-                                <Route path="/solarElecChart" element={<SolarElecChart/>}/>
-                                <Route path="/stats" element={<Stats/>}/>
-                                <Route path="/generationConsumChart" element={<GenerationConsumChart/>}/>
-                                <Route path="*" element={<NotFound/>}/>
-                            </Routes>
+                        <Layout><Component />
                         </Layout>
-                    </BrowserRouter>
                 </LocalizationProvider>
             </Provider>
         </NoSSR>

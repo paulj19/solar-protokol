@@ -6,10 +6,10 @@ export default function TotalCostSavings(params: PredictionParams) {
     const {totalSaved, totalElecCost, totalSolarCost} = calcTotalSaved(params);
 
     return (
-        <div className={styles.totalCostSavings}>
-            <span style={{ fontWeight: 300, fontSize: "x-large", margin: "0 auto" }}>Sie Sparen</span>
+        <>
+            <span className="font-sans font-normal text-2xl tracking-wide text-cyan-900 m-auto p-2">Sie Sparen</span>
             <EuroCurrencyFormat value={totalSaved} />
-        </div >
+        </ >
     );
 }
 
