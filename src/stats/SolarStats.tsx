@@ -13,7 +13,7 @@ export default function SolarStats(params: PredictionParams) {
     return (
         // <fieldset className="border-black border-2 rounded-sm" data-testid="solar-stats">
         //     <legend className={styles.headingLegend}>Mit Enpal</legend>
-        <div className="w-[450px] pt-[340px]">
+        <div className="w-[450px] pt-[340px]" data-testid="solar-stats">
             <div
                 className="font-sans font-normal text-2xl pl-3 tracking-wide text-cyan-900">{`Ihre Neu Strom kosten: ${solarCostParams.solarCost}€`}</div>
             <SolarCosts {...{params, solarCostParams}} />

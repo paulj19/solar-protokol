@@ -13,7 +13,7 @@ export function ElectricityStats(params: PredictionParams) {
     return (
         // <fieldset className={styles.fieldset} data-testid="electricity-stats">
         //     <legend className={styles.headingLegend}>Ohne Enpal</legend>
-        <div className="w-[450px] pt-[340px]">
+        <div className="w-[450px] pt-[340px]" data-testid="electricity-stats">
             <div className="font-sans font-normal text-2xl pl-3 tracking-wide text-cyan-900">{`Ihre Strom kosten: ${totalCost}€`}</div>
             <AccordionGroup variant="plain">
                 <Accordion>
