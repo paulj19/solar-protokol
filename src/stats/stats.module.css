@@ -21,13 +21,6 @@
     grid-row: 2/17;
 }
 
-.statsSection>fieldset,
-.statsSection>div {
-    flex: 1;
-    border: 1px solid black;
-    padding: 20px;
-}
-
 .statsChart {
     margin-top: 14px;
 }
@@ -43,24 +36,18 @@
 }
 
 
-.totalCostSavings {
-    grid-row: 17/21;
-    margin: auto;
-    display: flex;
-    flex-direction: column;
-}
-
 .savedAmount {
-    border: 1px solid black;
-    box-shadow: inset 4px 4px 8px rgba(0, 112, 112, 0.2),
-        inset -4px -4px 8px rgba(0, 112, 112, 0.2);
+    border: 2px solid rgba(0, 0, 0, 0.63);
+    /*box-shadow: inset 4px 4px 8px rgba(255, 131, 57, 0.63),*/
+    /*    inset -4px -4px 8px rgb(255, 131, 57);*/
     border-radius: 4px;
+    background: rgba(198, 245, 211, 0.89);
     font-size: xx-large;
     padding: 8px;
-    margin: 4px;
-    color: rgb(0, 88, 59);
+    color: rgb(0, 79, 53);
     width: 150px;
     text-align: center;
+    margin: 0 auto;
 }
 
 .yearSlider {
@@ -78,12 +65,6 @@
     font-size: x-large;
 }
 
-.costGrid {
-    display: grid;
-    grid-template-rows: 1fr 3fr;
-    height: 30%;
-}
-
 .costSolar {
     font-size: small;
 }
@@ -95,12 +76,6 @@
     align-items: center;
     padding-left: 10px;
     height: 20%;
-}
-
-.costHeading {
-    font-size: 1.6em;
-    padding-top: 40px;
-    padding-left: 10px;
 }
 
 .costNumber {
