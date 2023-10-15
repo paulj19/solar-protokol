@@ -157,7 +157,7 @@ export default function SolarElecChart() {
                             </ResponsiveContainer>
                         </div>
                         <ThemeProvider theme={theme}>
-                            <FormGroup className="m-auto pt-3">
+                            <FormGroup className="m-auto pt-3" data-testid="solar-toggle">
                                 <FormControlLabel control={
                                     <Switch
                                         onChange={(e) => changeSettings({...settings, showSolar: e.target.checked})}/>}
