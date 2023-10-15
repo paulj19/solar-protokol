@@ -120,23 +120,6 @@ export default function GenerationConsumChart(): ReactElement {
     )
 }
 
-function XXX(props) {
-    const {payload} = props
-    console.log(payload)
-    return (
-        <div className="flex flex-row gap-2 align-middle">
-            {payload.map(item => {
-                console.log(item)
-                return (<><Surface width={10} height={10}>
-                        <Symbols cx={5} cy={5} type="" size={190}/>
-                    </Surface>
-                        <span>{item.value}</span></>
-                )
-            })}
-        </div>
-    )
-}
-
 function LegendFormatter(value, productionYearly, consumptionYearly) {
     if (value === "generation") {
         return (

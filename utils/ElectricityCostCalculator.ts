@@ -1,4 +1,6 @@
 import {CostPredictions, NormalizationParams, PredictionParams} from "@/types/types";
+import {getMonth} from "date-fns";
+import {PayOffParam} from "@/src/payoffChart/PayoffChart";
 
 export const calculationMetrics: Record<string, NormalizationParams> = {
     "JANUARY": {days: 31, electricityFactor: 1.16, solarFactor: 0.055},
@@ -60,6 +62,21 @@ export function calcTotalSaved(params: PredictionParams): any {
         totalSaved += (predictedCosts[i].electricityCost - predictedCosts[i].solarCost) * 12;
     }
     return {totalSaved, totalElecCost, totalSolarCost};
+}
+
+export function calcCumulativeSaved(params: PredictionParams): Array<PayOffParam> {
+    let totalSaved = -1 * 20000;
+    const cumulativeSaved = [];
+    const currentYearSaved = calcElectricityCostMonthly({...params, year: 0}) * (11 - getMonth(new Date()));
+    totalSaved += currentYearSaved;
+    cumulativeSaved.push({year: 0, saved: totalSaved});
+    for (let i = 1; i <= 25; i += 1) {
+        const currentYearSaved = round(params.clientParams.consumptionYearly * calcUnitPrice({...params, year: i}) + calcBasePrice({...params, year: i}) * 12);
+        totalSaved += currentYearSaved;
+        cumulativeSaved.push({year: i, saved: totalSaved});
+    }
+    console.log(cumulativeSaved)
+    return cumulativeSaved;
 }
 
 export function calcElectricityCostMonthly(params: PredictionParams): number {
