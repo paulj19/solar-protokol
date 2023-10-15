@@ -12,18 +12,29 @@ import {
     YAxis
 } from 'recharts';
 import Tooltip from '@mui/material/Tooltip';
-import styles from './ComparisonChart.module.css'
 import {useGetClientQuery, useGetGeneralParamsQuery} from '@/src/context/RootApi';
 import Loading from "@/src/components/Loading";
 import ErrorScreen from "@/src/components/ErrorScreen";
 import {calcPredictions} from '@/utils/ElectricityCostCalculator';
 import {CostPredictions} from '@/types/types';
 import {Link, useNavigate, useSearchParams} from 'react-router-dom';
-import {Fab} from "@mui/material";
+import {Fab, FormControlLabel, FormGroup, Switch} from "@mui/material";
 import {ArrowForward} from "@mui/icons-material";
 import {styled} from "@mui/material/styles";
 import {Mark} from "@mui/base";
 import Slider from "@mui/joy/Slider";
+import ElecBarChart from "@/src/SolarElecChart/ElecBarChart";
+import {Typography} from "@mui/joy";
+import AccordionGroup from "@mui/joy/AccordionGroup";
+import Accordion from "@mui/joy/Accordion";
+import AccordionSummary from "@mui/joy/AccordionSummary";
+import AccordionDetails from "@mui/joy/AccordionDetails";
+import {createTheme, ThemeProvider} from "@mui/material/styles";
+
+type Settings = {
+    showSolar: boolean,
+    showElecBarChart: boolean,
+}
 
 export default function SolarElecChart() {
     const navigate = useNavigate();
@@ -39,7 +50,7 @@ export default function SolarElecChart() {
     }, []);
     const [inflationRate, setInflationRate] = useState<number>(null)
     const [elecIncreaseRate, setElecIncreaseRate] = useState<number>(null)
-    const [showSolar, setShowSolar] = useState<boolean>(false);
+    const [settings, changeSettings] = useState<Settings>({showSolar: false, showElecBarChart: false});
     const {data: clientParams, isLoading: isClientParamLoading, isError: isClientParamError} = useGetClientQuery({
         pDate,
         clientId
@@ -93,91 +104,123 @@ export default function SolarElecChart() {
 
     return (
         <>
-            <div className="flex flex-row w-[100%] gap-5">
-                <div className="flex flex-col w-full justify-center m-auto gap-3" data-testid="solar-elec-chart">
-                    <h1 className="font-bold text-3xl font-sans text-cyan-900 m-auto pb-2">STROM SOLAR VERGLEICH </h1>
-                    <div>
-                        <ResponsiveContainer className="h-full w-full min-h-[750px]">
-                            <ComposedChart
-                                data={comparisonDataWithRange}
-                                margin={{
-                                    top: 5,
-                                    right: 30,
-                                    left: 20,
-                                    bottom: 5,
-                                }}
-                            >
-                                <CartesianGrid strokeDasharray="3 3"/>
-                                <XAxis dataKey="year" ticks={[0, 5, 10, 15, 20, 25]} tickFormatter={formatXAxisTicks}
-                                       tick={{fill: 'green'}} tickSize={8} tickMargin={15} strokeWidth={0.7}/>
-                                <YAxis ticks={getYAxisTicks(comparisonDataWithRange)} tickFormatter={formatYAxisTicks}
-                                       tick={{fill: 'green'}} tickSize={8} tickMargin={15} width={80} strokeWidth={0.7}>
-                                    <Label
-                                        style={{
-                                            textAnchor: "middle",
-                                            fontSize: "1.4em",
-                                            fill: "#072543",
-                                        }}
-                                        dx={-50}
-                                        angle={270}
-                                        value={"Miete Pro Monat"}/>
-                                </YAxis>
-                                <RechartToolTop/>
-                                <defs>
-                                    <linearGradient id="splitColor">
-                                        <stop offset="1" stopColor="#bff593" stopOpacity={1}/>
-                                    </linearGradient>
-                                </defs>
-                                <Legend layout="horizontal" verticalAlign="top" align="right"/>
-                                <Line type="linear" dataKey="electricityCost" name="Ohne PV" stroke="#FF0000"
-                                      strokeWidth={3.5} activeDot={{r: 8}} dot={<CustomizedDot/>}/>
-                                <Line type="linear" dataKey="solarCost" name="Mit Enpal" stroke="#072543"
-                                      strokeWidth={3.5}
-                                      hide={!showSolar} dot={<CustomizedDot/>}/>
-                                <Area type="linear" dataKey="range" fill="url(#splitColor)" hide={!showSolar}
-                                      legendType='none' tooltipType='none'/>
-                            </ComposedChart>
-                        </ResponsiveContainer>
-                    </div>
-                    <div className="m-auto h-fit flex items-center pt-4" data-testid="solar-toggle">
-                        <label className={styles.switch}>
-                            <input type="checkbox" onChange={(e) => setShowSolar(e.target.checked)}/>
-                            <span className={styles.slider + " " + styles.round}></span>
-                        </label>
-                    </div>
-                    {/*<div className={styles.rangeSelectors} data-testid="inflation-elec-slider">*/}
-                        {/*<Slider ticks={[3, 4, 5, 6, 7, 8]} onChangeHandler={setInflationRate}*/}
-                        {/*        defaultValue={generalParams.inflationRate} label={"inflation rate(%)"} step={1}/>*/}
-                        {/*<Slider ticks={[1, 2, 3, 4, 5, 6]} onChangeHandler={setElecIncreaseRate}*/}
-                        {/*        defaultValue={generalParams.electricityIncreaseRate} label={"strom increase rate(%)"} step={1}/>*/}
-                    {/*</div>*/}
-                </div>
-                <div className="flex flex-col gap-8 h-[400px] pl-10 pt-20" data-testid="inflation-elec-slider">
-                    <Slider
-                        orientation="vertical"
-                        color="neutral"
-                        aria-label="inflationRate-slider"
-                        defaultValue={generalParams.inflationRate}
-                        min={generalParams.inflationRate}
-                        max={generalParams.inflationRate + 5}
-                        step={1}
-                        marks={getSliderMarks(generalParams.inflationRate)}
-                        valueLabelDisplay="off"
-                        onChange={(e, value) => setInflationRate(Number(value))}
-                    />
-                    <Slider
-                        orientation="vertical"
-                        color="neutral"
-                        aria-label="elecIncreaseRate-slider"
-                        defaultValue={generalParams.electricityIncreaseRate}
-                        min={generalParams.electricityIncreaseRate}
-                        max={generalParams.electricityIncreaseRate + 5}
-                        step={1}
-                        marks={getSliderMarks(generalParams.electricityIncreaseRate )}
-                        valueLabelDisplay="off"
-                        onChange={(e, value) => setElecIncreaseRate(Number(value))}
-                    />
-                </div>
+            <div className="flex flex-col w-[80%]  justify-center m-auto gap-3" data-testid="solar-elec-chart">
+                {!settings.showElecBarChart ?
+                    <>
+                        <h1 className="font-bold text-3xl font-sans text-cyan-900 m-auto pb-2">STROM SOLAR
+                            VERGLEICH </h1>
+                        <div>
+                            <ResponsiveContainer className="h-full w-full min-h-[750px]">
+                                <ComposedChart
+                                    data={comparisonDataWithRange}
+                                    margin={{
+                                        top: 5,
+                                        right: 30,
+                                        left: 20,
+                                        bottom: 5,
+                                    }}
+                                >
+                                    <CartesianGrid stroke="#000000" strokeWidth={0.1} strokeOpacity={0.7}/>
+                                    <XAxis dataKey="year" ticks={[0, 5, 10, 15, 20, 25]}
+                                           tickFormatter={formatXAxisTicks}
+                                           tick={{fill: 'green'}} tickSize={8} tickMargin={15} strokeWidth={0.7}/>
+                                    <YAxis ticks={getYAxisTicks(comparisonDataWithRange)}
+                                           tickFormatter={formatYAxisTicks}
+                                           tick={{fill: 'green'}} tickSize={8} tickMargin={15} width={80}
+                                           strokeWidth={0.7}>
+                                        <Label
+                                            style={{
+                                                textAnchor: "middle",
+                                                fontSize: "1.4em",
+                                                fill: "#072543",
+                                            }}
+                                            dx={-50}
+                                            angle={270}
+                                            value={"Miete Pro Monat"}/>
+                                    </YAxis>
+                                    <RechartToolTop/>
+                                    <defs>
+                                        <linearGradient id="splitColor">
+                                            <stop offset="1" stopColor="#bff593" stopOpacity={1}/>
+                                        </linearGradient>
+                                    </defs>
+                                    <Legend layout="horizontal" verticalAlign="top" align="right"/>
+                                    <Line type="linear" dataKey="electricityCost" name="Ohne PV" stroke="#FF0000"
+                                          strokeWidth={3.5} activeDot={{r: 8}} dot={<CustomizedDot/>}/>
+                                    <Line type="linear" dataKey="solarCost" name="Mit Enpal" stroke="#072543"
+                                          strokeWidth={3.5}
+                                          hide={!settings.showSolar} dot={<CustomizedDot/>}/>
+                                    <Area type="linear" dataKey="range" fill="url(#splitColor)"
+                                          hide={!settings.showSolar}
+                                          legendType='none' tooltipType='none'/>
+                                </ComposedChart>
+                            </ResponsiveContainer>
+                        </div>
+                        <ThemeProvider theme={theme}>
+                            <FormGroup className="m-auto pt-3">
+                                <FormControlLabel control={
+                                    <Switch
+                                        onChange={(e) => changeSettings({...settings, showSolar: e.target.checked})}/>}
+                                                  label={<span
+                                                      className="font-sans font-normal text-lg tracking-wide text-cyan-900">{settings.showSolar ? 'Mit Enpal' : 'Ohne Enpal'}</span>}/>
+                            </FormGroup>
+                        </ThemeProvider>
+                    </>
+                    : <ElecBarChart comparisonData={comparisonData}/>
+                }
+            </div>
+            <div className="top-44 right-8 absolute"
+                 data-testid="settings">
+                <AccordionGroup variant="plain">
+                    <Accordion>
+                        <AccordionSummary>Einstellung</AccordionSummary>
+                        <AccordionDetails>
+                            <div className="flex justify-center h-[240px] gap-2 pt-4">
+                                <div className="flex flex-col justify-center gap-4">
+                                    <Slider
+                                        orientation="vertical"
+                                        color="neutral"
+                                        aria-label="inflationRate-slider"
+                                        defaultValue={generalParams.inflationRate}
+                                        min={generalParams.inflationRate}
+                                        max={generalParams.inflationRate + 5}
+                                        step={1}
+                                        marks={getSliderMarks(generalParams.inflationRate)}
+                                        valueLabelDisplay="off"
+                                        onChange={(e, value) => setInflationRate(Number(value))}
+                                    />
+                                    <Typography fontSize={14}>
+                                        Inflation Rate
+                                    </Typography>
+                                </div>
+                                <div className="flex flex-col justify-center gap-4">
+                                    <Slider
+                                        orientation="vertical"
+                                        color="neutral"
+                                        aria-label="elecIncreaseRate-slider"
+                                        defaultValue={generalParams.electricityIncreaseRate}
+                                        min={generalParams.electricityIncreaseRate}
+                                        max={generalParams.electricityIncreaseRate + 5}
+                                        step={1}
+                                        marks={getSliderMarks(generalParams.electricityIncreaseRate)}
+                                        valueLabelDisplay="off"
+                                        onChange={(e, value) => setElecIncreaseRate(Number(value))}
+                                    />
+                                    <Typography fontSize={14}>
+                                        Preiserhöhung
+                                    </Typography>
+                                </div>
+                            </div>
+                            <ThemeProvider theme={theme}>
+                                <FormGroup className="m-auto pt-3">
+                                    <FormControlLabel control={<Switch
+                                        onChange={(event, checked) => changeSettings({...settings, showElecBarChart: checked})}/>}
+                                                      label="Strom"/>
+                                </FormGroup>
+                            </ThemeProvider>
+                        </AccordionDetails>
+                    </Accordion>
+                </AccordionGroup>
             </div>
             <div className="absolute bottom-7 right-7" data-testid="forward-fab">
                 <Tooltip title="comparison stat" arrow>
@@ -189,7 +232,8 @@ export default function SolarElecChart() {
                 </Tooltip>
             </div>
         </>
-    );
+    )
+        ;
 }
 
 function getYAxisTicks(comparisonDataWithRange): Array<number> {
@@ -287,3 +331,30 @@ function getSliderMarks(currentRate: number): Array<Mark> {
     }
     return marks;
 }
+
+const theme = createTheme({
+    components: {
+        MuiSwitch: {
+            styleOverrides: {
+                switchBase: {
+                    // Controls default (unchecked) color for the thumb
+                    color: "gray"
+                },
+                colorPrimary: {
+                    "&.Mui-checked": {
+                        // Controls checked color for the thumb
+                        color: "rgb(22 78 99 / var(--tw-text-opacity))"
+                    }
+                },
+                track: {
+                    // Controls default (unchecked) color for the track
+                    backgroundColor: "gray",
+                    ".Mui-checked.Mui-checked + &": {
+                        // Controls checked color for the track
+                        backgroundColor: "#071730"
+                    }
+                }
+            }
+        }
+    }
+});
