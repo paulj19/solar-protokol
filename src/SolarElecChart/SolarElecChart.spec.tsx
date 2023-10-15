@@ -8,7 +8,7 @@ describe('SolarElecChart', () => {
         renderWithWrappers(<SolarElecChart/>)
         expect(screen.getByTestId('solar-elec-chart')).toBeInTheDocument();
         expect(screen.getByTestId('solar-toggle')).toBeInTheDocument();
-        expect(screen.getByTestId('inflation-elec-slider')).toBeInTheDocument();
+        expect(screen.getByTestId('settings')).toBeInTheDocument();
         expect(screen.getByTestId('forward-fab')).toBeInTheDocument();
     });
 });
