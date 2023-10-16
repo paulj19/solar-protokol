@@ -117,6 +117,7 @@ a {
     --alpha-legend: 0.71;
     --color-axis: 9, 153, 255;
     --alpha-axis: 0.71;
+    --slider-thumb: 31, 45, 55;
   }
 
   html[data-theme='neon'] {
