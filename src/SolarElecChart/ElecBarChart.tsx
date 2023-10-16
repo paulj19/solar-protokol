@@ -1,9 +1,9 @@
-import {Bar, BarChart, CartesianGrid, ResponsiveContainer, XAxis, YAxis} from "recharts";
+import { Bar, BarChart, CartesianGrid, ResponsiveContainer, XAxis, YAxis } from "recharts";
 import React from "react";
-import {CostPredictions} from "@/types/types";
-import {format} from "date-fns";
+import { CostPredictions } from "@/types/types";
+import { format } from "date-fns";
 
-export default function ElecBarChart({comparisonData}:{comparisonData: Array<CostPredictions>}) {
+export default function ElecBarChart({ comparisonData }: { comparisonData: Array<CostPredictions> }) {
     function XAxisTickFormatter(value, index) {
         return (index % 2 === 0) ? value + Number(format(new Date, 'yyyy')) : ""
     }
@@ -23,10 +23,10 @@ export default function ElecBarChart({comparisonData}:{comparisonData: Array<Cos
                             left: 20,
                         }}
                     >
-                        <CartesianGrid stroke="#000000" vertical={false} strokeWidth={0.1} strokeOpacity={1}/>
-                        <XAxis dataKey="year" tick={{fill: '#1c6b02'}} tickFormatter={XAxisTickFormatter} tickLine={false}/>
-                        <YAxis axisLine={false} tick={{fill: '#1c6b02'}} tickLine={false}
-                               tickMargin={15} ticks={getYAxisTicks(comparisonData)} tickFormatter={(value, index) => `${value} €`}/>
+                        <CartesianGrid stroke="#000000" vertical={false} strokeWidth={0.1} strokeOpacity={1} />
+                        <XAxis dataKey="year" tick={{ fill: '#1c6b02' }} tickFormatter={XAxisTickFormatter} tickLine={false} />
+                        <YAxis axisLine={false} tick={{ fill: '#1c6b02' }} tickLine={false}
+                            tickMargin={15} ticks={getYAxisTicks(comparisonData)} tickFormatter={(value, index) => `${value} €`} />
                         {/*<Tooltip/>*/}
                         <Bar dataKey="electricityCost" barSize={30} fill="#071730" />
                     </BarChart>

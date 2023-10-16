@@ -55,8 +55,8 @@ export function calcTotalSaved(params: PredictionParams): any {
     let totalSolarCost = 0;
 
     for (let i = 0; i <= params.year; i++) {
-        totalElecCost += predictedCosts[i].electricityCost;
-        totalSolarCost += predictedCosts[i].solarCost;
+        totalElecCost += predictedCosts[i].electricityCost * 12;
+        totalSolarCost += predictedCosts[i].solarCost * 12;
         totalSaved += (predictedCosts[i].electricityCost - predictedCosts[i].solarCost) * 12;
     }
     return {totalSaved, totalElecCost, totalSolarCost};

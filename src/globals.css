@@ -109,6 +109,23 @@ a {
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  html[data-theme='gray-bg'] {
+    --color-title: 255, 245, 0;
+    --alpha-title: 0.93;
+    --color-legend: 180, 172, 2;
+    --alpha-legend: 0.71;
+    --color-axis: 9, 153, 255;
+    --alpha-axis: 0.71;
+  }
+
+  html[data-theme='neon'] {
+    --color-title: 34, 39, 46;
+    --color-legend: 45, 51, 59;
+    --color-axis: 55, 62, 71;
+  }
+}
+
 /*input[type='range'] {*/
 /*  box-sizing: border-box;*/
 /*  border: 0px solid transparent;*/
