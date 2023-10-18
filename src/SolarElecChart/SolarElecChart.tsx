@@ -20,9 +20,7 @@ import { CostPredictions } from '@/types/types';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { Fab, FormControlLabel, FormGroup, MobileStepper, Switch } from "@mui/material";
 import { ArrowForward, KeyboardArrowLeft, KeyboardArrowRight } from "@mui/icons-material";
-import { styled } from "@mui/material/styles";
 import { Mark } from "@mui/base";
-import Slider from "@mui/joy/Slider";
 import ElecBarChart from "@/src/SolarElecChart/ElecBarChart";
 import { Typography } from "@mui/joy";
 import AccordionGroup from "@mui/joy/AccordionGroup";
@@ -31,6 +29,7 @@ import AccordionSummary from "@mui/joy/AccordionSummary";
 import AccordionDetails from "@mui/joy/AccordionDetails";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Button from "@mui/material/Button";
+import ColoredSlider from "@/src/components/ColoredSlider";
 
 type Settings = {
     currentState: number
@@ -266,7 +265,7 @@ export default function SolarElecChart() {
                         <AccordionDetails>
                             <div className="flex justify-center h-[240px] gap-2 pt-4">
                                 <div className="flex flex-col justify-center gap-4">
-                                    <CustomSlider
+                                    <ColoredSlider
                                         orientation="vertical"
                                         color="neutral"
                                         aria-label="inflationRate-slider"
@@ -283,7 +282,7 @@ export default function SolarElecChart() {
                                     </Typography>
                                 </div>
                                 <div className="flex flex-col justify-center gap-4">
-                                    <CustomSlider
+                                    <ColoredSlider
                                         orientation="vertical"
                                         color="neutral"
                                         aria-label="elecIncreaseRate-slider"
@@ -403,22 +402,6 @@ const CustomizedDot = (props) => {
 
     return null;
 };
-
-const CustomSlider = styled(Slider)(({ theme }) => ({
-    color: "#072543", //color of the slider between thumbs
-    "& .MuiSlider-thumb": {
-        backgroundColor: "rgba(var(--slider-thumb))" //color of thumbs
-    },
-    "& .MuiSlider-rail": {
-        // backgroundColor: "rgba(var(--slider-thumb), 0.05)"
-    },
-    "& .MuiSlider-track": {
-        backgroundColor: "rgba(var(--slider-thumb), 0.85)"
-    },
-    '& input[type="range"]': {
-        WebkitAppearance: 'slider-vertical',
-    },
-}));
 
 function getSliderMarks(currentRate: number): Array<Mark> {
     const marks = [];
