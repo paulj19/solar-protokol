@@ -13,7 +13,7 @@ import {
     LabelList,
     Label, Text
 } from 'recharts';
-import {getBarLabel, renderCustomizedLabel} from "@/src/stats/Stats";
+import Stats, {getBarLabel, renderCustomizedLabel} from "@/src/stats/Stats";
 
 export default function StatsChart(params: PredictionParams) {
     const electricityCost = calcElectricityCostMonthly(params);
@@ -37,13 +37,13 @@ export default function StatsChart(params: PredictionParams) {
                     {/* <YAxis ticks={[0, 50, 100, 150, 200, 250, 300, 350]} /> */}
                     <Tooltip />
                      <Legend />
-                    <Bar dataKey="electricityCost" name={"ohne enpal"} fill="rgb(var(--stats-chart-elec))" label={renderCustomizedLabel}>
+                    <Bar dataKey="electricityCost" name={"ohne enpal"} fill="rgb(var(--stats-chart-elec))" label={renderCustomizedLabel} radius={2}>
                         {getBarLabel("STROMRECHNUNG ALT")}
                     </Bar>
-                    <Bar stackId="a" dataKey="electricityCostNew" name={"mit enpal"} fill="rgb(var(--stats-chart-elec))" label={renderCustomizedLabel}>
+                        <Bar stackId="a" dataKey="electricityCostNew" name={"mit enpal"} fill="rgb(var(--stats-chart-elec))" label={renderCustomizedLabel}  radius={2}>
                         {getBarLabel(`STROMRECHNUNG NEU ${electricityCostNew} €`)}
                     </Bar>
-                    <Bar stackId="a" dataKey="solarCost" name={"mit enpal"} fill="rgb(var(--stats-chart-solar))" label={renderCustomizedLabel}>
+                    <Bar stackId="a" dataKey="solarCost" name={"mit enpal"} fill="rgb(var(--stats-chart-solar))" label={renderCustomizedLabel} radius={2}>
                         {getBarLabel(`ENPAL KOMPLETTLÖSUNG ${solarCost} €`)}
                     </Bar>
                 </BarChart>

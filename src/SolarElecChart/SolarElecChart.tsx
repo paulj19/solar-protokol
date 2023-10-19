@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
     Area, Bar,
-    CartesianGrid,
+    CartesianGrid, Cell,
     ComposedChart,
     Label,
     Legend,
@@ -12,24 +12,27 @@ import {
     YAxis
 } from 'recharts';
 import Tooltip from '@mui/material/Tooltip';
-import { useGetClientQuery, useGetGeneralParamsQuery } from '@/src/context/RootApi';
+import {useGetClientQuery, useGetGeneralParamsQuery} from '@/src/context/RootApi';
 import Loading from "@/src/components/Loading";
 import ErrorScreen from "@/src/components/ErrorScreen";
-import { calcPredictions, calcTotalSaved } from '@/utils/ElectricityCostCalculator';
-import { CostPredictions } from '@/types/types';
-import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import { Fab, FormControlLabel, FormGroup, MobileStepper, Switch } from "@mui/material";
-import { ArrowForward, KeyboardArrowLeft, KeyboardArrowRight } from "@mui/icons-material";
-import { Mark } from "@mui/base";
+import {calcPredictions, calcTotalSaved} from '@/utils/ElectricityCostCalculator';
+import {CostPredictions} from '@/types/types';
+import {Link, useNavigate, useSearchParams} from 'react-router-dom';
+import {Fab, FormControlLabel, FormGroup, MobileStepper, Switch} from "@mui/material";
+import {ArrowForward, KeyboardArrowLeft, KeyboardArrowRight} from "@mui/icons-material";
+import {Mark} from "@mui/base";
 import ElecBarChart from "@/src/SolarElecChart/ElecBarChart";
-import { Typography } from "@mui/joy";
+import {Typography} from "@mui/joy";
 import AccordionGroup from "@mui/joy/AccordionGroup";
 import Accordion from "@mui/joy/Accordion";
 import AccordionSummary from "@mui/joy/AccordionSummary";
 import AccordionDetails from "@mui/joy/AccordionDetails";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
+import {createTheme, styled, ThemeProvider} from "@mui/material/styles";
 import Button from "@mui/material/Button";
 import ColoredSlider from "@/src/components/ColoredSlider";
+import {renderCustomizedLabel} from "@/src/stats/Stats";
+import {withStyles} from "@mui/styles";
+import Slider from "@mui/joy/Slider";
 
 type Settings = {
     currentState: number
@@ -58,8 +61,8 @@ export default function SolarElecChart() {
     // }, []);
     const [inflationRate, setInflationRate] = useState<number>(null)
     const [elecIncreaseRate, setElecIncreaseRate] = useState<number>(null)
-    const [settings, changeSettings] = useState<Settings>({ currentState: 0 });
-    const { data: clientParams, isLoading: isClientParamLoading, isError: isClientParamError } = useGetClientQuery({
+    const [settings, changeSettings] = useState<Settings>({currentState: 0});
+    const {data: clientParams, isLoading: isClientParamLoading, isError: isClientParamError} = useGetClientQuery({
         pDate,
         clientId
     });
@@ -68,19 +71,20 @@ export default function SolarElecChart() {
         isLoading: isGeneralParamLoading,
         isError: isGeneralParamsError
     } = useGetGeneralParamsQuery(undefined);
+    const currentYear = new Date().getFullYear();
     // const clientParams = useSelector(state => selectClientById(state, "cid_1"));
     if (isClientParamLoading || isGeneralParamLoading) {
-        return <Loading />;
+        return <Loading/>;
     }
     //todo why undef rendered twice
     if (isClientParamError || isGeneralParamsError) {
-        return <ErrorScreen />
+        return <ErrorScreen/>
     }
     //todo no direct url calls with cid, then have to handle loading and error conditions of query
 
     const comparisonData: Array<CostPredictions> = calcPredictions({
         year: undefined,
-        clientParams: { ...clientParams },
+        clientParams: {...clientParams},
         generalParams: {
             ...generalParams,
             inflationRate: inflationRate ?? generalParams.inflationRate,
@@ -96,8 +100,8 @@ export default function SolarElecChart() {
             if (i >= 1 && xx === false) {
                 const intersectionResut = intersect(array[i - 1].year, array[i - 1].solarCost, item.year, item.solarCost, array[i - 1].year, array[i - 1].electricityCost, item.year, item.electricityCost);
                 if (intersectionResut) {
-                    const { x, y }: any = intersectionResut;
-                    const intersection = { year: Math.floor(x), electricityCost: y, solarCost: y, range: [y, y] }
+                    const {x, y}: any = intersectionResut;
+                    const intersection = {year: Math.floor(x), electricityCost: y, solarCost: y, range: [y, y]}
                     acc = acc.concat(intersection);
                     xx = true;
                 }
@@ -109,7 +113,7 @@ export default function SolarElecChart() {
         }
         return acc.concat(item);
     }, []);
-    const { totalElecCost, totalSolarCost } = calcTotalSaved({ year: 25, clientParams, generalParams });
+    const {totalElecCost, totalSolarCost} = calcTotalSaved({year: 25, clientParams, generalParams});
 
     function stateHasSolarLine() {
         return STATES[settings.currentState]?.includes(STATE.SOLAR_LINE);
@@ -134,13 +138,15 @@ export default function SolarElecChart() {
                             >
                                 {/*<CartesianGrid stroke="#000000" strokeWidth={0.1} strokeOpacity={0.7}/>*/}
                                 <XAxis dataKey="year" ticks={[0, 5, 10, 15, 20, 25]}
-                                    tickFormatter={formatXAxisTicks}
-                                    tick={{ fill: 'rgba(var(--color-axis), var(--alpha-axis))' }}
-                                    tickSize={8} tickMargin={15} strokeWidth={0.7}
+                                       tickFormatter={value => `${value + currentYear}`}
+                                       tick={{fill: 'rgba(var(--color-axis), var(--alpha-axis))'}}
+                                       tickSize={8} tickMargin={15} strokeWidth={0.7}
                                 />
-                                <YAxis ticks={getYAxisTicks(comparisonDataWithRange, STATES[settings.currentState]?.includes(STATE.SOLAR_LINE))}
+                                <YAxis
+                                    ticks={getYAxisTicks(comparisonDataWithRange, STATES[settings.currentState]?.includes(STATE.SOLAR_LINE))}
                                     tickFormatter={formatYAxisTicks} strokeWidth={0.7}
-                                    tick={{ fill: 'rgba(var(--color-axis), var(--alpha-axis))' }} tickSize={8} tickMargin={15} width={80}
+                                    tick={{fill: 'rgba(var(--color-axis), var(--alpha-axis))'}} tickSize={8}
+                                    tickMargin={15} width={80}
                                 >
                                     <Label
                                         style={{
@@ -150,12 +156,20 @@ export default function SolarElecChart() {
                                         }}
                                         dx={-50}
                                         angle={270}
-                                        value={"PV-Miete pro Monat"} />
+                                        value={"PV-Miete pro Monat"}/>
                                 </YAxis>
-                                <RechartToolTop />
+                                <RechartToolTop
+                                    content={<CustomTooltip currentYear={currentYear}/>}
+                                    // formatter={value => <span className="text-xl font-medium text-axis">{`Stromrechnung ${value} €`}</span>}
+                                    // labelFormatter={label => <span className="text-xl font-medium text-axis">{`Im Jahr ${label + currentYear}`}</span>}
+                                />
                                 <defs>
+                                    <linearGradient id='elec-bar' gradientTransform="rotate(90)" spreadMethod='reflect'>
+                                        <stop offset='20%' stopColor={'rgb(var(--color-bar))'}/>
+                                        <stop offset='90%' stopColor='rgb(var(--color-axis))'/>
+                                    </linearGradient>
                                     <linearGradient id="splitColor">
-                                        <stop offset="1" stopColor="rgba(var(--color-axis), 0.6)" stopOpacity={1} />
+                                        <stop offset="1" stopColor="rgba(var(--color-axis), 0.6)" stopOpacity={1}/>
                                     </linearGradient>
                                 </defs>
                                 {/*<defs>*/}
@@ -164,24 +178,28 @@ export default function SolarElecChart() {
                                 {/*        <stop offset="35%" stopColor="#FFFFFF" stopOpacity={0.5} />*/}
                                 {/*    </linearGradient>*/}
                                 {/*</defs>*/}
-                                <Legend layout="horizontal" verticalAlign="top" align="right" />
+                                <Legend layout="horizontal" verticalAlign="top" align="right"/>
                                 <Line type="linear" dataKey="electricityCost" name="Ohne PV" stroke="#FF0000"
-                                    strokeWidth={5.5} activeDot={{ r: 8 }} dot={<CustomizedDot />}
-                                    hide={!STATES[settings.currentState]?.includes(STATE.ELEC_LINE)}
+                                      strokeWidth={STATES[settings.currentState]?.includes(STATE.ELEC_BAR) ? 8.5 : 5.5}
+                                      activeDot={{r: 6}} dot={<CustomizedDot/>}
+                                      hide={!STATES[settings.currentState]?.includes(STATE.ELEC_LINE)}//todo util function here
                                 />
                                 <Line type="linear" dataKey="solarCost" name="Mit Enpal" stroke="#10ad3f"
-                                    strokeWidth={5.5}
-                                    dot={<CustomizedDot />}
-                                    hide={!STATES[settings.currentState]?.includes(STATE.SOLAR_LINE)}
+                                      strokeWidth={5.5}
+                                      dot={<CustomizedDot/>}
+                                      hide={!STATES[settings.currentState]?.includes(STATE.SOLAR_LINE)}
                                 />
                                 <Area type="linear" dataKey="range" fill="url(#splitColor)"
-                                    legendType='none' tooltipType='none'
-                                    hide={!STATES[settings.currentState]?.includes(STATE.AREA)}
+                                      legendType='none' tooltipType='none'
+                                      hide={!STATES[settings.currentState]?.includes(STATE.AREA)}
                                 />
-                                <Bar dataKey="electricityCost"
-                                    barSize={30} fill="rgb(var(--color-bar))"
-                                    hide={!STATES[settings.currentState]?.includes(STATE.ELEC_BAR)}
-                                />
+                                <Bar dataKey="electricityCost" fill="rgb(var(--color-bar))" barSize={30}
+                                     legendType={STATES[settings.currentState]?.includes(STATE.ELEC_BAR) ? 'rect' : 'none'}
+                                     hide={!STATES[settings.currentState]?.includes(STATE.ELEC_BAR)}>
+                                    {comparisonDataWithRange.map((entry, index) => (
+                                        <Cell key="elec-bar" fill={`url(#elec-bar)`}/>
+                                    ))}
+                                </Bar>
                             </ComposedChart>
                         </ResponsiveContainer>
                         <div className="text-title font-medium text-sm pt-14 tracking-wide">
@@ -195,7 +213,7 @@ export default function SolarElecChart() {
                             variant="progress"
                             steps={STATES.length}
                             activeStep={settings.currentState}
-                            sx={{ maxWidth: 400, flexGrow: 1, bgcolor: 'transparent', margin: 'auto' }}
+                            sx={{maxWidth: 400, flexGrow: 1, bgcolor: 'transparent', margin: 'auto'}}
                             nextButton={
                                 <Button
                                     onClick={() => changeSettings({
@@ -205,16 +223,20 @@ export default function SolarElecChart() {
                                         // showElecBarChart: STATES[settings.currentState + 1].includes(STATE.ELEC_BAR)
                                     })}
                                     disabled={settings.currentState === STATES.length - 1}
-                                    style={{
+                                    sx={{
+                                        ':hover': {
+                                            bgcolor: 'primary.main', // theme.palette.primary.main
+                                            color: 'white',
+                                        },
                                         borderRadius: 25,
                                         border: "1px solid rgba(var(--color-axis), var(--alpha-axis))",
                                         fontSize: "1em",
                                         fontWeight: "bold",
-                                    }} >
+                                    }}>
                                     {theme.direction === 'rtl' ? (
-                                        <KeyboardArrowLeft />
+                                        <KeyboardArrowLeft/>
                                     ) : (
-                                        <KeyboardArrowRight />
+                                        <KeyboardArrowRight/>
                                     )}
 
                                 </Button>
@@ -228,16 +250,20 @@ export default function SolarElecChart() {
                                         // showElecBarChart: STATES[settings.currentState + 1].includes(STATE.ELEC_BAR)
                                     })}
                                     disabled={settings.currentState === 0}
-                                    style={{
+                                    sx={{
+                                        ':hover': {
+                                            bgcolor: 'primary.main', // theme.palette.primary.main
+                                            color: 'white',
+                                        },
                                         borderRadius: 25,
                                         border: "1px solid rgba(var(--color-axis), var(--alpha-axis))",
                                         fontSize: "1em",
                                         fontWeight: "bold",
                                     }}>
                                     {theme.direction === 'rtl' ? (
-                                        <KeyboardArrowRight />
+                                        <KeyboardArrowRight/>
                                     ) : (
-                                        <KeyboardArrowLeft />
+                                        <KeyboardArrowLeft/>
                                     )}
                                 </Button>
                             }
@@ -257,7 +283,7 @@ export default function SolarElecChart() {
                  } */}
             </div>
             <div className="bottom-24 left-8 absolute"
-                data-testid="settings">
+                 data-testid="settings">
                 <AccordionGroup variant="plain">
                     <Accordion>
                         <AccordionSummary className="bg-gray-800"><span
@@ -277,7 +303,8 @@ export default function SolarElecChart() {
                                         valueLabelDisplay="off"
                                         onChange={(e, value) => setInflationRate(Number(value))}
                                     />
-                                    <Typography fontSize={14} textColor="rgba(var(--color-legend), var(--alpha-legend))">
+                                    <Typography fontSize={14}
+                                                textColor="rgba(var(--color-legend), var(--alpha-legend))">
                                         Inflation Rate
                                     </Typography>
                                 </div>
@@ -294,7 +321,8 @@ export default function SolarElecChart() {
                                         valueLabelDisplay="off"
                                         onChange={(e, value) => setElecIncreaseRate(Number(value))}
                                     />
-                                    <Typography fontSize={14} textColor="rgba(var(--color-legend), var(--alpha-legend))">
+                                    <Typography fontSize={14}
+                                                textColor="rgba(var(--color-legend), var(--alpha-legend))">
                                         Preiserhöhung
                                     </Typography>
                                 </div>
@@ -367,10 +395,10 @@ function intersect(x1, y1, x2, y2, x3, y3, x4, y4) {
     const line1isHigher = y1 > y3;
     const line1isHigherNext = y2 > y4;
 
-    return { x, y, line1isHigher, line1isHigherNext };
+    return {x, y, line1isHigher, line1isHigherNext};
 }
 
-function LineLabel({ x, y, stroke, value }) {
+function LineLabel({x, y, stroke, value}) {
     return (
         <text x={x} y={y} dy={-4} fill={stroke} fontSize={10} className='custom-label' textAnchor="middle">
             {value + "€"}
@@ -382,19 +410,15 @@ function formatYAxisTicks(value) {
     return value + ' €';
 }
 
-function formatXAxisTicks(value) {
-    return value + 2013;
-}
-
 const CustomizedDot = (props) => {
-    const { cx, cy, stroke, payload, value } = props;
+    const {cx, cy, stroke, payload, value} = props;
 
     if (payload.year % 5 === 0) {
         return (
             <svg x={cx - 4} y={cy - 4} width={8} height={8} fill="white">
                 <g transform="translate(4 4)">
-                    <circle r="4" fill={stroke} />
-                    <circle r="2" fill="white" />
+                    <circle r="4" fill={stroke}/>
+                    <circle r="2" fill="white"/>
                 </g>
             </svg>
         );
@@ -406,7 +430,7 @@ const CustomizedDot = (props) => {
 function getSliderMarks(currentRate: number): Array<Mark> {
     const marks = [];
     for (let i = currentRate; i <= currentRate + 5; i++) {
-        marks.push({ value: i, label: <span className="text-axis">{i}</span> });
+        marks.push({value: i, label: <span className="text-axis">{i}</span>});
     }
     return marks;
 }
@@ -451,3 +475,33 @@ function formatEuroCurrency(totalSaved) {
     }).format(totalSaved);
 
 }
+
+const CustomTooltip = ({active, payload, label, currentYear}) => {
+    if (active && payload && payload.length) {
+        return (
+            <div className="bg-gray-300 p-2 border rounded-sm opacity-95">
+                <div className="text-xl font-medium text-axis">{`Im Jahr ${label + currentYear}`}</div>
+                <div className="text-xl font-medium text-axis">{`Stromrechnung ${payload[0].value} €`}</div>
+            </div>
+        );
+    }
+
+    return null;
+};
+
+
+const StepButton = styled(Button)(({ theme }) => ({
+    root: {
+        backgroundColor: '#3c52b2',
+        color: '#fff',
+        '&:hover': {
+            backgroundColor: '#fff',
+            color: '#3c52b2',
+        },
+        borderRadius: 25,
+        border: "1px solid rgba(var(--color-axis), var(--alpha-axis))",
+        fontSize: "1em",
+        fontWeight: "bold",
+    },
+}))
+

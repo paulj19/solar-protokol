@@ -171,7 +171,7 @@ export const renderCustomizedLabel = (props) => {
     return (
         <g>
             <text x={x + width / 2} y={y - radius} fill="rgba(var(--color-axis), var(--alpha-axis))" textAnchor="middle"
-                  className="font-serif text-lg font-md">
+                  className="font-sans text-md font-md">
                 {getFormattedCost(value)}
             </text>
         </g>
