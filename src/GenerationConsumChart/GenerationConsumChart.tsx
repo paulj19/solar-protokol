@@ -105,7 +105,7 @@ export default function GenerationConsumChart(): ReactElement {
                         <Switch
                             onChange={(e) => setShowConsumption(e.target.checked)}/>}
                                       label={<span
-                                          className="font-sans font-normal text-lg tracking-wide text-[#B4AC02B5]">{"show consumption"}</span>}/>
+                                          className="font-sans font-normal text-[#B4AC02B5]">Stromverbrauch</span>}/>
                 </FormGroup>
             </ThemeProvider>
             {/*<div className="absolute bottom-7 left-7" data-testid="backward-fab">*/}
