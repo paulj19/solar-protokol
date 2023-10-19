@@ -3,7 +3,7 @@ import {useGetClientQuery, useUpdateClientStatusMutation} from "@/src/context/Ro
 import {GenerationConsumParam, getGenerationConsumParam} from "@/utils/ElectricityCostCalculator";
 import {
     Bar,
-    CartesianGrid,
+    CartesianGrid, Cell,
     ComposedChart,
     Legend,
     Line,
@@ -86,16 +86,31 @@ export default function GenerationConsumChart(): ReactElement {
                         }}
                     >
                         <CartesianGrid stroke="#fff" vertical={false} strokeWidth={0.3} strokeOpacity={1}/>
-                        <XAxis dataKey="month" tick={{fill: 'rgb(var(--color-axis) , var(--alpha-axis))'}}  angle={320} tickMargin={15} dx={-20}/>
-                        <YAxis axisLine={false} tick={{fill: 'rgb(var(--color-axis) , var(--alpha-axis))'}} tickLine={false} tickMargin={15} ticks={getYAxisTicks(generationConsumParams)}/>
+                        <XAxis dataKey="month" tick={{fill: 'rgb(var(--color-axis) , var(--alpha-axis))'}} angle={320}
+                               tickMargin={15} dx={-20}/>
+                        <YAxis axisLine={false} tick={{fill: 'rgb(var(--color-axis) , var(--alpha-axis))'}}
+                               tickLine={false} tickMargin={15} ticks={getYAxisTicks(generationConsumParams)}/>
                         <Tooltip/>
                         <Legend layout="centric" verticalAlign="top" align="right" iconSize={30}
                                 formatter={(value) => LegendFormatter(value, clientParams.productionYearly, clientParams.consumptionYearly, showConsumption)}/>
                         {/*<Legend layout="horizontal" verticalAlign="top" align="left" iconSize={30} />*/}
                         {/*<Legend layout="radial" verticalAlign="top" align="right" content={XXX}/>*/}
                         {/*<Legend iconType="circle" wrapperStyle={{ top: 300 }} content={CusomizedLegend} />*/}
-                        <Bar dataKey="generation" barSize={30} fill="rgb(var(--color-bar))" label={renderCustomizedLabel} />
-                        <Line type="monotone" strokeWidth={3} dataKey="consumption" stroke="rgb(var(--color-line))" hide={!showConsumption}/>
+                        {/*<Bar dataKey="generation" barSize={30} fill="rgb(var(--color-bar))" label={renderCustomizedLabel} />*/}
+                        <defs>
+                            <linearGradient id='gen-bar' gradientTransform="rotate(90)" spreadMethod='reflect'>
+                                <stop offset='20%' stopColor={'rgb(var(--color-bar))'}/>
+                                <stop offset='90%' stopColor='rgb(var(--color-axis))'/>
+                            </linearGradient>
+                        </defs>
+                        <Bar dataKey='generation' fill="rgb(var(--color-bar))" barSize={70} label={renderCustomizedLabel} >
+                            {generationConsumParams.map((entry, index) => (
+                                <Cell key="generation-bar" fill={`url(#gen-bar)`}/>
+                            ))}
+                        </Bar>
+
+                        <Line type="monotone" strokeWidth={3.5} dataKey="consumption" stroke="rgb(var(--color-line))"
+                              hide={!showConsumption}/>
                     </ComposedChart>
                 </ResponsiveContainer>
             </div>
@@ -153,24 +168,23 @@ function XXX(props) {
 }
 
 function LegendFormatter(value, productionYearly, consumptionYearly, showConsumption) {
+    const outerDiv = "inline-flex flex-col gap-2";
+    const innerTitle = "text-[rgb(var(--color-bar))] font-sans text-md font-medium tracking-wide";
+    const innerSum = "font-sans text-md font-medium text-start";
     if (value === "generation") {
         return (
-            <span>
-            <div className="inline-flex flex-col">
-                <div className="text-[rgb(var(--color-bar))] font-sans text-md font-medium">STROMPRODUKTION</div>
+            <div className={outerDiv}>
+                <div className={innerTitle + " text-[rgb(var(--color-bar))]"}>STROMPRODUKTION</div>
                 <div
-                    className="text-[rgb(var(--color-bar))] font-sans text-md font-medium text-start">{productionYearly + "KwH pro Jahr"}</div>
-            </div>
-        </span>)
+                    className={innerSum + " text-[rgb(var(--color-bar))]"}>{productionYearly + "KwH pro Jahr"}</div>
+            </div>)
     } else if (value === "consumption" && showConsumption) {
         return (
-            <span>
-            <div className="inline-flex flex-col">
-                <div className="text-[rgb(var(--color-line))] font-sans text-md font-medium">STROMVERBRAUCH</div>
+            <div className={outerDiv + " pt-3"}>
+                <div className={innerTitle + " text-[rgb(var(--color-line))]"}>STROMVERBRAUCH</div>
                 <div
-                    className="text-[rgb(var(--color-line))] font-sans text-md font-medium text-start">{consumptionYearly + " KwH pro Jahr"}</div>
-            </div>
-        </span>)
+                    className={innerSum + " text-[rgb(var(--color-line))]"}>{consumptionYearly + " KwH pro Jahr"}</div>
+            </div>)
     }
 }
 
@@ -182,14 +196,16 @@ function getYAxisTicks(generationConsumParams: Array<GenerationConsumParam>): Ar
     }
     return ticks;
 }
+
 const renderCustomizedLabel = (props) => {
-    const { x, y, width, value } = props;
+    const {x, y, width, value} = props;
     const radius = 10;
 
     return (
         <g>
-            <text x={x + width / 2} y={y - radius} fill="rgb(var(--color-axis) , var(--alpha-axis))" textAnchor="middle" className="font-serif text-sm font-md">
-                {value + "€"}
+            <text x={x + width / 2} y={y - radius} fill="rgb(var(--color-bar) , var(--alpha-axis))" textAnchor="middle"
+                  className="font-serif text-md font-medium">
+                {value}
             </text>
         </g>
     );
