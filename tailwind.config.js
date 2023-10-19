@@ -4,6 +4,7 @@ module.exports = {
         "./src/**/*.{js,ts,jsx,tsx,mdx}",
         "./pages/**/*.{js,ts,jsx,tsx,mdx}",
         "./components/**/*.{js,ts,jsx,tsx,mdx}",
+        "./app/**/*.{js,ts,jsx,tsx}"
     ],
     theme: {
         extend: {
@@ -12,11 +13,11 @@ module.exports = {
                 '2': "url('/2.png')",
                 '3': "url('/3.jpg')",
             },
-        },
-        textColor: {
-            title: 'rgb(var(--color-title), var(--alpha-title))',
-            legend: 'rgb(var(--color-legend), var(--alpha-legend))',
-            axis: 'rgb(var(--color-axis), var(--alpha-axis))',
+            textColor: {
+                title: 'rgb(var(--color-title), var(--alpha-title))',
+                legend: 'rgb(var(--color-legend), var(--alpha-legend))',
+                axis: 'rgb(var(--color-axis), var(--alpha-axis))',
+            },
         },
     },
     plugins: [],

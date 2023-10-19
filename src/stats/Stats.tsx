@@ -103,13 +103,13 @@ export default function Stats() {
 function getSliderMarks(): Array<Mark> {
     const marks = [];
     for (let i = 0; i <= 25; i += 5) {
-        marks.push({value: i, label: <span className="text-axis font-medium">{i}</span>});
+        marks.push({value: i, label: <span className="text-gray-400 font-medium">{i}</span>});
     }
     return marks;
 }
 
 export function PriceHeading({text}) {
-    return (<div className="font-sans font-normal text-2xl pl-3 tracking-wide text-axis">{text}</div>)
+    return (<div className="font-sans font-normal text-2xl pl-3 tracking-wide text-gray-300">{text}</div>)
 }
 
 {/*<div className="absolute bottom-7 left-7" data-testid="backward-fab">*/
@@ -170,7 +170,7 @@ export const renderCustomizedLabel = (props) => {
 
     return (
         <g>
-            <text x={x + width / 2} y={y - radius} fill="rgba(var(--color-axis), var(--alpha-axis))" textAnchor="middle"
+            <text x={x + width / 2} y={y - radius} fill="rgb(156, 163, 175)" textAnchor="middle"
                   className="font-sans text-md font-md">
                 {getFormattedCost(value)}
             </text>
@@ -186,5 +186,5 @@ export function getFormattedCost(cost: number) {
     }).format(cost);
 }
 export function getBarLabel(text): ReactElement {
-    return <LabelList position="middle" fill="rgba(var(--color-title), 0.7)" className="font-sans font-medium tracking-wide " style={{paddingLeft: "10px"}}>{text}</LabelList>
+    return <LabelList position="middle" fill="rgba(var(--color-title), 0.7)" className="font-sans font-medium tracking-wide" style={{paddingLeft: "10px"}}>{text}</LabelList>
 }

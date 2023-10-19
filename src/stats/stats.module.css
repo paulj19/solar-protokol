@@ -38,8 +38,8 @@
 
 .savedAmount {
     border: 2px solid rgba(0, 0, 0, 0.63);
-    box-shadow: inset 4px 4px 8px rgba(21, 0, 0, 0.63),
-        inset -4px -4px 8px rgb(21, 13, 8);
+    box-shadow: inset 4px 4px 8px rgb(0, 0, 0),
+        inset -4px -4px 8px rgb(0, 0, 0);
     border-radius: 4px;
     background: rgb(var(--color-bar));
     font-size: xx-large;

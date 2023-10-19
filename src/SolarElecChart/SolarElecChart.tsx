@@ -306,7 +306,7 @@ export default function SolarElecChart() {
                                     />
                                     <Typography fontSize={14}
                                                 textColor="rgba(var(--color-legend), var(--alpha-legend))">
-                                        Inflation Rate
+                                        Inflation
                                     </Typography>
                                 </div>
                                 <div className="flex flex-col justify-center gap-4">
@@ -324,7 +324,7 @@ export default function SolarElecChart() {
                                     />
                                     <Typography fontSize={14}
                                                 textColor="rgba(var(--color-legend), var(--alpha-legend))">
-                                        Preiserhöhung
+                                         Preissteigerung
                                     </Typography>
                                 </div>
                             </div>
