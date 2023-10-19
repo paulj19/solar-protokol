@@ -38,12 +38,13 @@
 
 .savedAmount {
     border: 2px solid rgba(0, 0, 0, 0.63);
-    /*box-shadow: inset 4px 4px 8px rgba(255, 131, 57, 0.63),*/
-    /*    inset -4px -4px 8px rgb(255, 131, 57);*/
+    box-shadow: inset 4px 4px 8px rgba(21, 0, 0, 0.63),
+        inset -4px -4px 8px rgb(21, 13, 8);
     border-radius: 4px;
-    background: rgb(var(--stats-chart-solar));
+    background: rgb(var(--color-bar));
     font-size: xx-large;
     padding: 8px;
+    /*color: rgb(-var(--color-bar));*/
     color: rgb(0, 79, 53);
     width: 150px;
     text-align: center;

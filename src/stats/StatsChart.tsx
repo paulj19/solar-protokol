@@ -14,6 +14,7 @@ import {
     Label, Text
 } from 'recharts';
 import Stats, {getBarLabel, renderCustomizedLabel} from "@/src/stats/Stats";
+import React from "react";
 
 export default function StatsChart(params: PredictionParams) {
     const electricityCost = calcElectricityCostMonthly(params);
@@ -37,13 +38,23 @@ export default function StatsChart(params: PredictionParams) {
                     {/* <YAxis ticks={[0, 50, 100, 150, 200, 250, 300, 350]} /> */}
                     <Tooltip />
                      <Legend />
-                    <Bar dataKey="electricityCost" name={"ohne enpal"} fill="rgb(var(--stats-chart-elec))" label={renderCustomizedLabel} radius={2}>
+                    <defs>
+                        <linearGradient id='stat-solar' gradientTransform="rotate(90)" spreadMethod='reflect'>
+                            <stop offset='20%' stopColor='rgb(var(--color-bar))'/>
+                            <stop offset='90%' stopColor={'rgb(var(--stats-chart-solar))'}/>
+                        </linearGradient>
+                        <linearGradient id='stat-elec' gradientTransform="rotate(90)" spreadMethod='reflect'>
+                            <stop offset='20%' stopColor="rgb(var(--stats-chart-elecShade))"/>
+                            <stop offset='90%' stopColor="rgb(var(--stats-chart-elec))"/>
+                        </linearGradient>
+                    </defs>
+                    <Bar dataKey="electricityCost" name={"ohne enpal"} fill={`url(#stat-elec)`} label={renderCustomizedLabel} radius={2}>
                         {getBarLabel("STROMRECHNUNG ALT")}
                     </Bar>
                         <Bar stackId="a" dataKey="electricityCostNew" name={"mit enpal"} fill="rgb(var(--stats-chart-elec))" label={renderCustomizedLabel}  radius={2}>
                         {getBarLabel(`STROMRECHNUNG NEU ${electricityCostNew} €`)}
                     </Bar>
-                    <Bar stackId="a" dataKey="solarCost" name={"mit enpal"} fill="rgb(var(--stats-chart-solar))" label={renderCustomizedLabel} radius={2}>
+                    <Bar stackId="a" dataKey="solarCost" name={"mit enpal"} fill={`url(#stat-solar)`} label={renderCustomizedLabel} radius={2}>
                         {getBarLabel(`ENPAL KOMPLETTLÖSUNG ${solarCost} €`)}
                     </Bar>
                 </BarChart>

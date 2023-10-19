@@ -5,10 +5,10 @@ import {getFormattedCost} from "@/src/stats/Stats";
 
 export default function TotalCostSavings(params: PredictionParams) {
     const { totalSaved, totalElecCost, totalSolarCost } = calcTotalSaved(params);
-
+    // text-[#c7c7c7]
     return (
         <>
-            <span className="font-sans font-normal text-2xl tracking-wide text-cyan-900 m-auto p-3 text-title">ERSPARNIS INSGESAMT</span>
+            <span className="font-sans font-normal text-[1.6em] tracking-wide text-cyan-900 m-auto p-3 text-axis">ERSPARNIS INSGESAMT</span>
             <EuroCurrencyFormat totalSaved={totalSaved} />
         </ >
     );
