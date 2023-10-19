@@ -123,7 +123,7 @@ export default function SolarElecChart() {
         <>
             <div className="flex flex-col w-full justify-center m-auto gap-3 pl-[200px]" data-testid="solar-elec-chart">
                 <>
-                    <h1 className="font-bold text-3xl font-sans text-title ml-[30%] pb-2">STROM SOLAR
+                    <h1 className="font-bold text-3xl font-sans text-gray-300 ml-[30%] pb-2">STROM SOLAR
                         VERGLEICH </h1>
                     <div className="flex gap-4 pt-4 min-h-[750px] w-full h-full">
                         <ResponsiveContainer >
@@ -202,13 +202,13 @@ export default function SolarElecChart() {
                                 </Bar>
                             </ComposedChart>
                         </ResponsiveContainer>
-                        <div className="text-title font-medium text-sm pt-2 tracking-wide gap-4 flex flex-col">
+                        <div className="text-gray-400 font-medium text-sm pt-2 tracking-wide gap-4 flex flex-col">
                             <div className="text-axis">{`INFLATION: ${inflationRate??generalParams.inflationRate}% | PREISSTEIGERUNG: ${elecIncreaseRate??generalParams.electricityIncreaseRate}%`}</div>
                             <h2>IHRE STROMKOSTEN IN DEN NÄCHSTEN 25 JAHREN</h2>
                             <p>{'OHNE SOLAR: '}{<span
-                                className="text-md">{formatEuroCurrency(totalElecCost)}</span>}</p>
-                            {stateHasSolarLine() ? <p className="pt-4">{'MIT SOLAR: '}{<span
-                                className="text-md">{formatEuroCurrency(totalSolarCost)}</span>}</p> : null}
+                                className="text-lg">{formatEuroCurrency(totalElecCost)}</span>}</p>
+                            {stateHasSolarLine() ? <p>{'MIT SOLAR: '}{<span
+                                className="text-lg">{formatEuroCurrency(totalSolarCost)}</span>}</p> : null}
                         </div>
                         <MobileStepper
                             variant="progress"

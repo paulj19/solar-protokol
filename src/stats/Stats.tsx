@@ -64,7 +64,7 @@ export default function Stats() {
     const predictionParams = {year, clientParams, generalParams};
     return (
         <>
-            <h1 className="m-auto font-medium font-sans text-4xl tracking-wide text-title">{"Jahr " + (new Date().getFullYear() + year)}</h1>
+            <h1 className="m-auto font-medium font-sans text-4xl tracking-wide text-gray-300">{"Jahr " + (new Date().getFullYear() + year)}</h1>
             <div className="w-full h-full" data-testid="stats">
                 <div className="flex pb-10 justify-center h-[650px]">
                     <StatsChart {...predictionParams} />

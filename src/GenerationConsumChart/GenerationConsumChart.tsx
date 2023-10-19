@@ -73,7 +73,7 @@ export default function GenerationConsumChart(): ReactElement {
 
     return (
         <>
-            <h1 className="font-bold text-3xl font-sans text-title m-auto pb-2">{`ERTRAGSPROGNOSE ${clientParams?.nickname?.toUpperCase()}`}</h1>
+            <h1 className="font-bold text-3xl font-sans text-gray-300 m-auto pb-2">{`ERTRAGSPROGNOSE ${clientParams?.nickname?.toUpperCase()}`}</h1>
             <div data-testid="generationConsum-chart" className="w-[80%] h-[90%] ">
                 <ResponsiveContainer>
                     <ComposedChart
@@ -86,10 +86,10 @@ export default function GenerationConsumChart(): ReactElement {
                             left: 20,
                         }}
                     >
-                        <CartesianGrid  stroke="#fff" vertical={false} strokeWidth={0.3} strokeOpacity={1}/>
+                        <CartesianGrid stroke="#fff" vertical={false} strokeWidth={0.3} strokeOpacity={1}/>
                         <XAxis dataKey="month" tick={{fill: 'rgb(var(--color-axis) , var(--alpha-axis))'}} angle={320}
                                tickMargin={15} dx={-20}/>
-                        <YAxis tick={{fill: 'rgb(var(--color-axis) , var(--alpha-axis))'}}
+                        <YAxis axisLine={false} tick={{fill: 'rgb(var(--color-axis) , var(--alpha-axis))'}}
                                tickLine={false} tickMargin={15} ticks={getYAxisTicks(generationConsumParams)}/>
                         <Tooltip/>
                         <Legend layout="centric" verticalAlign="top" align="right" iconSize={30}
@@ -104,7 +104,8 @@ export default function GenerationConsumChart(): ReactElement {
                                 <stop offset='90%' stopColor='rgb(var(--color-axis))'/>
                             </linearGradient>
                         </defs>
-                        <Bar dataKey='generation' fill="rgb(var(--color-bar))" barSize={70} label={renderCustomizedLabel} >
+                        <Bar dataKey='generation' fill="rgb(var(--color-bar))" barSize={70}
+                             label={renderCustomizedLabel}>
                             {generationConsumParams.map((entry, index) => (
                                 <Cell key="generation-bar" fill={`url(#gen-bar)`}/>
                             ))}
@@ -170,21 +171,21 @@ function XXX(props) {
 
 function LegendFormatter(value, productionYearly, consumptionYearly, showConsumption) {
     const outerDiv = "inline-flex flex-col gap-2";
-    const innerTitle = "text-[rgb(var(--color-bar))] font-sans text-md font-medium tracking-wide";
+    const innerTitle = "font-sans text-md font-medium tracking-wide";
     const innerSum = "font-sans text-md font-medium text-start";
     if (value === "generation") {
         return (
             <div className={outerDiv}>
-                <div className={innerTitle + " text-[rgb(var(--color-bar))]"}>STROMPRODUKTION</div>
+                <div className={innerTitle}>STROMPRODUKTION</div>
                 <div
-                    className={innerSum + " text-[rgb(var(--color-bar))]"}>{productionYearly + "KwH pro Jahr"}</div>
+                    className={innerSum}>{productionYearly + " KwH pro Jahr"}</div>
             </div>)
     } else if (value === "consumption" && showConsumption) {
         return (
             <div className={outerDiv + " pt-3"}>
-                <div className={innerTitle + " text-[rgb(var(--color-line))]"}>STROMVERBRAUCH</div>
+                <div className={innerTitle}>STROMVERBRAUCH</div>
                 <div
-                    className={innerSum + " text-[rgb(var(--color-line))]"}>{consumptionYearly + " KwH pro Jahr"}</div>
+                    className={innerSum}>{consumptionYearly + " KwH pro Jahr"}</div>
             </div>)
     }
 }
@@ -204,7 +205,7 @@ const renderCustomizedLabel = (props) => {
 
     return (
         <g>
-            <text x={x + width / 2} y={y - radius} fill="rgb(var(--color-bar) , var(--alpha-axis))" textAnchor="middle"
+            <text x={x + width / 2} y={y - radius} fill="rgb(var(--color-title),0.7 )" textAnchor="middle"
                   className="font-serif text-md font-medium">
                 {value}
             </text>
