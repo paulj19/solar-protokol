@@ -6,7 +6,7 @@ import {
     Label,
     Legend,
     Line,
-    ResponsiveContainer,
+    ResponsiveContainer, Text,
     Tooltip as RechartToolTop,
     XAxis,
     YAxis
@@ -125,8 +125,8 @@ export default function SolarElecChart() {
                 <>
                     <h1 className="font-bold text-3xl font-sans text-title ml-[30%] pb-2">STROM SOLAR
                         VERGLEICH </h1>
-                    <div className="flex gap-4 pt-4">
-                        <ResponsiveContainer className="h-full w-full min-h-[750px]">
+                    <div className="flex gap-4 pt-4 min-h-[750px] w-full h-full">
+                        <ResponsiveContainer >
                             <ComposedChart
                                 data={comparisonDataWithRange}
                                 margin={{
@@ -202,9 +202,10 @@ export default function SolarElecChart() {
                                 </Bar>
                             </ComposedChart>
                         </ResponsiveContainer>
-                        <div className="text-title font-medium text-sm pt-14 tracking-wide">
+                        <div className="text-title font-medium text-sm pt-2 tracking-wide gap-4 flex flex-col">
+                            <div className="text-axis">{`INFLATION: ${inflationRate??generalParams.inflationRate}% | PREISSTEIGERUNG: ${elecIncreaseRate??generalParams.electricityIncreaseRate}%`}</div>
                             <h2>IHRE STROMKOSTEN IN DEN NÄCHSTEN 25 JAHREN</h2>
-                            <p className="pt-4">{'OHNE SOLAR: '}{<span
+                            <p>{'OHNE SOLAR: '}{<span
                                 className="text-md">{formatEuroCurrency(totalElecCost)}</span>}</p>
                             {stateHasSolarLine() ? <p className="pt-4">{'MIT SOLAR: '}{<span
                                 className="text-md">{formatEuroCurrency(totalSolarCost)}</span>}</p> : null}

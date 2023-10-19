@@ -77,6 +77,7 @@ export default function GenerationConsumChart(): ReactElement {
             <div data-testid="generationConsum-chart" className="w-[80%] h-[90%] ">
                 <ResponsiveContainer>
                     <ComposedChart
+
                         data={generationConsumParams}
                         margin={{
                             top: 20,
@@ -85,10 +86,10 @@ export default function GenerationConsumChart(): ReactElement {
                             left: 20,
                         }}
                     >
-                        <CartesianGrid stroke="#fff" vertical={false} strokeWidth={0.3} strokeOpacity={1}/>
+                        <CartesianGrid  stroke="#fff" vertical={false} strokeWidth={0.3} strokeOpacity={1}/>
                         <XAxis dataKey="month" tick={{fill: 'rgb(var(--color-axis) , var(--alpha-axis))'}} angle={320}
                                tickMargin={15} dx={-20}/>
-                        <YAxis axisLine={false} tick={{fill: 'rgb(var(--color-axis) , var(--alpha-axis))'}}
+                        <YAxis tick={{fill: 'rgb(var(--color-axis) , var(--alpha-axis))'}}
                                tickLine={false} tickMargin={15} ticks={getYAxisTicks(generationConsumParams)}/>
                         <Tooltip/>
                         <Legend layout="centric" verticalAlign="top" align="right" iconSize={30}
