@@ -14,28 +14,34 @@ import {
     XAxis,
     YAxis
 } from "recharts";
-import {Alert, Fab, Snackbar, Tooltip as MuiToolTip} from "@mui/material";
+import {Alert, Fab, FormControlLabel, FormGroup, Snackbar, Switch, Tooltip as MuiToolTip} from "@mui/material";
 import {Link, useNavigate, useSearchParams} from "react-router-dom";
 import {ArrowBack} from "@mui/icons-material";
 import Loading from "@/src/components/Loading";
 import ErrorScreen from "@/src/components/ErrorScreen";
+import ColoredSlider from "@/src/components/ColoredSlider";
+import {Typography} from "@mui/joy";
+import {createTheme, ThemeProvider} from "@mui/material/styles";
 
 export default function GenerationConsumChart(): ReactElement {
-    const navigate = useNavigate();
-    const [searchParams] = useSearchParams();
-    const clientId = searchParams.get('clientId');
-    const pDate = searchParams.get('pDate');
-    useEffect(() => {
-        if (!clientId || !pDate) {
-            navigate('/');
-        }
-    }, []);
+    // const navigate = useNavigate();
+    // const [searchParams] = useSearchParams();
+    // const clientId = searchParams.get('clientId');
+    // const pDate = searchParams.get('pDate');
+    // useEffect(() => {
+    //     if (!clientId || !pDate) {
+    //         navigate('/');
+    //     }
+    // }, []);
+    const clientId = "43"
+    const pDate = "2023-11-09"
     const [updateClientStatus] = useUpdateClientStatusMutation()
     const [snackOpen, setSnackOpen] = useState(false);
     const {data: clientParams, isLoading: isClientParamLoading, isError: isClientParamError} = useGetClientQuery({
         pDate,
         clientId
     });
+    const [showConsumption, setShowConsumption] = useState<boolean>(false);
     if (isClientParamLoading) {
         return <Loading/>;
     }
@@ -46,28 +52,28 @@ export default function GenerationConsumChart(): ReactElement {
 
     const generationConsumParams: Array<GenerationConsumParam> = getGenerationConsumParam(clientParams.productionYearly, clientParams.consumptionYearly);
 
-    async function handleUpdateClientStatus() {
-        try {
-            if (clientParams.status !== "completed") {
-                await updateClientStatus({
-                    [`/uid_1/${pDate}/cid_${clientId}/status`]:
-                        "completed"
-                }).unwrap();
-            }
-            navigate("/");
-        } catch (e) {
-            setSnackOpen(true);
-        }
-    }
-
-    function handleSnackClose() {
-        setSnackOpen(false);
-        navigate("/");
-    }
+    // async function handleUpdateClientStatus() {
+    //     try {
+    //         if (clientParams.status !== "completed") {
+    //             await updateClientStatus({
+    //                 [`/uid_1/${pDate}/cid_${clientId}/status`]:
+    //                     "completed"
+    //             }).unwrap();
+    //         }
+    //         navigate("/");
+    //     } catch (e) {
+    //         setSnackOpen(true);
+    //     }
+    // }
+    //
+    // function handleSnackClose() {
+    //     setSnackOpen(false);
+    //     navigate("/");
+    // }
 
     return (
         <>
-            <h1 className="font-bold text-3xl font-sans text-cyan-900 m-auto pb-2">ERTRAGSPROGNOSE</h1>
+            <h1 className="font-bold text-3xl font-sans text-title m-auto pb-2">{`ERTRAGSPROGNOSE ${clientParams?.nickname?.toUpperCase()}`}</h1>
             <div data-testid="generationConsum-chart" className="w-[80%] h-[90%] ">
                 <ResponsiveContainer>
                     <ComposedChart
@@ -79,43 +85,52 @@ export default function GenerationConsumChart(): ReactElement {
                             left: 20,
                         }}
                     >
-                        <CartesianGrid stroke="#000000" vertical={false} strokeWidth={0.1} strokeOpacity={1}/>
-                        <XAxis dataKey="month" tick={{fill: 'rgb(22 78 99 / var(--tw-text-opacity))'}} />
-                        <YAxis axisLine={false} tick={{fill: 'rgb(22 78 99 / var(--tw-text-opacity))'}} tickLine={false} tickMargin={15} ticks={getYAxisTicks(generationConsumParams)}/>
+                        <CartesianGrid stroke="#fff" vertical={false} strokeWidth={0.3} strokeOpacity={1}/>
+                        <XAxis dataKey="month" tick={{fill: 'rgb(var(--color-axis) , var(--alpha-axis))'}}  angle={320} tickMargin={15} dx={-20}/>
+                        <YAxis axisLine={false} tick={{fill: 'rgb(var(--color-axis) , var(--alpha-axis))'}} tickLine={false} tickMargin={15} ticks={getYAxisTicks(generationConsumParams)}/>
                         <Tooltip/>
                         <Legend layout="centric" verticalAlign="top" align="right" iconSize={30}
-                                formatter={(value) => LegendFormatter(value, clientParams.productionYearly, clientParams.consumptionYearly)}/>
+                                formatter={(value) => LegendFormatter(value, clientParams.productionYearly, clientParams.consumptionYearly, showConsumption)}/>
                         {/*<Legend layout="horizontal" verticalAlign="top" align="left" iconSize={30} />*/}
                         {/*<Legend layout="radial" verticalAlign="top" align="right" content={XXX}/>*/}
                         {/*<Legend iconType="circle" wrapperStyle={{ top: 300 }} content={CusomizedLegend} />*/}
-                        <Bar dataKey="generation" barSize={30} fill="rgb(22, 101, 52)" label={renderCustomizedLabel} />
-                        <Line type="monotone" strokeWidth={2.5} dataKey="consumption" stroke="#ff7300"/>
+                        <Bar dataKey="generation" barSize={30} fill="rgb(var(--color-bar))" label={renderCustomizedLabel} />
+                        <Line type="monotone" strokeWidth={3} dataKey="consumption" stroke="rgb(var(--color-line))" hide={!showConsumption}/>
                     </ComposedChart>
                 </ResponsiveContainer>
             </div>
-            <div className="absolute bottom-7 left-7" data-testid="backward-fab">
-                <MuiToolTip title="comparison stat" arrow>
-                    <Fab variant="circular" color="inherit" component={Link}
-                         to={`/stats?pDate=${pDate}&clientId=${clientId}`}
-                         aria-label="add">
-                        <ArrowBack/>
-                    </Fab>
-                </MuiToolTip>
-            </div>
-            <div className="absolute bottom-7 right-7" data-testid="end-fab">
-                <MuiToolTip title="back to home" arrow>
-                    <Fab variant="extended" color="inherit" component={Link} to='/'
-                         onClick={() => handleUpdateClientStatus()} aria-label="add">
-                        END
-                    </Fab>
-                </MuiToolTip>
-            </div>
-            <Snackbar open={snackOpen} autoHideDuration={3000}
-                      anchorOrigin={{vertical: 'bottom', horizontal: 'center'}} onClose={() => handleSnackClose()}>
-                <Alert severity={"error"} sx={{width: '100%'}}>
-                    {"ErrorScreen while updating client status, update in home page."}
-                </Alert>
-            </Snackbar>
+            <ThemeProvider theme={theme}>
+                <FormGroup className="m-auto pt-9" data-testid="solar-toggle">
+                    <FormControlLabel control={
+                        <Switch
+                            onChange={(e) => setShowConsumption(e.target.checked)}/>}
+                                      label={<span
+                                          className="font-sans font-normal text-lg tracking-wide text-[#B4AC02B5]">{"show consumption"}</span>}/>
+                </FormGroup>
+            </ThemeProvider>
+            {/*<div className="absolute bottom-7 left-7" data-testid="backward-fab">*/}
+            {/*    <MuiToolTip title="comparison stat" arrow>*/}
+            {/*        <Fab variant="circular" color="inherit" component={Link}*/}
+            {/*             to={`/stats?pDate=${pDate}&clientId=${clientId}`}*/}
+            {/*             aria-label="add">*/}
+            {/*            <ArrowBack/>*/}
+            {/*        </Fab>*/}
+            {/*    </MuiToolTip>*/}
+            {/*</div>*/}
+            {/*<div className="absolute bottom-7 right-7" data-testid="end-fab">*/}
+            {/*    <MuiToolTip title="back to home" arrow>*/}
+            {/*        <Fab variant="extended" color="inherit" component={Link} to='/'*/}
+            {/*             onClick={() => handleUpdateClientStatus()} aria-label="add">*/}
+            {/*            END*/}
+            {/*        </Fab>*/}
+            {/*    </MuiToolTip>*/}
+            {/*</div>*/}
+            {/*<Snackbar open={snackOpen} autoHideDuration={3000}*/}
+            {/*          anchorOrigin={{vertical: 'bottom', horizontal: 'center'}} onClose={() => handleSnackClose()}>*/}
+            {/*    <Alert severity={"error"} sx={{width: '100%'}}>*/}
+            {/*        {"ErrorScreen while updating client status, update in home page."}*/}
+            {/*    </Alert>*/}
+            {/*</Snackbar>*/}
         </>
     )
 }
@@ -137,23 +152,23 @@ function XXX(props) {
     )
 }
 
-function LegendFormatter(value, productionYearly, consumptionYearly) {
+function LegendFormatter(value, productionYearly, consumptionYearly, showConsumption) {
     if (value === "generation") {
         return (
             <span>
             <div className="inline-flex flex-col">
-                <div className="text-green-800 font-sans text-md font-medium">STROMPRODUKTION</div>
+                <div className="text-[rgb(var(--color-bar))] font-sans text-md font-medium">STROMPRODUKTION</div>
                 <div
-                    className="text-green-800 font-sans text-md font-medium text-start">{productionYearly + "KwH pro Jahr"}</div>
+                    className="text-[rgb(var(--color-bar))] font-sans text-md font-medium text-start">{productionYearly + "KwH pro Jahr"}</div>
             </div>
         </span>)
-    } else if (value === "consumption") {
+    } else if (value === "consumption" && showConsumption) {
         return (
             <span>
             <div className="inline-flex flex-col">
-                <div className="text-[#ff7300] font-sans text-md font-medium">STROMVERBRAUCH</div>
+                <div className="text-[rgb(var(--color-line))] font-sans text-md font-medium">STROMVERBRAUCH</div>
                 <div
-                    className="text-[#ff7300] font-sans text-md font-medium text-start">{consumptionYearly + " KwH pro Jahr"}</div>
+                    className="text-[rgb(var(--color-line))] font-sans text-md font-medium text-start">{consumptionYearly + " KwH pro Jahr"}</div>
             </div>
         </span>)
     }
@@ -173,9 +188,35 @@ const renderCustomizedLabel = (props) => {
 
     return (
         <g>
-            <text x={x + width / 2} y={y - radius} fill="rgb(22 78 99 / var(--tw-text-opacity))" textAnchor="middle" className="font-serif text-sm font-md">
+            <text x={x + width / 2} y={y - radius} fill="rgb(var(--color-axis) , var(--alpha-axis))" textAnchor="middle" className="font-serif text-sm font-md">
                 {value + "€"}
             </text>
         </g>
     );
 };
+const theme = createTheme({
+    components: {
+        MuiSwitch: {
+            styleOverrides: {
+                switchBase: {
+                    // Controls default (unchecked) color for the thumb
+                    color: "gray"
+                },
+                colorPrimary: {
+                    "&.Mui-checked": {
+                        // Controls checked color for the thumb
+                        color: "rgba(9,153,255,0.71)"
+                    }
+                },
+                track: {
+                    // Controls default (unchecked) color for the track
+                    backgroundColor: "gray",
+                    ".Mui-checked.Mui-checked + &": {
+                        // Controls checked color for the track
+                        backgroundColor: "rgba(9,153,255,0.71)"
+                    }
+                }
+            }
+        }
+    }
+});

@@ -179,7 +179,7 @@ export default function SolarElecChart() {
                                     hide={!STATES[settings.currentState]?.includes(STATE.AREA)}
                                 />
                                 <Bar dataKey="electricityCost"
-                                    barSize={30} fill="#f3eb42f5"
+                                    barSize={30} fill="rgb(var(--color-bar))"
                                     hide={!STATES[settings.currentState]?.includes(STATE.ELEC_BAR)}
                                 />
                             </ComposedChart>

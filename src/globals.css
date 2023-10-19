@@ -120,6 +120,8 @@ a {
     --slider-thumb: 31, 45, 55;
     --stats-chart-solar: 59, 161, 86;
     --stats-chart-elec: 145, 0, 19;
+    --color-bar: 241, 231, 39;
+    --color-line: 230, 0, 0;
   }
 
   html[data-theme='neon'] {
