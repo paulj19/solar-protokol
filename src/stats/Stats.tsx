@@ -78,7 +78,7 @@ export default function Stats() {
             </div>
             {/*<Slider ticks={[0, 5, 10, 15, 20, 25]} onChangeHandler={setYear} defaultValue={year} label={""}*/}
             {/*        step={1}/>*/}
-            <div className="flex w-full justify-center gap-20  absolute bottom-4">
+            <div className="flex w-full justify-center gap-20 pt-6">
                 <div className="w-[200px] self-end" data-testid="year-slider">
                     <ColoredSlider
                         orientation="horizontal"

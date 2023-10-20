@@ -19,7 +19,7 @@ export default function Layout({ children }) {
     const [openModal, setOpenModal] = useState(false);
     return (
         <>
-            <div className="absolute top-0 left-0 bg-gray-900 w-full flex h-[50px] ">
+            <div className="absolute top-0 left-0 bg-zinc-900 w-full flex h-[50px] ">
                 <Image id="enpal-logo" src={logo} alt="Enpal ." className="block w-[90px] h-[45px] mx-auto p-[5px] pt-3" />
             </div>
             <div className="absolute top-2 right-1" data-testid="right-menu">
