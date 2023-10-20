@@ -48,17 +48,17 @@ enum STATE {
 const STATES = [[STATE.ELEC_BAR], [STATE.ELEC_BAR, STATE.ELEC_LINE], [STATE.ELEC_LINE, STATE.SOLAR_LINE], [STATE.ELEC_LINE, STATE.SOLAR_LINE, STATE.AREA]]
 
 export default function SolarElecChart() {
-    // const navigate = useNavigate();
-    // const [searchParams] = useSearchParams();
-    // const clientId = searchParams.get('clientId');
-    // const pDate = searchParams.get('pDate');
-    const clientId = "43"
-    const pDate = "2023-11-09"
-    // useEffect(() => {
-    //     if (!clientId || !pDate) {
-    //         navigate('/');
-    //     }
-    // }, []);
+    const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
+    const clientId = searchParams.get('clientId');
+    const pDate = searchParams.get('pDate');
+    // const clientId = "43"
+    // const pDate = "2023-11-09"
+    useEffect(() => {
+        if (!clientId || !pDate) {
+            navigate('/');
+        }
+    }, []);
     const [inflationRate, setInflationRate] = useState<number>(null)
     const [elecIncreaseRate, setElecIncreaseRate] = useState<number>(null)
     const [settings, changeSettings] = useState<Settings>({currentState: 0});
@@ -340,15 +340,15 @@ export default function SolarElecChart() {
                     </Accordion>
                 </AccordionGroup>
             </div>
-            {/*<div className="absolute bottom-7 right-7" data-testid="forward-fab">*/}
-            {/*    <Tooltip title="comparison stat" arrow>*/}
-            {/*        <Fab variant="circular" color="inherit" component={Link}*/}
-            {/*             to={`/stats?pDate=${pDate}&clientId=${clientId}`}*/}
-            {/*             aria-label="add">*/}
-            {/*            <ArrowForward/>*/}
-            {/*        </Fab>*/}
-            {/*    </Tooltip>*/}
-            {/*</div>*/}
+            <div className="absolute bottom-7 right-7" data-testid="forward-fab">
+                <Tooltip title="comparison stat" arrow>
+                    <Fab variant="circular" color="inherit" component={Link}
+                         to={`/stats?pDate=${pDate}&clientId=${clientId}`}
+                         aria-label="add">
+                        <ArrowForward/>
+                    </Fab>
+                </Tooltip>
+            </div>
         </>
     )
         ;

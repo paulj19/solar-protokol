@@ -24,17 +24,17 @@ import {Typography} from "@mui/joy";
 import {createTheme, ThemeProvider} from "@mui/material/styles";
 
 export default function GenerationConsumChart(): ReactElement {
-    // const navigate = useNavigate();
-    // const [searchParams] = useSearchParams();
-    // const clientId = searchParams.get('clientId');
-    // const pDate = searchParams.get('pDate');
-    // useEffect(() => {
-    //     if (!clientId || !pDate) {
-    //         navigate('/');
-    //     }
-    // }, []);
-    const clientId = "43"
-    const pDate = "2023-11-09"
+    const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
+    const clientId = searchParams.get('clientId');
+    const pDate = searchParams.get('pDate');
+    useEffect(() => {
+        if (!clientId || !pDate) {
+            navigate('/');
+        }
+    }, []);
+    // const clientId = "43"
+    // const pDate = "2023-11-09"
     const [updateClientStatus] = useUpdateClientStatusMutation()
     const [snackOpen, setSnackOpen] = useState(false);
     const {data: clientParams, isLoading: isClientParamLoading, isError: isClientParamError} = useGetClientQuery({
@@ -52,24 +52,24 @@ export default function GenerationConsumChart(): ReactElement {
 
     const generationConsumParams: Array<GenerationConsumParam> = getGenerationConsumParam(clientParams.productionYearly, clientParams.consumptionYearly);
 
-    // async function handleUpdateClientStatus() {
-    //     try {
-    //         if (clientParams.status !== "completed") {
-    //             await updateClientStatus({
-    //                 [`/uid_1/${pDate}/cid_${clientId}/status`]:
-    //                     "completed"
-    //             }).unwrap();
-    //         }
-    //         navigate("/");
-    //     } catch (e) {
-    //         setSnackOpen(true);
-    //     }
-    // }
-    //
-    // function handleSnackClose() {
-    //     setSnackOpen(false);
-    //     navigate("/");
-    // }
+    async function handleUpdateClientStatus() {
+        try {
+            if (clientParams.status !== "completed") {
+                await updateClientStatus({
+                    [`/uid_1/${pDate}/cid_${clientId}/status`]:
+                        "completed"
+                }).unwrap();
+            }
+            navigate("/");
+        } catch (e) {
+            setSnackOpen(true);
+        }
+    }
+
+    function handleSnackClose() {
+        setSnackOpen(false);
+        navigate("/");
+    }
 
     return (
         <>
@@ -125,29 +125,29 @@ export default function GenerationConsumChart(): ReactElement {
                                           className="font-sans font-normal text-[#B4AC02B5]">Stromverbrauch</span>}/>
                 </FormGroup>
             </ThemeProvider>
-            {/*<div className="absolute bottom-7 left-7" data-testid="backward-fab">*/}
-            {/*    <MuiToolTip title="comparison stat" arrow>*/}
-            {/*        <Fab variant="circular" color="inherit" component={Link}*/}
-            {/*             to={`/stats?pDate=${pDate}&clientId=${clientId}`}*/}
-            {/*             aria-label="add">*/}
-            {/*            <ArrowBack/>*/}
-            {/*        </Fab>*/}
-            {/*    </MuiToolTip>*/}
-            {/*</div>*/}
-            {/*<div className="absolute bottom-7 right-7" data-testid="end-fab">*/}
-            {/*    <MuiToolTip title="back to home" arrow>*/}
-            {/*        <Fab variant="extended" color="inherit" component={Link} to='/'*/}
-            {/*             onClick={() => handleUpdateClientStatus()} aria-label="add">*/}
-            {/*            END*/}
-            {/*        </Fab>*/}
-            {/*    </MuiToolTip>*/}
-            {/*</div>*/}
-            {/*<Snackbar open={snackOpen} autoHideDuration={3000}*/}
-            {/*          anchorOrigin={{vertical: 'bottom', horizontal: 'center'}} onClose={() => handleSnackClose()}>*/}
-            {/*    <Alert severity={"error"} sx={{width: '100%'}}>*/}
-            {/*        {"ErrorScreen while updating client status, update in home page."}*/}
-            {/*    </Alert>*/}
-            {/*</Snackbar>*/}
+            <div className="absolute bottom-7 left-7" data-testid="backward-fab">
+                <MuiToolTip title="comparison stat" arrow>
+                    <Fab variant="circular" color="inherit" component={Link}
+                         to={`/stats?pDate=${pDate}&clientId=${clientId}`}
+                         aria-label="add">
+                        <ArrowBack/>
+                    </Fab>
+                </MuiToolTip>
+            </div>
+            <div className="absolute bottom-7 right-7" data-testid="end-fab">
+                <MuiToolTip title="back to home" arrow>
+                    <Fab variant="extended" color="inherit" component={Link} to='/'
+                         onClick={() => handleUpdateClientStatus()} aria-label="add">
+                        END
+                    </Fab>
+                </MuiToolTip>
+            </div>
+            <Snackbar open={snackOpen} autoHideDuration={3000}
+                      anchorOrigin={{vertical: 'bottom', horizontal: 'center'}} onClose={() => handleSnackClose()}>
+                <Alert severity={"error"} sx={{width: '100%'}}>
+                    {"ErrorScreen while updating client status, update in home page."}
+                </Alert>
+            </Snackbar>
         </>
     )
 }
