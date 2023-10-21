@@ -16,7 +16,9 @@ import Theme from "@/src/components/Theme";
 import {ThemeProvider} from "next-themes";
 
 export default function SolarProtokol({Component, pageProps}) {
+    const xxx = true;
     return (
+        xxx ?
         <NoSSR>
             <html data-theme="gray-bg" suppressHydrationWarning>
             <Provider store={store}>
@@ -35,17 +37,17 @@ export default function SolarProtokol({Component, pageProps}) {
                 </LocalizationProvider>
             </Provider>
             </html>
+        </NoSSR>  :
+        <NoSSR>
+            <html data-theme="gray-bg" suppressHydrationWarning>
+                <Provider store={store}>
+                    <LocalizationProvider dateAdapter={AdapterDateFns}>
+                        <Layout>
+                            <Component />
+                        </Layout>
+                    </LocalizationProvider>
+                </Provider>
+            </html >
         </NoSSR>
-        // <NoSSR>
-        //     <html data-theme="gray-bg" suppressHydrationWarning>
-        //         <Provider store={store}>
-        //             <LocalizationProvider dateAdapter={AdapterDateFns}>
-        //                 <Layout>
-        //                     <Component />
-        //                 </Layout>
-        //             </LocalizationProvider>
-        //         </Provider>
-        //     </html >
-        // </NoSSR>
     )
 }

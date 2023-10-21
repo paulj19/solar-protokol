@@ -30,7 +30,7 @@ import AccordionDetails from "@mui/joy/AccordionDetails";
 import {createTheme, styled, ThemeProvider} from "@mui/material/styles";
 import Button from "@mui/material/Button";
 import ColoredSlider from "@/src/components/ColoredSlider";
-import {renderCustomizedLabel} from "@/src/stats/Stats";
+import {customLabel} from "@/src/stats/Stats";
 import {withStyles} from "@mui/styles";
 import Slider from "@mui/joy/Slider";
 
@@ -342,7 +342,7 @@ export default function SolarElecChart() {
             </div>
             <div className="absolute bottom-7 right-7" data-testid="forward-fab">
                 <Tooltip title="comparison stat" arrow>
-                    <Fab variant="circular" color="inherit" component={Link}
+                    <Fab variant="circular" sx={{backgroundColor: "#474747", color: "#878787de"}} component={Link}
                          to={`/stats?pDate=${pDate}&clientId=${clientId}`}
                          aria-label="add">
                         <ArrowForward/>

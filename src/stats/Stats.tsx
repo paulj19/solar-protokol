@@ -66,7 +66,7 @@ export default function Stats() {
         <>
             <h1 className="m-auto font-medium font-sans text-4xl tracking-wide text-gray-300">{"Jahr " + (new Date().getFullYear() + year)}</h1>
             <div className="w-full h-full" data-testid="stats">
-                <div className="flex pb-10 justify-center h-[650px]">
+                <div className="flex pb-10 gap-3 justify-center h-[650px]">
                     <StatsChart {...predictionParams} />
                     <ElectricityStats {...predictionParams} />
                     <CumStatsChart {...predictionParams} />
@@ -98,7 +98,7 @@ export default function Stats() {
             </div>
             <div className="absolute bottom-7 left-7" data-testid="backward-fab">
                 <Tooltip title="comparison chart" arrow>
-                    <Fab variant="circular" color="inherit" component={Link} to={`/solarElecChart?pDate=${pDate}&clientId=${clientId}`}
+                    <Fab variant="circular"  sx={{backgroundColor: "#474747", color: "#878787de"}} component={Link} to={`/solarElecChart?pDate=${pDate}&clientId=${clientId}`}
                          aria-label="add">
                         <ArrowBack/>
                     </Fab>
@@ -106,7 +106,7 @@ export default function Stats() {
             </div>
             <div className="absolute bottom-7 right-7" data-testid="forward-fab">
                 <Tooltip title="generation consumption chart" arrow>
-                    <Fab variant="circular" color="inherit" component={Link}
+                    <Fab variant="circular" sx={{backgroundColor: "#474747", color: "#878787de"}} component={Link}
                          to={`/generationConsumChart?pDate=${pDate}&clientId=${clientId}`}
                          aria-label="add">
                         <ArrowForward/>
@@ -181,7 +181,7 @@ export function PriceHeading({text}) {
                 </Tooltip>
             </div> */
 }
-export const renderCustomizedLabel = (props) => {
+export const customLabel = (props) => {
     const {x, y, width, height, value} = props;
     const radius = 10;
 
@@ -203,5 +203,5 @@ export function getFormattedCost(cost: number) {
     }).format(cost);
 }
 export function getBarLabel(text): ReactElement {
-    return <LabelList position="middle" fill="rgba(var(--color-title), 0.7)" className="font-sans font-medium tracking-wide" style={{paddingLeft: "10px"}}>{text}</LabelList>
+    return <LabelList position="middle" fill="rgba(var(--color-title), 0.7)" className="font-sans font-medium tracking-wide" style={{paddingLeft: "5px"}}>{text}</LabelList>
 }
