@@ -3,8 +3,8 @@ import {useGetClientQuery, useGetGeneralParamsQuery, useUpdateClientStatusMutati
 import {calcCumulativeSaved, GenerationConsumParam, getGenerationConsumParam} from "@/utils/ElectricityCostCalculator";
 import {
     Bar,
-    CartesianGrid,
-    ComposedChart,
+    CartesianGrid, Cell,
+    ComposedChart, Label,
     Legend,
     Line,
     ResponsiveContainer,
@@ -16,7 +16,7 @@ import {
 } from "recharts";
 import {Alert, Fab, Snackbar, Tooltip as MuiToolTip} from "@mui/material";
 import {Link, useNavigate, useSearchParams} from "react-router-dom";
-import {ArrowBack} from "@mui/icons-material";
+import {ArrowBack, ArrowForward} from "@mui/icons-material";
 import Loading from "@/src/components/Loading";
 import ErrorScreen from "@/src/components/ErrorScreen";
 import {format} from "date-fns";
@@ -27,19 +27,17 @@ export type PayOffParam = {
 }
 
 export default function PayoffChart(): ReactElement {
-    // const navigate = useNavigate();
-    // const [searchParams] = useSearchParams();
-    // const clientId = searchParams.get('clientId');
-    // const pDate = searchParams.get('pDate');
-    const clientId = "43"
-    const pDate = "2023-11-09"
-    // useEffect(() => {
-    //     if (!clientId || !pDate) {
-    //         navigate('/');
-    //     }
-    // }, []);
-    const [updateClientStatus] = useUpdateClientStatusMutation()
-    const [snackOpen, setSnackOpen] = useState(false);
+    const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
+    const clientId = searchParams.get('clientId');
+    const pDate = searchParams.get('pDate');
+    // const clientId = "901"
+    // const pDate = "2024-10-22"
+    useEffect(() => {
+        if (!clientId || !pDate) {
+            navigate('/');
+        }
+    }, []);
     const {data: clientParams, isLoading: isClientParamLoading, isError: isClientParamError} = useGetClientQuery({
         pDate,
         clientId
@@ -58,41 +56,23 @@ export default function PayoffChart(): ReactElement {
         return <ErrorScreen/>
     }
 
-    const generationConsumParams: Array<PayOffParam> = calcCumulativeSaved({
+    if (!clientParams.isPurchase || !clientParams.purchasePrice) {
+        return <ErrorScreen errorText={"Solaranlage ist nicht als kauf markiert oder kaufpreis nicht eingegeben."}/>
+    }
+    const payOffParams: Array<PayOffParam> = calcCumulativeSaved({
         year: undefined,
         clientParams,
         generalParams
     })
-
-    // async function handleUpdateClientStatus() {
-    //     try {
-    //         if (clientParams.status !== "completed") {
-    //             await updateClientStatus({
-    //                 [`/uid_1/${pDate}/cid_${clientId}/status`]:
-    //                     "completed"
-    //             }).unwrap();
-    //         }
-    //         navigate("/");
-    //     } catch (e) {
-    //         setSnackOpen(true);
-    //     }
-    // }
-
-    // function handleSnackClose() {
-    //     setSnackOpen(false);
-    //     navigate("/");
-    // }
-    function XAxisTickFormatter(value, index) {
-        return (index % 2 === 0) ? value + Number(format(new Date, 'yyyy')) : ""
-    }
+    const currentYear = new Date().getFullYear();
 
     return (
         <>
-            <h1 className="font-bold text-3xl font-sans text-cyan-900 m-auto pb-2">ERTRAGSPROGNOSE</h1>
+            <h1 className="font-bold text-3xl font-sans text-gray-300 m-auto pb-2">{`PAYOFF`}</h1>
             <div data-testid="generationConsum-chart" className="w-[80%] h-[90%] ">
                 <ResponsiveContainer>
                     <ComposedChart
-                        data={generationConsumParams}
+                        data={payOffParams}
                         margin={{
                             top: 20,
                             right: 20,
@@ -100,29 +80,53 @@ export default function PayoffChart(): ReactElement {
                             left: 20,
                         }}
                     >
-                        <CartesianGrid stroke="#000000" vertical={false} strokeWidth={0.1} strokeOpacity={1}/>
-                        <XAxis dataKey="year" tick={{fill: '#1c6b02'}} tickFormatter={XAxisTickFormatter} tickLine={false}/>
-                        <YAxis axisLine={false} tick={{fill: '#1c6b02'}} tickLine={false}
-                               tickMargin={15} tickCount={10} tickFormatter={(value, index) => `${value} €`} ticks={()}/>
-                        <Tooltip/>
-                        <Legend layout="centric" verticalAlign="top" align="right" iconSize={30}
-                                formatter={(value) => LegendFormatter(value, clientParams.productionYearly, clientParams.consumptionYearly)}/>
-                        {/*<Legend layout="horizontal" verticalAlign="top" align="left" iconSize={30} />*/}
-                        {/*<Legend layout="radial" verticalAlign="top" align="right" content={XXX}/>*/}
-                        {/*<Legend iconType="circle" wrapperStyle={{ top: 300 }} content={CusomizedLegend} />*/}
-                        <Bar dataKey="saved" barSize={30} fill="#071730"/>
+                        <CartesianGrid stroke="#fff" vertical={false} strokeWidth={0.3} strokeOpacity={1}/>
+                        <XAxis dataKey="year" tick={{fill: 'rgb(var(--color-axis) , var(--alpha-axis))'}}
+                               tickFormatter={(value, index) => XAxisTickFormatter(value, index, currentYear)}
+                               tickLine={false}
+                        />
+                        <YAxis axisLine={false} tick={{fill: 'rgb(var(--color-axis) , var(--alpha-axis))'}}
+                               tickLine={false} width={110}
+                               tickMargin={15} tickCount={10} tickFormatter={(value, index) => `${value} €`}>
+                            <Label
+                                style={{
+                                    textAnchor: "middle",
+                                    fontSize: "1.4em",
+                                    fill: "rgba(209 213 219, 0.8)",
+                                }}
+                                dx={-60}
+                                angle={270}
+                                value={"Kumulierte jährliche Einsparung durch Sonnenenergie"}/>
+                        </YAxis>
+                        {/*<Tooltip/>*/}
+                        <defs>
+                            <linearGradient id='payoff-positive' gradientTransform="rotate(90)" spreadMethod='reflect'>
+                                <stop offset='20%' stopColor='#1a6e01'/>
+                                <stop offset='90%' stopColor='#31c704'/>
+                            </linearGradient>
+                            <linearGradient id='payoff-negative' gradientTransform="rotate(90)" spreadMethod='reflect'>
+                                <stop offset='20%' stopColor="rgb(var(--stats-chart-elecShade))"/>
+                                <stop offset='90%' stopColor="rgb(var(--stats-chart-elec))"/>
+                            </linearGradient>
+                        </defs>
+                        <Bar dataKey='saved' fill="rgb(var(--color-bar))" barSize={35}>
+                            {payOffParams.map((entry, index) => (
+                                entry.saved < 0 ? <Cell key={`payoff-bar-${index}`} fill={`url(#payoff-negative)`}/> :
+                                    <Cell key={`payoff-bar-${index}`} fill={`url(#payoff-positive)`}/>
+                            ))}
+                        </Bar>
                     </ComposedChart>
                 </ResponsiveContainer>
             </div>
-            {/*<div className="absolute bottom-7 left-7" data-testid="backward-fab">*/}
-            {/*    <MuiToolTip title="comparison stat" arrow>*/}
-            {/*        <Fab variant="circular" color="inherit" component={Link}*/}
-            {/*             to={`/stats?pDate=${pDate}&clientId=${clientId}`}*/}
-            {/*             aria-label="add">*/}
-            {/*            <ArrowBack/>*/}
-            {/*        </Fab>*/}
-            {/*    </MuiToolTip>*/}
-            {/*</div>*/}
+            <div className="absolute bottom-7 right-7" data-testid="forward-fab">
+                <MuiToolTip title="stats chart" arrow>
+                    <Fab variant="circular" sx={{backgroundColor: "#474747", color: "#878787de"}} component={Link}
+                         to={`/generationConsumChart?pDate=${pDate}&clientId=${clientId}`}
+                         aria-label="add">
+                        <ArrowForward/>
+                    </Fab>
+                </MuiToolTip>
+            </div>
             {/*<div className="absolute bottom-7 right-7" data-testid="end-fab">*/}
             {/*    <MuiToolTip title="back to home" arrow>*/}
             {/*        <Fab variant="extended" color="inherit" component={Link} to='/'*/}
@@ -141,47 +145,20 @@ export default function PayoffChart(): ReactElement {
     )
 }
 
-function LegendFormatter(value, productionYearly, consumptionYearly) {
-    if (value === "generation") {
-        return (
-            <span>
-            <div className="inline-flex flex-col">
-                <div className="text-green-800 font-sans text-md font-medium">STROMPRODUKTION</div>
-                <div
-                    className="text-green-800 font-sans text-md font-medium text-start">{productionYearly + "KwH pro Jahr"}</div>
-            </div>
-        </span>)
-    } else if (value === "consumption") {
-        return (
-            <span>
-            <div className="inline-flex flex-col">
-                <div className="text-[#ff7300] font-sans text-md font-medium">STROMVERBRAUCH</div>
-                <div
-                    className="text-[#ff7300] font-sans text-md font-medium text-start">{consumptionYearly + " KwH pro Jahr"}</div>
-            </div>
-        </span>)
-    }
-}
-
-function getYAxisTicks(generationConsumParams: Array<GenerationConsumParam>): Array<number> {
-    const highestYValue = Math.max(...generationConsumParams.map(item => item.generation), ...generationConsumParams.map(item => item.consumption));
-    const ticks = []
-    for (let i = 0; (i - 100) < highestYValue; i += 100) {
-        ticks.push(i);
-    }
-    return ticks;
-}
-
 const renderCustomizedLabel = (props) => {
     const {x, y, width, value} = props;
     const radius = 10;
 
     return (
         <g>
-            <text x={x + width / 2} y={y - radius} fill="rgb(22 78 99 / var(--tw-text-opacity))" textAnchor="middle"
-                  className="font-serif text-sm font-md">
-                {value + "€"}
+            <text x={x + width / 2} y={y - radius} fill="rgb(var(--color-title),0.7 )" textAnchor="middle"
+                  className="font-serif text-md font-medium">
+                {value}
             </text>
         </g>
     );
 };
+
+function XAxisTickFormatter(value, index, currentYear) {
+    return (index % 2 === 0) ? value + currentYear : ""
+}

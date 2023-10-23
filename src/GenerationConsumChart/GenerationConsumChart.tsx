@@ -110,7 +110,6 @@ export default function GenerationConsumChart(): ReactElement {
                                 <Cell key="generation-bar" fill={`url(#gen-bar)`}/>
                             ))}
                         </Bar>
-
                         <Line type="monotone" strokeWidth={3.5} dataKey="consumption" stroke="rgb(var(--color-line))"
                               hide={!showConsumption}/>
                     </ComposedChart>

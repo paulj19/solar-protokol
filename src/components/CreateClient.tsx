@@ -1,4 +1,13 @@
-import {Alert, Button, InputAdornment, InputLabel, MenuItem, Select, Snackbar, TextField} from "@mui/material";
+import {
+    Alert,
+    Button,
+    InputAdornment,
+    InputLabel,
+    MenuItem,
+    Select,
+    Snackbar,
+    TextField
+} from "@mui/material";
 import {StaticDateTimePicker} from "@mui/x-date-pickers";
 import {Controller, useForm} from "react-hook-form";
 import {
@@ -8,7 +17,7 @@ import {
 } from "@/src/context/RootApi";
 import {addHours, format, setHours} from "date-fns";
 import {useRef, useState} from "react";
-import {Typography} from "@mui/joy";
+import {Checkbox, Typography} from "@mui/joy";
 import Loading from "@/src/components/Loading";
 import ErrorScreen from "@/src/components/ErrorScreen";
 
@@ -23,16 +32,19 @@ export function CreateClient({selectedDate, clientToEdit, setModalParams}) {
         unitPrice: 32,
         consumptionYearly: 3500,
         productionYearly: 7000,
+        isPurchase: false,
+        purchasePrice: 20000,
     }
     const [updateHighestClientId] = useUpdateHighestClientIdMutation();
     const [addNewClient, result] = useAddClientMutation();
-    const {control, reset, formState, handleSubmit} = useForm({
+    const {control, reset, formState, handleSubmit, watch} = useForm({
         values: clientToEdit ? {...clientToEdit, presentationDate: new Date(clientToEdit.presentationDate), unitPrice: clientToEdit.unitPrice * 100} : {
             ...defaultValues,
             presentationDate: prevPresentationDate.current ? addHours(prevPresentationDate.current, 1) : setHours(new Date(selectedDate), 10),
             id: data ? data.highestClientId + 1 : 0,
         }
     });
+    const isPurchase = watch("isPurchase");
     const [snackData, setSnackData] = useState({open: false, severity: null, message: null});
 
     if (!clientToEdit) {
@@ -54,8 +66,12 @@ export function CreateClient({selectedDate, clientToEdit, setModalParams}) {
             const unitPrice = data.unitPrice / 100;
             //todo check if presentationDate is in string
             const presentationDate = format(new Date(data.presentationDate), "yyyy-MM-dd");
+            let purchasePrice = data.purchasePrice;
+            if (!data.isPurchase) {
+                purchasePrice = null;
+            }
 
-            const client = {nickname: data.nickname, presentationDate: data.presentationDate.toString(), remarks: data.remarks, status: data.status, id: data.id, basePrice: data.basePrice, unitPrice: unitPrice, consumptionYearly: data.consumptionYearly, productionYearly: data.productionYearly}
+            const client = {...data, presentationDate: data.presentationDate.toString(), unitPrice, purchasePrice}
 
             await addNewClient({pDate: presentationDate, data: {["uid_1/" + presentationDate + "/cid_" + client.id]: client}}).unwrap()
 
@@ -157,16 +173,35 @@ export function CreateClient({selectedDate, clientToEdit, setModalParams}) {
                             }}/>}
                         />
                     </div>
-                    <Controller
-                        name="presentationDate"
-                        control={control}
-                        render={({field}) =>
-                            <div className="border border-gray-400 rounded-md p-3">
-                                <InputLabel>Presentation Date</InputLabel>
-                                <StaticDateTimePicker {...field} ampm={false} slotProps={{actionBar: {actions: []}}}/>
-                            </div>
-                        }
-                    />
+                    <div className="flex flex-col gap-4">
+                        <Controller
+                            name="presentationDate"
+                            control={control}
+                            render={({field}) =>
+                                <div className="border border-gray-400 rounded-md p-3">
+                                    <InputLabel>Presentation Date</InputLabel>
+                                    <StaticDateTimePicker {...field} ampm={false}
+                                                          slotProps={{actionBar: {actions: []}}}/>
+                                </div>
+                            }
+                        />
+                        <Controller
+                            name="isPurchase"
+                            control={control}
+                            render={({field}) =>
+                                <Checkbox {...field} checked={field.value} label="Is Purchase"/>}/>
+                        <Controller
+                            name="purchasePrice"
+                            control={control}
+                            render={({field}) =>
+                                <TextField {...field} label="Purchase Price" disabled={!isPurchase}
+                                           InputProps={{
+                                               endAdornment: <InputAdornment
+                                                   position="start">€</InputAdornment>, type: 'number',
+                                           }}
+                                />}
+                        />
+                    </div>
                     <Button variant="contained" color="inherit" type="submit">Save</Button>
                     <Button variant="contained" color="inherit" type="reset">Reset</Button>
                 </form>

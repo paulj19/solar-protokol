@@ -1,8 +1,8 @@
 import {ReactElement} from "react";
 
-export default function ErrorScreen(): ReactElement {
+export default function ErrorScreen({errorText}: {errorText?: string}): ReactElement {
     console.error("Error screen")
     return (
-        <div className="flex m-auto text-lg">An error occurred, please refresh and try again.</div>
+        <div className="flex m-auto text-lg text-gray-300">{errorText ?? "Ein Fehler ist aufgetreten, bitte nochmal versuchen."}</div>
     )
 }

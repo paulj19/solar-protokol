@@ -12,6 +12,8 @@ export type ClientParams = {
     unitPrice: number;
     consumptionYearly: number;
     productionYearly: number;
+    isPurchase: boolean;
+    purchasePrice: number | undefined;
 }
 
 export type PredictionParams = {

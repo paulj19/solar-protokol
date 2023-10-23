@@ -65,7 +65,7 @@ export function calcTotalSaved(params: PredictionParams): any {
 }
 
 export function calcCumulativeSaved(params: PredictionParams): Array<PayOffParam> {
-    let totalSaved = -1 * 20000;
+    let totalSaved = -1 * params.clientParams.purchasePrice;
     const cumulativeSaved = [];
     const currentYearSaved = calcElectricityCostMonthly({...params, year: 0}) * (11 - getMonth(new Date()));
     totalSaved += currentYearSaved;
@@ -75,7 +75,6 @@ export function calcCumulativeSaved(params: PredictionParams): Array<PayOffParam
         totalSaved += currentYearSaved;
         cumulativeSaved.push({year: i, saved: totalSaved});
     }
-    console.log(cumulativeSaved)
     return cumulativeSaved;
 }
 

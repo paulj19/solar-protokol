@@ -3,7 +3,7 @@ import {DeleteOutlined, EditOutlined, PlayArrow} from "@mui/icons-material";
 import Button from '@material-ui/core/Button';
 import {format} from "date-fns";
 
-export function ClientRow({client: {id, nickname, remarks, presentationDate, status}, setModalParams, triggerDeleteClient}) {
+export function ClientRow({client: {id, nickname, remarks, presentationDate, status, isPurchase}, setModalParams, triggerDeleteClient}) {
     return (
         <tr key={id} className="border h-[80px] shadow-sm ">
             <td className="font-mono font-bold">{format(new Date(presentationDate), "HH:mm")}</td>
@@ -13,7 +13,7 @@ export function ClientRow({client: {id, nickname, remarks, presentationDate, sta
             <td>{status}</td>
             <td className="flex justify-between mt-3">
                 <Button variant="contained" component={Link}
-                        to={"/solarElecChart?pDate=" + format(new Date(presentationDate), 'yyyy-MM-dd') + "&clientId=" + id}
+                        to={(isPurchase ? "/payoffChart" : "/solarElecChart") + "?pDate=" + format(new Date(presentationDate), 'yyyy-MM-dd') + "&clientId=" + id}
                         className="w-[115px]" color="inherit" startIcon={<PlayArrow/>} aria-label="present-client">
                     Present
                 </Button>
@@ -21,7 +21,8 @@ export function ClientRow({client: {id, nickname, remarks, presentationDate, sta
                         onClick={() => setModalParams({openModal: true, clientIdToEdit: id})} aria-label="edit-client">
                     Edit
                 </Button>
-                <Button variant="contained" color="inherit" startIcon={<DeleteOutlined/>} className="w-[115px]" aria-label="delete-client"
+                <Button variant="contained" color="inherit" startIcon={<DeleteOutlined/>} className="w-[115px]"
+                        aria-label="delete-client"
                         onClick={() => triggerDeleteClient(presentationDate, id)} autoFocus={false}>
                     Delete
                 </Button>
