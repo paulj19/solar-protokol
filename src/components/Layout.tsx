@@ -45,7 +45,7 @@ export default function Layout({ children }) {
                     </Menu>
                 </Dropdown>
             </div>
-            <main className="flex flex-col justify-between items-center p-20 h-screen w-screen bg-2">{children}</main>
+            <main className="flex flex-col justify-between items-center p-20 h-screen w-screen">{children}</main>
             <Modal open={openModal}
                 onClose={() => setOpenModal(false)}>
                 <ModalDialog

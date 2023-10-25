@@ -1,25 +1,13 @@
-import React, {ReactElement, useEffect, useState} from "react";
-import {useGetClientQuery, useGetGeneralParamsQuery, useUpdateClientStatusMutation} from "@/src/context/RootApi";
-import {calcCumulativeSaved, GenerationConsumParam, getGenerationConsumParam} from "@/utils/ElectricityCostCalculator";
-import {
-    Bar,
-    CartesianGrid, Cell,
-    ComposedChart, Label,
-    Legend,
-    Line,
-    ResponsiveContainer,
-    Surface,
-    Symbols,
-    Tooltip,
-    XAxis,
-    YAxis
-} from "recharts";
-import {Alert, Fab, Snackbar, Tooltip as MuiToolTip} from "@mui/material";
+import React, {ReactElement, useEffect} from "react";
+import {useGetClientQuery, useGetGeneralParamsQuery} from "@/src/context/RootApi";
+import {calcCumulativeSaved} from "@/utils/ElectricityCostCalculator";
+import {Bar, CartesianGrid, Cell, ComposedChart, Label, ResponsiveContainer, XAxis, YAxis} from "recharts";
+import {Fab, Tooltip as MuiToolTip} from "@mui/material";
 import {Link, useNavigate, useSearchParams} from "react-router-dom";
-import {ArrowBack, ArrowForward} from "@mui/icons-material";
+import {ArrowForward} from "@mui/icons-material";
 import Loading from "@/src/components/Loading";
 import ErrorScreen from "@/src/components/ErrorScreen";
-import {format} from "date-fns";
+import {useTheme} from "next-themes";
 
 export type PayOffParam = {
     year: number
@@ -27,6 +15,8 @@ export type PayOffParam = {
 }
 
 export default function PayoffChart(): ReactElement {
+    const { setTheme } = useTheme();
+    setTheme('gray-bg');
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
     const clientId = searchParams.get('clientId');

@@ -12,42 +12,43 @@ import {LocalizationProvider} from "@mui/x-date-pickers";
 import Home from "@/src/Home";
 import GenerationConsumChart from "@/src/GenerationConsumChart/GenerationConsumChart";
 import {NotFound} from "next/dist/client/components/error";
-import Theme from "@/src/components/Theme";
 import {ThemeProvider} from "next-themes";
+import PayoffChart from "@/src/payoffChart/PayoffChart";
 
 export default function SolarProtokol({Component, pageProps}) {
-    const xxx = true;
+    const design = false;
     return (
-        xxx ?
-        <NoSSR>
-            <html data-theme="gray-bg" suppressHydrationWarning>
-            <Provider store={store}>
-                <LocalizationProvider dateAdapter={AdapterDateFns}>
-                    <BrowserRouter>
-                        <Layout>
-                            <Routes>
-                                <Route path="/" element={<Home/>}/>
-                                <Route path="/solarElecChart" element={<SolarElecChart/>}/>
-                                <Route path="/stats" element={<Stats/>}/>
-                                <Route path="/generationConsumChart" element={<GenerationConsumChart/>}/>
-                                <Route path="*" element={<NotFound/>}/>
-                            </Routes>
-                        </Layout>
-                    </BrowserRouter>
-                </LocalizationProvider>
-            </Provider>
-            </html>
-        </NoSSR>  :
-        <NoSSR>
-            <html data-theme="gray-bg" suppressHydrationWarning>
+        !design ?
+            <NoSSR>
+                <ThemeProvider>
+                    <Provider store={store}>
+                        <LocalizationProvider dateAdapter={AdapterDateFns}>
+                            <BrowserRouter>
+                                <Layout>
+                                    <Routes>
+                                        <Route path="/" element={<Home/>}/>
+                                        <Route path="/solarElecChart" element={<SolarElecChart/>}/>
+                                        <Route path="/payoffChart" element={<PayoffChart/>}/>
+                                        <Route path="/stats" element={<Stats/>}/>
+                                        <Route path="/generationConsumChart" element={<GenerationConsumChart/>}/>
+                                        <Route path="*" element={<NotFound/>}/>
+                                    </Routes>
+                                </Layout>
+                            </BrowserRouter>
+                        </LocalizationProvider>
+                    </Provider>
+                </ThemeProvider>
+            </NoSSR> :
+            <NoSSR>
+                <html data-theme="gray-bg" suppressHydrationWarning>
                 <Provider store={store}>
                     <LocalizationProvider dateAdapter={AdapterDateFns}>
                         <Layout>
-                            <Component />
+                            <Component/>
                         </Layout>
                     </LocalizationProvider>
                 </Provider>
-            </html >
-        </NoSSR>
+                </html>
+            </NoSSR>
     )
 }

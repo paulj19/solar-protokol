@@ -123,12 +123,10 @@ a {
     --stats-chart-elecShade: 250, 59, 59;
     --color-bar: 241, 231, 39;
     --color-line: 230, 0, 0;
+    background-image: url("../public/2.png");
   }
 
-  html[data-theme='neon'] {
-    --color-title: 34, 39, 46;
-    --color-legend: 45, 51, 59;
-    --color-axis: 55, 62, 71;
+  html[data-theme='home'] {
   }
 }
 

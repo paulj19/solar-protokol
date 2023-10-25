@@ -1,12 +1,13 @@
 import React, {useEffect, useState} from 'react';
 import {
-    Area, Bar,
-    CartesianGrid, Cell,
+    Area,
+    Bar,
+    Cell,
     ComposedChart,
     Label,
     Legend,
     Line,
-    ResponsiveContainer, Text,
+    ResponsiveContainer,
     Tooltip as RechartToolTop,
     XAxis,
     YAxis
@@ -18,21 +19,18 @@ import ErrorScreen from "@/src/components/ErrorScreen";
 import {calcPredictions, calcTotalSaved} from '@/utils/ElectricityCostCalculator';
 import {CostPredictions} from '@/types/types';
 import {Link, useNavigate, useSearchParams} from 'react-router-dom';
-import {Fab, FormControlLabel, FormGroup, MobileStepper, Switch} from "@mui/material";
+import {Fab, MobileStepper} from "@mui/material";
 import {ArrowForward, KeyboardArrowLeft, KeyboardArrowRight} from "@mui/icons-material";
 import {Mark} from "@mui/base";
-import ElecBarChart from "@/src/SolarElecChart/ElecBarChart";
 import {Typography} from "@mui/joy";
 import AccordionGroup from "@mui/joy/AccordionGroup";
 import Accordion from "@mui/joy/Accordion";
 import AccordionSummary from "@mui/joy/AccordionSummary";
 import AccordionDetails from "@mui/joy/AccordionDetails";
-import {createTheme, styled, ThemeProvider} from "@mui/material/styles";
+import {createTheme, styled} from "@mui/material/styles";
 import Button from "@mui/material/Button";
 import ColoredSlider from "@/src/components/ColoredSlider";
-import {customLabel} from "@/src/stats/Stats";
-import {withStyles} from "@mui/styles";
-import Slider from "@mui/joy/Slider";
+import {useTheme} from "next-themes";
 
 type Settings = {
     currentState: number
@@ -48,6 +46,8 @@ enum STATE {
 const STATES = [[STATE.ELEC_BAR], [STATE.ELEC_BAR, STATE.ELEC_LINE], [STATE.ELEC_LINE, STATE.SOLAR_LINE], [STATE.ELEC_LINE, STATE.SOLAR_LINE, STATE.AREA]]
 
 export default function SolarElecChart() {
+    const { setTheme } = useTheme();
+    setTheme('gray-bg');
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
     const clientId = searchParams.get('clientId');
