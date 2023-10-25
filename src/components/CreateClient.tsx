@@ -20,7 +20,7 @@ import {useRef, useState} from "react";
 import {Checkbox, Typography} from "@mui/joy";
 import Loading from "@/src/components/Loading";
 import ErrorScreen from "@/src/components/ErrorScreen";
-import {ERROR_TEXT} from "@/utils/CommonText.";
+import {CLOSE_MODAL_DELAY, ERROR_TEXT} from "@/utils/CommonVars";
 
 export function CreateClient({selectedDate, clientToEdit, setModalParams}) {
     const {data, isLoading: isIdLoading, isFetching: isIdFetching, isError} = useGetHighestClientIdQuery("uid_1", {skip: Boolean(clientToEdit)});
@@ -81,12 +81,12 @@ export function CreateClient({selectedDate, clientToEdit, setModalParams}) {
                     //todo delete client again
                 });
                 prevPresentationDate.current = data.presentationDate;
-                setSnackData({open: true, severity: "success", message: "Kunden erstellung Erfolgreich!"});
+                setSnackData({open: true, severity: "success", message: "Gespeichert!"});
             } else {
-                setSnackData({open: true, severity: "success", message: "Bearbeitung Erfolgreich!"});
+                setSnackData({open: true, severity: "success", message: "Gespeichert!"});
                 setTimeout(() => {
                     setModalParams({openModal: false, clientIdToEdit: null});
-                }, 2000);
+                }, CLOSE_MODAL_DELAY);
             }
         } catch (e) {
             console.error("error on add or edit client", e);
@@ -205,7 +205,7 @@ export function CreateClient({selectedDate, clientToEdit, setModalParams}) {
                     <Button variant="contained" color="inherit" type="submit">Speichern</Button>
                     <Button variant="contained" color="inherit" type="reset">Zurücksetzen</Button>
                 </form>
-                <Snackbar open={snackData.open} autoHideDuration={3000} aria-label="clientCreate-snackbar"
+                <Snackbar open={snackData.open} autoHideDuration={CLOSE_MODAL_DELAY} aria-label="clientCreate-snackbar"
                           anchorOrigin={{vertical: 'bottom', horizontal: 'center'}} onClose={handleSnackClose}>
                     <Alert severity={snackData.severity ?? "info"} sx={{width: '100%'}}>
                         {snackData.message}

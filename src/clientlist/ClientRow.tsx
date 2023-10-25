@@ -2,7 +2,7 @@ import {Link} from "react-router-dom";
 import {DeleteOutlined, EditOutlined, PlayArrow} from "@mui/icons-material";
 import Button from '@material-ui/core/Button';
 import {format} from "date-fns";
-import {STATUS_COMPLETED, STATUS_OPEN} from "@/utils/CommonText.";
+import {STATUS_COMPLETED, STATUS_OPEN} from "@/utils/CommonVars";
 
 export function ClientRow({client: {id, nickname, remarks, presentationDate, status, isPurchase}, setModalParams, triggerDeleteClient}) {
     return (

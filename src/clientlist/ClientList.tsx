@@ -43,7 +43,7 @@ export default function ClientList() {
     async function handleDeleteClient() {
         try {
             await deleteClient({pDate: format(new Date(deleteData.pDate), "yyyy-MM-dd"), clientId: "cid_" + deleteData.clientId}).unwrap();
-            setSnackData({open: true, severity: "success", message: "Kunden löschen Erfolgreich."});
+            setSnackData({open: true, severity: "success", message: "Gelöscht"});
         } catch (e) {
             setSnackData({open: true, severity: "error", message: "Es ist ein Fehler aufgetreten. Bitte aktualisieren Sie die Seite und versuchen Sie es erneut."});
             console.error("error deleting client", e)

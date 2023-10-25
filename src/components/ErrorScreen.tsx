@@ -1,5 +1,5 @@
 import {ReactElement} from "react";
-import {ERROR_TEXT} from "@/utils/CommonText.";
+import {ERROR_TEXT} from "@/utils/CommonVars";
 
 export default function ErrorScreen({errorText}: {errorText?: string}): ReactElement {
     console.error("Error screen")

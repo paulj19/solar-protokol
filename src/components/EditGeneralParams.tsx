@@ -5,7 +5,7 @@ import {useState} from "react";
 import {Typography} from "@mui/joy";
 import Loading from "@/src/components/Loading";
 import ErrorScreen from "@/src/components/ErrorScreen";
-import {ERROR_TEXT} from "@/utils/CommonText.";
+import {CLOSE_MODAL_DELAY, ERROR_TEXT} from "@/utils/CommonVars";
 
 export function EditGeneralParams({setOpenModal}) {
     const {data: values, isLoading: isGeneralParamLoading, isError: isGeneralParamQueryError} = useGetGeneralParamsQuery(undefined);
@@ -40,8 +40,8 @@ export function EditGeneralParams({setOpenModal}) {
                 yearLimit: parseInt(data.yearLimit)
             };
             await updateGeneralParams(generalParams).unwrap()
-            setSnackData({open: true, severity: "success", message: "Einstellungen erfolgreich gespeichert!"});
-            setTimeout(() => setOpenModal(false), 1500);
+            setSnackData({open: true, severity: "success", message: "Einstellungen gespeichert!"});
+            setTimeout(() => setOpenModal(false), CLOSE_MODAL_DELAY);
         } catch (e) {
             setSnackData({open: true, severity: "error", message: ERROR_TEXT});
             console.error("error on edit general params", e);
@@ -121,7 +121,7 @@ export function EditGeneralParams({setOpenModal}) {
                     <Button variant="contained" color="inherit" type="submit">Speichern</Button>
                     <Button variant="contained" color="inherit" type="reset">Zurücksetzen</Button>
                 </form>
-                <Snackbar open={snackData.open} autoHideDuration={3000}
+                <Snackbar open={snackData.open} autoHideDuration={CLOSE_MODAL_DELAY}
                           anchorOrigin={{vertical: 'bottom', horizontal: 'center'}} onClose={handleSnackClose}>
                     <Alert severity={snackData.severity ?? "info"} sx={{width: '100%'}}>
                         {snackData.message}
