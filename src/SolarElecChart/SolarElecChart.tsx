@@ -156,7 +156,7 @@ export default function SolarElecChart() {
                                         }}
                                         dx={-50}
                                         angle={270}
-                                        value={"PV-Miete pro Monat"}/>
+                                        value={"PV-Rate pro Monat"}/>
                                 </YAxis>
                                 <RechartToolTop
                                     content={<CustomTooltip currentYear={currentYear}/>}
@@ -180,11 +180,13 @@ export default function SolarElecChart() {
                                 {/*</defs>*/}
                                 <Legend layout="horizontal" verticalAlign="top" align="right"/>
                                 <Line type="linear" dataKey="electricityCost" name="Ohne PV" stroke="#FF0000"
+                                      legendType={STATES[settings.currentState]?.includes(STATE.ELEC_LINE) ? 'line' : 'none'}
                                       strokeWidth={STATES[settings.currentState]?.includes(STATE.ELEC_BAR) ? 8.5 : 5.5}
                                       activeDot={{r: 6}} dot={<CustomizedDot/>}
                                       hide={!STATES[settings.currentState]?.includes(STATE.ELEC_LINE)}//todo util function here
                                 />
                                 <Line type="linear" dataKey="solarCost" name="Mit Enpal" stroke="#10ad3f"
+                                      legendType={STATES[settings.currentState]?.includes(STATE.SOLAR_LINE) ? 'line' : 'none'}
                                       strokeWidth={5.5}
                                       dot={<CustomizedDot/>}
                                       hide={!STATES[settings.currentState]?.includes(STATE.SOLAR_LINE)}

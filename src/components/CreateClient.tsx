@@ -20,6 +20,7 @@ import {useRef, useState} from "react";
 import {Checkbox, Typography} from "@mui/joy";
 import Loading from "@/src/components/Loading";
 import ErrorScreen from "@/src/components/ErrorScreen";
+import {ERROR_TEXT} from "@/utils/CommonText.";
 
 export function CreateClient({selectedDate, clientToEdit, setModalParams}) {
     const {data, isLoading: isIdLoading, isFetching: isIdFetching, isError} = useGetHighestClientIdQuery("uid_1", {skip: Boolean(clientToEdit)});
@@ -60,7 +61,7 @@ export function CreateClient({selectedDate, clientToEdit, setModalParams}) {
         try {
             //todo presentationDate is duplicated, etc.
             if (!data.id || !data.presentationDate || !data.basePrice || !data.unitPrice || !data.consumptionYearly || !data.productionYearly) {
-                setSnackData({open: true, severity: "error", message: "An error occurred, please refresh the page and try again."});
+                setSnackData({open: true, severity: "error", message: ERROR_TEXT});
                 return;
             }
             const unitPrice = data.unitPrice / 100;
@@ -80,16 +81,16 @@ export function CreateClient({selectedDate, clientToEdit, setModalParams}) {
                     //todo delete client again
                 });
                 prevPresentationDate.current = data.presentationDate;
-                setSnackData({open: true, severity: "success", message: "Client creation success!"});
+                setSnackData({open: true, severity: "success", message: "Kunden erstellung Erfolgreich!"});
             } else {
-                setSnackData({open: true, severity: "success", message: "Client edit success!"});
+                setSnackData({open: true, severity: "success", message: "Bearbeitung Erfolgreich!"});
                 setTimeout(() => {
                     setModalParams({openModal: false, clientIdToEdit: null});
                 }, 2000);
             }
         } catch (e) {
             console.error("error on add or edit client", e);
-            setSnackData({open: true, severity: "error", message: "An error occurred, please refresh the page and try again."});
+            setSnackData({open: true, severity: "error", message: ERROR_TEXT});
         }
     };
 
@@ -106,7 +107,7 @@ export function CreateClient({selectedDate, clientToEdit, setModalParams}) {
                 fontWeight="sm"
                 textAlign="center"
             >
-                Create New Client
+                Neuen Kunden erstellen
             </Typography>
             <div className="flex justify-center items-center pt-10 pb-7">
                 <form onSubmit={handleSubmit(onSubmit)} onReset={() => reset()}
@@ -115,13 +116,13 @@ export function CreateClient({selectedDate, clientToEdit, setModalParams}) {
                         <Controller
                             name="nickname"
                             control={control}
-                            render={({field}) => <TextField {...field} label="Nickname"
+                            render={({field}) => <TextField {...field} label="Name"
                                                             inputProps={{maxLength: 32, autoFocus: true}}/>}
                         />
                         <Controller
                             name="remarks"
                             control={control}
-                            render={({field}) => <TextField {...field} label="Remarks" minRows={5} multiline
+                            render={({field}) => <TextField {...field} label="Bemerkungen" minRows={5} multiline
                                                             inputProps={{maxLength: 128}}/>}
                         />
                         <InputLabel id="select-label">Status</InputLabel>
@@ -132,8 +133,8 @@ export function CreateClient({selectedDate, clientToEdit, setModalParams}) {
                                 <Select {...field}
                                         sx={{width: 150}}
                                 >
-                                    <MenuItem value="open">open</MenuItem>
-                                    <MenuItem value="completed">completed</MenuItem>
+                                    <MenuItem value="open">offen</MenuItem>
+                                    <MenuItem value="completed">abgeschlossen</MenuItem>
                                 </Select>
                             )}
                         />
@@ -145,7 +146,7 @@ export function CreateClient({selectedDate, clientToEdit, setModalParams}) {
                         <Controller
                             name="basePrice"
                             control={control}
-                            render={({field}) => <TextField {...field} label="Base Price" InputProps={{
+                            render={({field}) => <TextField {...field} label="Grundpreis" InputProps={{
                                 endAdornment: <InputAdornment
                                     position="start">€</InputAdornment>, type: 'number', required: true
                             }}/>}
@@ -153,22 +154,21 @@ export function CreateClient({selectedDate, clientToEdit, setModalParams}) {
                         <Controller
                             name="unitPrice"
                             control={control}
-                            render={({field}) => <TextField {...field} label="Unit Price" InputProps={{
-                                endAdornment: <InputAdornment position="start">Cents pro
-                                    Kwh</InputAdornment>, type: 'number',
+                            render={({field}) => <TextField {...field} label="Verbrauchspreis" InputProps={{
+                                endAdornment: <InputAdornment position="start">Cents/Kwh</InputAdornment>, type: 'number',
                             }} inputProps={{pattern: "[0-9]+"}}/>}
                         />
                         <Controller
                             name="consumptionYearly"
                             control={control}
-                            render={({field}) => <TextField {...field} label="Consumption Yearly" InputProps={{
+                            render={({field}) => <TextField {...field} label="Stromverbrauch pro Jahr" InputProps={{
                                 endAdornment: <InputAdornment position="start">Kwh</InputAdornment>, type: 'number',
                             }}/>}
                         />
                         <Controller
                             name="productionYearly"
                             control={control}
-                            render={({field}) => <TextField {...field} label="Production Yearly" InputProps={{
+                            render={({field}) => <TextField {...field} label="Stromproduktion pro Jahr" InputProps={{
                                 endAdornment: <InputAdornment position="start">Kwh</InputAdornment>, type: 'number',
                             }}/>}
                         />
@@ -179,7 +179,7 @@ export function CreateClient({selectedDate, clientToEdit, setModalParams}) {
                             control={control}
                             render={({field}) =>
                                 <div className="border border-gray-400 rounded-md p-3">
-                                    <InputLabel>Presentation Date</InputLabel>
+                                    <InputLabel>Präsentationstermin</InputLabel>
                                     <StaticDateTimePicker {...field} ampm={false}
                                                           slotProps={{actionBar: {actions: []}}}/>
                                 </div>
@@ -189,12 +189,12 @@ export function CreateClient({selectedDate, clientToEdit, setModalParams}) {
                             name="isPurchase"
                             control={control}
                             render={({field}) =>
-                                <Checkbox {...field} checked={field.value} label="Is Purchase"/>}/>
+                                <Checkbox {...field} checked={field.value} label="Kauf"/>}/>
                         <Controller
                             name="purchasePrice"
                             control={control}
                             render={({field}) =>
-                                <TextField {...field} label="Purchase Price" disabled={!isPurchase}
+                                <TextField {...field} label="Kaufpreis" disabled={!isPurchase}
                                            InputProps={{
                                                endAdornment: <InputAdornment
                                                    position="start">€</InputAdornment>, type: 'number',
@@ -202,8 +202,8 @@ export function CreateClient({selectedDate, clientToEdit, setModalParams}) {
                                 />}
                         />
                     </div>
-                    <Button variant="contained" color="inherit" type="submit">Save</Button>
-                    <Button variant="contained" color="inherit" type="reset">Reset</Button>
+                    <Button variant="contained" color="inherit" type="submit">Speichern</Button>
+                    <Button variant="contained" color="inherit" type="reset">Zurücksetzen</Button>
                 </form>
                 <Snackbar open={snackData.open} autoHideDuration={3000} aria-label="clientCreate-snackbar"
                           anchorOrigin={{vertical: 'bottom', horizontal: 'center'}} onClose={handleSnackClose}>

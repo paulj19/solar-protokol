@@ -3,18 +3,18 @@ import {getMonth} from "date-fns";
 import {PayOffParam} from "@/src/payoffChart/PayoffChart";
 
 export const calculationMetrics: Record<string, NormalizationParams> = {
-    "JANUARY": { days: 31, electricityFactor: 1.16, solarFactor: 0.055 },
-    "FEBRUARY": { days: 28, electricityFactor: 1.10, solarFactor: 0.065 },
-    "MARCH": { days: 31, electricityFactor: 1.10, solarFactor: 0.088 },
+    "Januar": { days: 31, electricityFactor: 1.16, solarFactor: 0.055 },
+    "FEBRUAR": { days: 28, electricityFactor: 1.10, solarFactor: 0.065 },
+    "MAERZ": { days: 31, electricityFactor: 1.10, solarFactor: 0.088 },
     "APRIL": { days: 30, electricityFactor: 0.98, solarFactor: 0.1 },
-    "MAY": { days: 31, electricityFactor: 0.90, solarFactor: 0.098 },
-    "JUNE": { days: 30, electricityFactor: 0.88, solarFactor: 0.112 },
-    "JULY": { days: 31, electricityFactor: 0.89, solarFactor: 0.115 },
+    "MAI": { days: 31, electricityFactor: 0.90, solarFactor: 0.098 },
+    "JUNI": { days: 30, electricityFactor: 0.88, solarFactor: 0.112 },
+    "JULI": { days: 31, electricityFactor: 0.89, solarFactor: 0.115 },
     "AUGUST": { days: 31, electricityFactor: 0.91, solarFactor: 0.1 },
     "SEPTEMBER": { days: 30, electricityFactor: 0.97, solarFactor: 0.087 },
-    "OCTOBER": { days: 31, electricityFactor: 0.99, solarFactor: 0.08 },
+    "OKTOBER": { days: 31, electricityFactor: 0.99, solarFactor: 0.08 },
     "NOVEMBER": { days: 30, electricityFactor: 1.05, solarFactor: 0.055 },
-    "DECEMBER": { days: 31, electricityFactor: 1.07, solarFactor: 0.045 },
+    "DEZEMBER": { days: 31, electricityFactor: 1.07, solarFactor: 0.045 },
 };
 
 export type GenerationConsumParam = {

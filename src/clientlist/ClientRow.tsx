@@ -14,17 +14,17 @@ export function ClientRow({client: {id, nickname, remarks, presentationDate, sta
             <td className="flex justify-between mt-3">
                 <Button variant="contained" component={Link}
                         to={(isPurchase ? "/payoffChart" : "/solarElecChart") + "?pDate=" + format(new Date(presentationDate), 'yyyy-MM-dd') + "&clientId=" + id}
-                        className="w-[115px]" color="inherit" startIcon={<PlayArrow/>} aria-label="present-client">
-                    Present
+                        className="w-[155px]" color="inherit" startIcon={<PlayArrow/>} aria-label="present-client">
+                    Präsentieren
                 </Button>
-                <Button variant="contained" color="inherit" startIcon={<EditOutlined/>} className="w-[115px]"
+                <Button variant="contained" color="inherit" startIcon={<EditOutlined/>} className="w-[155px]"
                         onClick={() => setModalParams({openModal: true, clientIdToEdit: id})} aria-label="edit-client">
-                    Edit
+                    Bearbeiten
                 </Button>
-                <Button variant="contained" color="inherit" startIcon={<DeleteOutlined/>} className="w-[115px]"
+                <Button variant="contained" color="inherit" startIcon={<DeleteOutlined/>} className="w-[155px]"
                         aria-label="delete-client"
                         onClick={() => triggerDeleteClient(presentationDate, id)} autoFocus={false}>
-                    Delete
+                    Löschen
                 </Button>
             </td>
         </tr>

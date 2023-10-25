@@ -197,18 +197,18 @@ describe("ElectricityCostCalculator", () => {
         const consumptionYearly = 3500;
         const productionYearly = 7192;
         const expectedGenerationConsumption: Array<GenerationConsumParam> = [
-            {month: "January", generation: 396, consumption: 345},
-            {month: "February", generation: 467, consumption: 295},
-            {month: "March", generation: 633, consumption: 327},
+            {month: "Januar", generation: 396, consumption: 345},
+            {month: "Februar", generation: 467, consumption: 295},
+            {month: "Maerz", generation: 633, consumption: 327},
             {month: "April", generation: 719, consumption: 282},
-            {month: "May", generation: 705, consumption: 268},
-            {month: "June", generation: 806, consumption: 253},
-            {month: "July", generation: 827, consumption: 265},
+            {month: "Mai", generation: 705, consumption: 268},
+            {month: "Juni", generation: 806, consumption: 253},
+            {month: "Juli", generation: 827, consumption: 265},
             {month: "August", generation: 719, consumption: 271},
             {month: "September", generation: 626, consumption: 279},
-            {month: "October", generation: 575, consumption: 294},
+            {month: "Oktober", generation: 575, consumption: 294},
             {month: "November", generation: 396, consumption: 302},
-            {month: "December", generation: 324, consumption: 318},
+            {month: "Dezember", generation: 324, consumption: 318},
         ];
         const resultGenerationConsumption = getGenerationConsumParam(productionYearly, consumptionYearly);
         expect(resultGenerationConsumption).toEqual(expectedGenerationConsumption);

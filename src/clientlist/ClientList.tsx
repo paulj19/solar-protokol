@@ -43,9 +43,9 @@ export default function ClientList() {
     async function handleDeleteClient() {
         try {
             await deleteClient({pDate: format(new Date(deleteData.pDate), "yyyy-MM-dd"), clientId: "cid_" + deleteData.clientId}).unwrap();
-            setSnackData({open: true, severity: "success", message: "Client deleted successfully."});
+            setSnackData({open: true, severity: "success", message: "Kunden löschen Erfolgreich."});
         } catch (e) {
-            setSnackData({open: true, severity: "error", message: "An error occurred, please refresh the page and try again."});
+            setSnackData({open: true, severity: "error", message: "Es ist ein Fehler aufgetreten. Bitte aktualisieren Sie die Seite und versuchen Sie es erneut."});
             console.error("error deleting client", e)
         }
         onDeleteClientClose();
@@ -62,10 +62,10 @@ export default function ClientList() {
                         <tr className="border h-[50px] bg-gray-500 shadow-lg text-gray-200 font-mono">
                             <th>Termin Zeit</th>
                             <th>ID</th>
-                            <th className="w-[20%]">Nickname</th>
+                            <th className="w-[20%]">Name</th>
                             <th className="w-[35%]">Bemerkungen</th>
                             <th>Status</th>
-                            <th className="w-[22%]"></th>
+                            <th className="w-[29%]"></th>
                         </tr>
                         </thead>
                         <tbody>
@@ -77,7 +77,7 @@ export default function ClientList() {
                             })
                         }
                         </tbody>
-                    </table> : <p className="p-5" data-testid="no-client-msg">no entries yet, add new</p>
+                    </table> : <p className="p-5" data-testid="no-client-msg">noch keine Einträge, neue hinzufügen</p>
 
             }
             <Button
@@ -89,7 +89,7 @@ export default function ClientList() {
                 autoFocus={false}
                 onClick={() => setModalParams({openModal: true, clientIdToEdit: null})}
             >
-                New Client
+                Neukunde
             </Button>
             <Modal open={modalParams.openModal}
                    onClose={() => setModalParams({openModal: false, clientIdToEdit: null})}
@@ -112,17 +112,17 @@ export default function ClientList() {
                 aria-describedby="alert-dialog-description"
             >
                 <DialogTitle id="alert-dialog-title">
-                    {"Delete Client"}
+                    {"Kunden löschen"}
                 </DialogTitle>
                 <DialogContent>
                     <DialogContentText id="alert-dialog-description">
-                        Are you sure you want to delete this client?
+                        Sind Du sicher, dass Du diesen Client löschen möchtest?
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={onDeleteClientClose}>Cancel</Button>
+                    <Button onClick={onDeleteClientClose}>Abbrechen</Button>
                     <Button onClick={handleDeleteClient} aria-label="deleteClient-confirm">
-                        Delete
+                        Löschen
                     </Button>
                 </DialogActions>
             </Dialog>

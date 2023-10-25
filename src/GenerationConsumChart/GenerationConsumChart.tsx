@@ -137,7 +137,7 @@ export default function GenerationConsumChart(): ReactElement {
                 <MuiToolTip title="back to home" arrow>
                     <Fab variant="extended" sx={{backgroundColor: "#474747", color: "#878787de"}} component={Link} to='/'
                          onClick={() => handleUpdateClientStatus()} aria-label="add">
-                        END
+                        BEENDEN
                     </Fab>
                 </MuiToolTip>
             </div>

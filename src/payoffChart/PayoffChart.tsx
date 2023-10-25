@@ -47,7 +47,7 @@ export default function PayoffChart(): ReactElement {
     }
 
     if (!clientParams.isPurchase || !clientParams.purchasePrice) {
-        return <ErrorScreen errorText={"Solaranlage ist nicht als kauf markiert oder kaufpreis nicht eingegeben."}/>
+        return <ErrorScreen errorText={"Nicht als Kauf markiert wärend der Kundenerstellung"}/>
     }
     const payOffParams: Array<PayOffParam> = calcCumulativeSaved({
         year: undefined,
@@ -58,7 +58,7 @@ export default function PayoffChart(): ReactElement {
 
     return (
         <>
-            <h1 className="font-bold text-3xl font-sans text-gray-300 m-auto pb-2">{`PAYOFF`}</h1>
+            <h1 className="font-bold text-3xl font-sans text-gray-300 m-auto pb-2">AUSZAHLUNG</h1>
             <div data-testid="generationConsum-chart" className="w-[80%] h-[90%] ">
                 <ResponsiveContainer>
                     <ComposedChart

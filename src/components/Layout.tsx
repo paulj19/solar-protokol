@@ -34,13 +34,13 @@ export default function Layout({ children }) {
                             <ListItemDecorator>
                                 <HomeIcon />
                             </ListItemDecorator>
-                            Client List
+                            Home
                         </MenuItem>
                         <MenuItem onClick={() => setOpenModal(true)} aria-label="generalParams-item">
                             <ListItemDecorator>
                                 <Settings />
                             </ListItemDecorator>
-                            General Params
+                            Einstellungen
                         </MenuItem>
                     </Menu>
                 </Dropdown>
