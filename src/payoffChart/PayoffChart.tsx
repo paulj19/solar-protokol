@@ -8,6 +8,7 @@ import {ArrowForward} from "@mui/icons-material";
 import Loading from "@/src/components/Loading";
 import ErrorScreen from "@/src/components/ErrorScreen";
 import {useTheme} from "next-themes";
+import {getFormattedCost} from "@/src/stats/Stats";
 
 export type PayOffParam = {
     year: number
@@ -77,7 +78,7 @@ export default function PayoffChart(): ReactElement {
                         />
                         <YAxis axisLine={false} tick={{fill: 'rgb(var(--color-axis) , var(--alpha-axis))'}}
                                tickLine={false} width={110}
-                               tickMargin={15} tickCount={10} tickFormatter={(value, index) => `${value} €`}>
+                               tickMargin={15} tickCount={10} tickFormatter={(value, index) => `${getFormattedCost(value)}`}>
                             <Label
                                 style={{
                                     textAnchor: "middle",
@@ -91,8 +92,8 @@ export default function PayoffChart(): ReactElement {
                         {/*<Tooltip/>*/}
                         <defs>
                             <linearGradient id='payoff-positive' gradientTransform="rotate(90)" spreadMethod='reflect'>
-                                <stop offset='20%' stopColor='#1a6e01'/>
-                                <stop offset='90%' stopColor='#31c704'/>
+                                <stop offset='20%' stopColor='#ff9100'/>
+                                <stop offset='90%' stopColor='#ffc261'/>
                             </linearGradient>
                             <linearGradient id='payoff-negative' gradientTransform="rotate(90)" spreadMethod='reflect'>
                                 <stop offset='20%' stopColor="rgb(var(--stats-chart-elecShade))"/>
