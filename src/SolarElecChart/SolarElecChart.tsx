@@ -168,8 +168,9 @@ export default function SolarElecChart() {
                                         <stop offset='20%' stopColor={'rgb(var(--color-bar))'}/>
                                         <stop offset='90%' stopColor='rgb(var(--color-axis))'/>
                                     </linearGradient>
-                                    <linearGradient id="splitColor">
-                                        <stop offset="1" stopColor="rgba(var(--color-axis), 0.6)" stopOpacity={1}/>
+                                        <linearGradient id='saved-enpal' gradientTransform="rotate(90)" spreadMethod='reflect'>
+                                        <stop offset="30%" stopColor="#0aff33" />
+                                        <stop offset="90%" stopColor="#026112"/>
                                     </linearGradient>
                                 </defs>
                                 {/*<defs>*/}
@@ -191,7 +192,7 @@ export default function SolarElecChart() {
                                       dot={<CustomizedDot/>}
                                       hide={!STATES[settings.currentState]?.includes(STATE.SOLAR_LINE)}
                                 />
-                                <Area type="linear" dataKey="range" fill="url(#splitColor)"
+                                <Area type="linear" dataKey="range" fill="url(#saved-enpal)"
                                       legendType='none' tooltipType='none'
                                       hide={!STATES[settings.currentState]?.includes(STATE.AREA)}
                                 />
