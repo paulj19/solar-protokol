@@ -133,8 +133,8 @@ export function CreateClient({selectedDate, clientToEdit, setModalParams}) {
                                 <Select {...field}
                                         sx={{width: 150}}
                                 >
-                                    <MenuItem value="open">offen</MenuItem>
-                                    <MenuItem value="completed">abgeschlossen</MenuItem>
+                                    <MenuItem value="open">Offen</MenuItem>
+                                    <MenuItem value="completed">Abgeschlossen</MenuItem>
                                 </Select>
                             )}
                         />

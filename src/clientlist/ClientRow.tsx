@@ -2,6 +2,7 @@ import {Link} from "react-router-dom";
 import {DeleteOutlined, EditOutlined, PlayArrow} from "@mui/icons-material";
 import Button from '@material-ui/core/Button';
 import {format} from "date-fns";
+import {STATUS_COMPLETED, STATUS_OPEN} from "@/utils/CommonText.";
 
 export function ClientRow({client: {id, nickname, remarks, presentationDate, status, isPurchase}, setModalParams, triggerDeleteClient}) {
     return (
@@ -10,7 +11,7 @@ export function ClientRow({client: {id, nickname, remarks, presentationDate, sta
             <td>{id}</td>
             <td>{nickname}</td>
             <td>{remarks}</td>
-            <td>{status}</td>
+            <td>{status == "open" ? STATUS_OPEN : STATUS_COMPLETED }</td>
             <td className="flex justify-between mt-3">
                 <Button variant="contained" component={Link}
                         to={(isPurchase ? "/payoffChart" : "/solarElecChart") + "?pDate=" + format(new Date(presentationDate), 'yyyy-MM-dd') + "&clientId=" + id}
