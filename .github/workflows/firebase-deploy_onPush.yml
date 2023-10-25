@@ -3,11 +3,11 @@ on:
   push:
     branches:
       - xxx
-  workflow_run:
-    workflows:
-      - unit and e2e tests
-    types:
-      - completed
+#  workflow_run:
+#    workflows:
+#      - unit and e2e tests
+#    types:
+#      - completed
 jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
