@@ -156,7 +156,7 @@ export default function SolarElecChart() {
                                         }}
                                         dx={-50}
                                         angle={270}
-                                        value={"PV-Rate pro Monat"}/>
+                                        value={"Rechnung pro Monat"}/>
                                 </YAxis>
                                 <RechartToolTop
                                     content={<CustomTooltip currentYear={currentYear}/>}
@@ -196,7 +196,7 @@ export default function SolarElecChart() {
                                       legendType='none' tooltipType='none'
                                       hide={!STATES[settings.currentState]?.includes(STATE.AREA)}
                                 />
-                                <Bar dataKey="electricityCost" fill="rgb(var(--color-bar))" barSize={30}
+                                <Bar dataKey="electricityCost" fill="rgb(var(--color-bar))" barSize={30} name="Stromrechnung pro Monat"
                                      legendType={STATES[settings.currentState]?.includes(STATE.ELEC_BAR) ? 'rect' : 'none'}
                                      hide={!STATES[settings.currentState]?.includes(STATE.ELEC_BAR)}>
                                     {comparisonDataWithRange.map((entry, index) => (

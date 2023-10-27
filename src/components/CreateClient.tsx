@@ -107,7 +107,7 @@ export function CreateClient({selectedDate, clientToEdit, setModalParams}) {
                 fontWeight="sm"
                 textAlign="center"
             >
-                Neuen Kunden erstellen
+                {clientToEdit ? "Kundendaten  Bearbeiten": "Neuen Kundendaten erstellen"}
             </Typography>
             <div className="flex justify-center items-center pt-10 pb-7">
                 <form onSubmit={handleSubmit(onSubmit)} onReset={() => reset()}
