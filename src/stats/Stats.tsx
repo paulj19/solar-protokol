@@ -70,7 +70,6 @@ export default function Stats() {
                     <StatsChart {...predictionParams} />
                     <ElectricityStats {...predictionParams} />
                     <CumStatsChart {...predictionParams} />
-                    {/* <SolarStats {...predictionParams} /> */}
                 </div>
                 <div className="flex m-auto flex-col pt-4">
                     <TotalCostSavings {...predictionParams} />
@@ -202,6 +201,6 @@ export function getFormattedCost(cost: number) {
         maximumFractionDigits: 0,
     }).format(cost);
 }
-export function getBarLabel(text): ReactElement {
-    return <LabelList position="middle" fill="rgba(var(--color-title), 0.7)" className="font-sans font-medium tracking-wide" style={{paddingLeft: "5px"}}>{text}</LabelList>
+export function getBarLabel(text, isValueTiny = false): ReactElement {
+    return <LabelList position={isValueTiny? "right": "middle"} fill="rgba(var(--color-title), 0.7)" className="font-sans font-medium tracking-wide" style={{paddingLeft: "5px", textOverflow: "visible"}}>{text}</LabelList>
 }

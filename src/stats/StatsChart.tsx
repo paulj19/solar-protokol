@@ -35,8 +35,10 @@ export default function StatsChart(params: PredictionParams) {
                     stackOffset="sign"
                 >
                     {/* <CartesianGrid strokeDasharray="3 3" /> */}
+                    {/*//todo fix me*/}
                     <XAxis ticks={["Strom", "Solar"]}/>
                     {/* <YAxis ticks={[0, 50, 100, 150, 200, 250, 300, 350]} /> */}
+                    {/*<YAxis/>*/}
                     {/*<Tooltip/>*/}
                     <Legend wrapperStyle={{bottom: 12}} formatter={value => <span
                         className="text-[rgba(var(--color-title))] opacity-70 tracking-wide">{value}</span>}/>
@@ -62,11 +64,11 @@ export default function StatsChart(params: PredictionParams) {
                          legendType={'none'} radius={2}
                          label={props => solarCost < 0 ? customLabel({...props, value: totalSolarCost}) : null}
                     >
-                        {electricityCostNew ? getBarLabel(`Stromrechnung Neu ${electricityCostNew} €`) : null}
+                        {electricityCostNew ? getBarLabel(`Stromrechnung Neu ${electricityCostNew} €`, electricityCost < 10) : null}
                     </Bar>
                     <Bar stackId="a" dataKey="solarCost" name={"Mit Enpal"} fill={solarCost >= 0 ?`url(#stat-solar)`: `url(#stat-solar-negative)`}
                          label={props => props.value > 0 ? customLabel(props) : null} radius={2}>
-                        {getBarLabel(`Enpal Komplettlösung ${solarCost} €`)}
+                        {solarCost !== 0 ? getBarLabel(`Enpal Komplettlösung ${solarCost} €`, solarCost < 10 && solarCost > -50) : null}
                     </Bar>
                 </BarChart>
             </ResponsiveContainer>
