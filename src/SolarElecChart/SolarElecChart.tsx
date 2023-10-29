@@ -215,6 +215,7 @@ export default function SolarElecChart() {
                         </div>
                         <MobileStepper
                             variant="progress"
+                            aria-label="state-stepper"
                             steps={STATES.length}
                             activeStep={settings.currentState}
                             sx={{maxWidth: 400, flexGrow: 1, bgcolor: 'transparent', margin: 'auto'}}

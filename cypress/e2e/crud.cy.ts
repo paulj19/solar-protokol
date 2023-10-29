@@ -3,6 +3,7 @@ import {screen} from "@testing-library/react";
 import {be} from "date-fns/locale";
 import * as process from "process";
 import {not} from "rxjs/internal/util/not";
+import {STATUS_COMPLETED, STATUS_OPEN} from "@/utils/CommonVars";
 
 function assertListIsEmpty() {
     cy.get('table tbody tr').should('have.length', 0);
@@ -41,7 +42,7 @@ function createClient() {
     cy.get('table tbody tr td').eq(0).should('contain', '10:00')
     cy.get('table tbody tr td').eq(2).should('contain', 'test nickname')
     cy.get('table tbody tr td').eq(3).should('contain', 'test remarks')
-    cy.get('table tbody tr td').eq(4).should('contain', 'open')
+    cy.get('table tbody tr td').eq(4).should('contain', STATUS_OPEN)
     cy.get('[aria-label="present-client"]').should('be.visible');
     cy.get('[aria-label="edit-client"]').should('be.visible');
 }
@@ -51,7 +52,7 @@ function solarElecChart() {
         expect(url).to.match(/.*?\/solarElecChart\?pDate=\d{4}-\d{2}-\d{2}&clientId=\d+$/);
     });
     cy.get('[data-testid="solar-elec-chart"]').should('be.visible')
-    cy.get('[data-testid="solar-toggle"]').should('be.visible')
+    cy.get('[aria-label="state-stepper"]').should('be.visible')
 }
 
 function stats() {
@@ -165,7 +166,7 @@ describe('CLIENT CRUD', () => {
         cy.get('[data-testid="end-fab"]').click()
         cy.url().should('eq', Cypress.config().baseUrl + '/')
         setDate()
-        cy.get('table tbody tr td').eq(4).should('contain', 'completed')
+        cy.get('table tbody tr td').eq(4).should('contain', STATUS_COMPLETED)
         deleteClient()
     })
 

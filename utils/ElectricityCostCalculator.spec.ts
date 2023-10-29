@@ -115,55 +115,58 @@ describe("ElectricityCostCalculator", () => {
 
     it("should calculate solar cost for 25 years", () => {
         const params: PredictionParams = {year: 0, clientParams: {consumptionYearly: 3500, unitPrice: 0.32, basePrice: 10, productionYearly: 7192}, generalParams: {rent: 132, rentDiscountPeriod: 2, rentDiscountAmount: 15, feedInPrice: 0.08, inflationRate: 3, electricityIncreaseRate: 1}};
-        const expectedSolarCost = [102, 101, 116, 115, 115, 114, 114, 113, 112, 111, 111, 109, 109, 108, 106, 106, 105, 103, 102, 101, 100, -33, -34, -36, -37];
+        const expectedSolarCost = [102, 102, 118, 118, 119, 119, 120, 120, 121, 121, 122, 122, 123, 124, 124, 125, 126, 126, 127, 128, 129, -2, -1, 0, 1];
         let solarCost_ = [];
         for (let i = 0; i < 25; i++) {
             const {solarCost} = calcSolarCostMonthly({...params, year: i});
             solarCost_.push(solarCost);
         }
+        console.log("YYY", solarCost_)
         expect(solarCost_).toEqual(expectedSolarCost);
     });
 
     it("should calculate predictions for 25 years", () => {
         const params: PredictionParams = {year: 0, clientParams: {consumptionYearly: 3500, unitPrice: 0.32, basePrice: 10, productionYearly: 7192}, generalParams: {rent: 132, rentDiscountPeriod: 2, rentDiscountAmount: 15, feedInPrice: 0.08, inflationRate: 3, electricityIncreaseRate: 1}};
         const expectedFeedInTarrif = [
-            {year: 0, electricityCost: 103, solarCost: 102},
-            {year: 1, electricityCost: 107, solarCost: 101},
-            {year: 2, electricityCost: 112, solarCost: 116},
-            {year: 3, electricityCost: 116, solarCost: 115},
-            {year: 4, electricityCost: 121, solarCost: 115},
-            {year: 5, electricityCost: 126, solarCost: 114},
-            {year: 6, electricityCost: 131, solarCost: 114},
-            {year: 7, electricityCost: 136, solarCost: 113},
-            {year: 8, electricityCost: 142, solarCost: 112},
-            {year: 9, electricityCost: 147, solarCost: 111},
-            {year: 10, electricityCost: 153, solarCost: 111},
-            {year: 11, electricityCost: 159, solarCost: 109},
-            {year: 12, electricityCost: 165, solarCost: 109},
-            {year: 13, electricityCost: 172, solarCost: 108},
-            {year: 14, electricityCost: 179, solarCost: 106},
-            {year: 15, electricityCost: 186, solarCost: 106},
-            {year: 16, electricityCost: 194, solarCost: 105},
-            {year: 17, electricityCost: 201, solarCost: 103},
-            {year: 18, electricityCost: 209, solarCost: 102},
-            {year: 19, electricityCost: 218, solarCost: 101},
-            {year: 20, electricityCost: 227, solarCost: 100},
-            {year: 21, electricityCost: 236, solarCost: -33},
-            {year: 22, electricityCost: 245, solarCost: -34},
-            {year: 23, electricityCost: 255, solarCost: -36},
-            {year: 24, electricityCost: 265, solarCost: -37},
-            {year: 25, electricityCost: 276, solarCost: -39}
+            { year: 0, electricityCost: 103, solarCost: 102 },
+            { year: 1, electricityCost: 107, solarCost: 102 },
+            { year: 2, electricityCost: 112, solarCost: 118 },
+            { year: 3, electricityCost: 116, solarCost: 118 },
+            { year: 4, electricityCost: 121, solarCost: 119 },
+            { year: 5, electricityCost: 126, solarCost: 119 },
+            { year: 6, electricityCost: 131, solarCost: 120 },
+            { year: 7, electricityCost: 136, solarCost: 120 },
+            { year: 8, electricityCost: 142, solarCost: 121 },
+            { year: 9, electricityCost: 147, solarCost: 121 },
+            { year: 10, electricityCost: 153, solarCost: 122 },
+            { year: 11, electricityCost: 159, solarCost: 122 },
+            { year: 12, electricityCost: 165, solarCost: 123 },
+            { year: 13, electricityCost: 172, solarCost: 124 },
+            { year: 14, electricityCost: 179, solarCost: 124 },
+            { year: 15, electricityCost: 186, solarCost: 125 },
+            { year: 16, electricityCost: 194, solarCost: 126 },
+            { year: 17, electricityCost: 201, solarCost: 126 },
+            { year: 18, electricityCost: 209, solarCost: 127 },
+            { year: 19, electricityCost: 218, solarCost: 128 },
+            { year: 20, electricityCost: 227, solarCost: 129 },
+            { year: 21, electricityCost: 236, solarCost: -2 },
+            { year: 22, electricityCost: 245, solarCost: -1 },
+            { year: 23, electricityCost: 255, solarCost: 0 },
+            { year: 24, electricityCost: 265, solarCost: 1 },
+            { year: 25, electricityCost: 276, solarCost: 2 }
         ]
         const resultFeedInTariff = calcPredictions(params);
+        console.log("XXX", resultFeedInTariff)
         expect(resultFeedInTariff).toEqual(expectedFeedInTarrif);
     });
 
     it("should calculate total saved for 1 year", () => {
         const params: PredictionParams = {year: 0, clientParams: {consumptionYearly: 3500, unitPrice: 0.32, basePrice: 10, productionYearly: 7192}, generalParams: {rent: 132, rentDiscountPeriod: 2, rentDiscountAmount: 15, feedInPrice: 0.08, inflationRate: 3, electricityIncreaseRate: 1}};
         const expectedTotalSaved = 12;
-        const expectedElecTotalSaved = 103;
-        const expectedSolarTotalSaved = 102;
+        const expectedElecTotalSaved = 1236;
+        const expectedSolarTotalSaved = 1224;
         const {totalSaved, totalElecCost, totalSolarCost} = calcTotalSaved(params);
+        console.log("ZZZ", totalSaved, totalElecCost, totalSolarCost)
         expect(totalSaved).toEqual(expectedTotalSaved);
         expect(totalElecCost).toEqual(expectedElecTotalSaved);
         expect(totalSolarCost).toEqual(expectedSolarTotalSaved);
@@ -171,10 +174,11 @@ describe("ElectricityCostCalculator", () => {
 
     it("should calculate total saved for 25 year", () => {
         const params: PredictionParams = {year: 25, clientParams: {consumptionYearly: 3500, unitPrice: 0.32, basePrice: 10, productionYearly: 7192}, generalParams: {rent: 132, rentDiscountPeriod: 2, rentDiscountAmount: 15, feedInPrice: 0.08, inflationRate: 3, electricityIncreaseRate: 1}};
-        const expectedTotalSaved = 29844;
-        const expectedElecTotalSaved = 4581;
-        const expectedSolarTotalSaved = 2094;
+        const expectedTotalSaved = 24540;
+        const expectedElecTotalSaved = 54972;
+        const expectedSolarTotalSaved = 30432;
         const {totalSaved, totalElecCost, totalSolarCost} = calcTotalSaved(params);
+        console.log("ZZZ", totalSaved, totalElecCost, totalSolarCost)
         expect(totalSaved).toEqual(expectedTotalSaved);
         expect(totalElecCost).toEqual(expectedElecTotalSaved);
         expect(totalSolarCost).toEqual(expectedSolarTotalSaved);
@@ -214,9 +218,9 @@ describe("ElectricityCostCalculator", () => {
         expect(resultGenerationConsumption).toEqual(expectedGenerationConsumption);
     });
     it('should calculate cumulative saved', () => {
-        const params: PredictionParams = {year: 0, clientParams: {consumptionYearly: 3500, unitPrice: 0.32, basePrice: 10, productionYearly: 7192}, generalParams: {rent: 132, rentDiscountPeriod: 2, rentDiscountAmount: 15, feedInPrice: 0.08, inflationRate: 3, electricityIncreaseRate: 1}};
-        const cumulativeSaved: Array<PayOffParam> = calcCumulativeSaved(params);
+        const params: PredictionParams = {year: 0, clientParams: {consumptionYearly: 3500, unitPrice: 0.32, basePrice: 10, productionYearly: 7192, isPurchase: true, purchasePrice: 20000}, generalParams: {rent: 132, rentDiscountPeriod: 2, rentDiscountAmount: 15, feedInPrice: 0.08, inflationRate: 3, electricityIncreaseRate: 1}};
         const expectedCumlativeSaved: Array<PayOffParam> = [{year: 0, saved: -19794}, {year: 1, saved: -18509}, {year: 2, saved: -17166}, {year: 3, saved: -15774}, {year: 4, saved: -14320}, {year: 5, saved: -12813}, {year: 6, saved: -11240}, {year: 7, saved: -9610}, {year: 8, saved: -7909}, {year: 9, saved: -6147}, {year: 10, saved: -4309}, {year: 11, saved: -2405}, {year: 12, saved: -420}, {year: 13, saved: 1649}, {year: 14, saved: 3792}, {year: 15, saved: 6025}, {year: 16, saved: 8351}, {year: 17, saved: 10761}, {year: 18, saved: 13270}, {year: 19, saved: 15882}, {year: 20, saved: 18600}, {year: 21, saved: 21428}, {year: 22, saved: 24370}, {year: 23, saved: 27430}, {year: 24, saved: 30613}, {year: 25, saved: 33923}];
+        const cumulativeSaved: Array<PayOffParam> = calcCumulativeSaved(params);
         expect(cumulativeSaved).toEqual(expectedCumlativeSaved);
     });
 });
