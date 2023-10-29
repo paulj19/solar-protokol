@@ -87,9 +87,9 @@ export default function GenerationConsumChart(): ReactElement {
                         }}
                     >
                         <CartesianGrid stroke="#fff" vertical={false} strokeWidth={0.3} strokeOpacity={1}/>
-                        <XAxis dataKey="month" tick={{fill: 'rgb(var(--color-axis) , var(--alpha-axis))'}} angle={320}
+                        <XAxis dataKey="month" tick={{fill: '#e3a600'}} angle={320}
                                tickMargin={15} dx={-20}/>
-                        <YAxis axisLine={false} tick={{fill: 'rgb(var(--color-axis) , var(--alpha-axis))'}}
+                        <YAxis axisLine={false} tick={{fill: '#e3a600'}}
                                tickLine={false} tickMargin={15} ticks={getYAxisTicks(generationConsumParams)}/>
                         <Tooltip/>
                         <Legend layout="centric" verticalAlign="top" align="right" iconSize={30}
@@ -100,8 +100,8 @@ export default function GenerationConsumChart(): ReactElement {
                         {/*<Bar dataKey="generation" barSize={30} fill="rgb(var(--color-bar))" label={renderCustomizedLabel} />*/}
                         <defs>
                             <linearGradient id='gen-bar' gradientTransform="rotate(90)" spreadMethod='reflect'>
-                                <stop offset='20%' stopColor={'rgb(var(--color-bar))'}/>
-                                <stop offset='90%' stopColor='rgb(var(--color-axis))'/>
+                                <stop offset='20%' stopColor='#e37500'/>
+                                <stop offset='90%' stopColor='#e3a600'/>
                             </linearGradient>
                         </defs>
                         <Bar dataKey='generation' fill="rgb(var(--color-bar))" barSize={70}
@@ -110,7 +110,7 @@ export default function GenerationConsumChart(): ReactElement {
                                 <Cell key="generation-bar" fill={`url(#gen-bar)`}/>
                             ))}
                         </Bar>
-                        <Line type="monotone" strokeWidth={3.5} dataKey="consumption" stroke="rgb(var(--color-line))"
+                        <Line type="monotone" strokeWidth={4.5} dataKey="consumption" stroke="rgb(var(--color-line))" dot={false}
                               hide={!showConsumption}/>
                     </ComposedChart>
                 </ResponsiveContainer>
@@ -170,21 +170,21 @@ function XXX(props) {
 
 function LegendFormatter(value, productionYearly, consumptionYearly, showConsumption) {
     const outerDiv = "inline-flex flex-col gap-2";
-    const innerTitle = "font-sans text-md font-medium tracking-wide";
-    const innerSum = "font-sans text-md font-medium text-start";
+    const innerTitle = "font-sans text-2xl font-bold tracking-wide";
+    const innerSum = "font-sans text-2xl font-bold text-start";
     if (value === "generation") {
         return (
             <div className={outerDiv}>
                 <div className={innerTitle}>STROMPRODUKTION</div>
                 <div
-                    className={innerSum}>{productionYearly + " KwH pro Jahr"}</div>
+                    className={innerSum}>{productionYearly + " KwH PRO JAHR"}</div>
             </div>)
     } else if (value === "consumption" && showConsumption) {
         return (
             <div className={outerDiv + " pt-3"}>
                 <div className={innerTitle}>STROMVERBRAUCH</div>
                 <div
-                    className={innerSum}>{consumptionYearly + " KwH pro Jahr"}</div>
+                    className={innerSum}>{consumptionYearly + " KwH PRO JAHR"}</div>
             </div>)
     }
 }
@@ -204,8 +204,8 @@ const renderCustomizedLabel = (props) => {
 
     return (
         <g>
-            <text x={x + width / 2} y={y - radius} fill="rgb(var(--color-title),0.7 )" textAnchor="middle"
-                  className="font-serif text-md font-medium">
+            <text x={x + width / 2} y={y - radius} fill="#e3a600" textAnchor="middle"
+                  className="text-md font-bold">
                 {value}
             </text>
         </g>

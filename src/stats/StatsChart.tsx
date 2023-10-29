@@ -41,14 +41,14 @@ export default function StatsChart(params: PredictionParams) {
                     {/*<YAxis/>*/}
                     {/*<Tooltip/>*/}
                     <Legend wrapperStyle={{bottom: 12}} formatter={value => <span
-                        className="text-[rgba(var(--color-title))] opacity-70 tracking-wide">{value}</span>}/>
+                        className="text-[#fff] opacity-70 tracking-wide">{value}</span>}/>
                     <defs>
                         <linearGradient id='stat-solar' gradientTransform="rotate(90)" spreadMethod='reflect'>
-                            <stop offset='20%' stopColor='rgb(var(--color-bar))'/>
+                            <stop offset='20%' stopColor='rgb(var(--stats-chart-solar))'/>
                             <stop offset='90%' stopColor={'rgb(var(--stats-chart-solar))'}/>
                         </linearGradient>
                         <linearGradient id='stat-solar-negative' gradientTransform="rotate(90)" spreadMethod='reflect'>
-                            <stop offset='' stopColor='rgb(var(--color-bar))'/>
+                            <stop offset='' stopColor='rgb(var(--stats-chart-solar))'/>
                             <stop offset='79%' stopColor={'rgb(var(--stats-chart-solar))'}/>
                         </linearGradient>
                         <linearGradient id='stat-elec' gradientTransform="rotate(90)" spreadMethod='reflect'>
@@ -56,19 +56,19 @@ export default function StatsChart(params: PredictionParams) {
                             <stop offset='90%' stopColor="rgb(var(--stats-chart-elec))"/>
                         </linearGradient>
                     </defs>
-                    <Bar dataKey="electricityCost" name={"Ohne Enpal"} fill={`url(#stat-elec)`}
+                    <Bar dataKey="electricityCost" name={"OHNE ENPAL"} fill={`url(#stat-elec)`}
                          label={customLabel} radius={2}>
-                        {getBarLabel("Stromrechnung Alt")}
+                        {getBarLabel("STROMRECHNUNG ALT")}
                     </Bar>
-                    <Bar stackId="a" dataKey="electricityCostNew" name={"Mit Enpal"} fill="rgb(var(--stats-chart-elec))"
+                    <Bar stackId="a" dataKey="electricityCostNew" name={"MIT ENPAL"} fill="#00a115"
                          legendType={'none'} radius={2}
                          label={props => solarCost < 0 ? customLabel({...props, value: totalSolarCost}) : null}
                     >
-                        {electricityCostNew ? getBarLabel(`Stromrechnung Neu ${electricityCostNew} €`, electricityCost < 10) : null}
+                        {electricityCostNew ? getBarLabel(`STROMRECHNUNG NEU ${electricityCostNew} €`, electricityCost < 10) : null}
                     </Bar>
-                    <Bar stackId="a" dataKey="solarCost" name={"Mit Enpal"} fill={solarCost >= 0 ?`url(#stat-solar)`: `url(#stat-solar-negative)`}
+                    <Bar stackId="a" dataKey="solarCost" name={"MIT ENPAL"} fill={solarCost >= 0 ?`url(#stat-solar)`: `url(#stat-solar-negative)`}
                          label={props => props.value > 0 ? customLabel(props) : null} radius={2}>
-                        {solarCost !== 0 ? getBarLabel(`Enpal Komplettlösung ${solarCost} €`, solarCost < 10 && solarCost > -50) : null}
+                        {solarCost !== 0 ? getBarLabel(`PV-Rate ${solarCost} €`, solarCost < 10 && solarCost > -50) : null}
                     </Bar>
                 </BarChart>
             </ResponsiveContainer>

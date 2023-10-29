@@ -4,4 +4,4 @@ import GenerationConsumChart from "@/src/GenerationConsumChart/GenerationConsumC
 import Home from "@/src/Home";
 import PayoffChart from "@/src/payoffChart/PayoffChart";
 
-export default Home
+export default SolarElecChart

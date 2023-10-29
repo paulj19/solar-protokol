@@ -123,8 +123,7 @@ export default function SolarElecChart() {
         <>
             <div className="flex flex-col w-full justify-center m-auto gap-3 pl-[200px]" data-testid="solar-elec-chart">
                 <>
-                    <h1 className="font-bold text-3xl font-sans text-gray-300 ml-[30%] pb-2">STROM SOLAR
-                        VERGLEICH </h1>
+                    <h1 className="font-bold text-3xl font-sans text-gray-300 ml-[14%] pb-2">IHRE MONATLICHE STROMRECHNUNG IN DER ZUKUNFT</h1>
                     <div className="flex gap-4 pt-4 min-h-[750px] w-full h-full">
                         <ResponsiveContainer >
                             <ComposedChart
@@ -156,7 +155,7 @@ export default function SolarElecChart() {
                                         }}
                                         dx={-50}
                                         angle={270}
-                                        value={"Rechnung pro Monat"}/>
+                                        value={"MONATL.STROMRECHNUNG"}/>
                                 </YAxis>
                                 <RechartToolTop
                                     content={<CustomTooltip currentYear={currentYear}/>}
@@ -180,13 +179,13 @@ export default function SolarElecChart() {
                                 {/*    </linearGradient>*/}
                                 {/*</defs>*/}
                                 <Legend layout="horizontal" verticalAlign="top" align="right"/>
-                                <Line type="linear" dataKey="electricityCost" name="Ohne PV" stroke="#FF0000"
+                                <Line type="linear" dataKey="electricityCost" name="PREISENTWICKLUNG OHNE SOLAR" stroke="#FF0000"
                                       legendType={STATES[settings.currentState]?.includes(STATE.ELEC_LINE) ? 'line' : 'none'}
                                       strokeWidth={STATES[settings.currentState]?.includes(STATE.ELEC_BAR) ? 8.5 : 5.5}
                                       activeDot={{r: 6}} dot={<CustomizedDot/>}
                                       hide={!STATES[settings.currentState]?.includes(STATE.ELEC_LINE)}//todo util function here
                                 />
-                                <Line type="linear" dataKey="solarCost" name="Mit Enpal" stroke="#10ad3f"
+                                <Line type="linear" dataKey="solarCost" name="MIT ENPAL" stroke="#10ad3f"
                                       legendType={STATES[settings.currentState]?.includes(STATE.SOLAR_LINE) ? 'line' : 'none'}
                                       strokeWidth={5.5}
                                       dot={<CustomizedDot/>}
@@ -196,7 +195,8 @@ export default function SolarElecChart() {
                                       legendType='none' tooltipType='none'
                                       hide={!STATES[settings.currentState]?.includes(STATE.AREA)}
                                 />
-                                <Bar dataKey="electricityCost" fill="rgb(var(--color-bar))" barSize={30} name="Stromrechnung pro Monat"
+                                <Bar dataKey="electricityCost" fill="rgb(var(--color-bar))" barSize={30} name="STROMRECHNUNG PRO MONAT"
+                                label='none'
                                      legendType={STATES[settings.currentState]?.includes(STATE.ELEC_BAR) ? 'rect' : 'none'}
                                      hide={!STATES[settings.currentState]?.includes(STATE.ELEC_BAR)}>
                                     {comparisonDataWithRange.map((entry, index) => (
@@ -205,13 +205,13 @@ export default function SolarElecChart() {
                                 </Bar>
                             </ComposedChart>
                         </ResponsiveContainer>
-                        <div className="text-gray-400 font-medium text-sm pt-2 tracking-wide gap-4 flex flex-col">
+                        <div className="text-gray-300 text-font-medium text-sm pt-2 tracking-wide gap-4 flex flex-col">
                             <div className="text-axis">{`INFLATION: ${inflationRate??generalParams.inflationRate}% | PREISSTEIGERUNG: ${elecIncreaseRate??generalParams.electricityIncreaseRate}%`}</div>
-                            <h2>IHRE STROMKOSTEN IN DEN NÄCHSTEN 25 JAHREN</h2>
-                            <p>{'OHNE SOLAR: '}{<span
-                                className="text-lg">{formatEuroCurrency(totalElecCost)}</span>}</p>
-                            {stateHasSolarLine() ? <p>{'MIT SOLAR: '}{<span
-                                className="text-lg">{formatEuroCurrency(totalSolarCost)}</span>}</p> : null}
+                            <h2 className="text-2xl font-bold">IHRE STROMKOSTEN IN DEN NÄCHSTEN 25 JAHREN</h2>
+                            <p className="text-3xl text-red-600 font-bold">{'OHNE SOLAR'}{<p
+                                className="text-5xl text-red-600 font-bold">{formatEuroCurrency(totalElecCost)}</p>}</p>
+                            {stateHasSolarLine() ? <p className="text-3xl text-green-600 font-bold leading-6 pt-8">{'MIT SOLAR'}
+                            {<p className="text-5xl text-green-600 font-bold">{formatEuroCurrency(totalSolarCost)}</p>}</p> : null}
                         </div>
                         <MobileStepper
                             variant="progress"
@@ -484,9 +484,9 @@ function formatEuroCurrency(totalSaved) {
 const CustomTooltip = ({active, payload, label, currentYear}) => {
     if (active && payload && payload.length) {
         return (
-            <div className="bg-gray-300 p-2 border rounded-sm opacity-95">
-                <div className="text-xl font-medium text-axis">{`Im Jahr ${label + currentYear}`}</div>
-                <div className="text-xl font-medium text-axis">{`Stromrechnung ${payload[0].value} €`}</div>
+            <div className="bg-gray-700 p-2 border rounded-sm opacity-95 text-[rgb(var(--color-bar))]">
+                <div className="text-xl font-medium">{`JAHR ${label + currentYear}`}</div>
+                <div className="text-xl font-medium">{`MONATL.ABSCHLAG ${payload[0].value} €`}</div>
             </div>
         );
     }

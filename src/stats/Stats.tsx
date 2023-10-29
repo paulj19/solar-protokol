@@ -68,8 +68,8 @@ export default function Stats() {
             <div className="w-full h-full" data-testid="stats">
                 <div className="flex pb-10 gap-3 justify-center h-[650px]">
                     <StatsChart {...predictionParams} />
-                    <ElectricityStats {...predictionParams} />
                     <CumStatsChart {...predictionParams} />
+                    <ElectricityStats {...predictionParams} />
                 </div>
                 <div className="flex m-auto flex-col pt-4">
                     <TotalCostSavings {...predictionParams} />
@@ -77,7 +77,7 @@ export default function Stats() {
             </div>
             {/*<Slider ticks={[0, 5, 10, 15, 20, 25]} onChangeHandler={setYear} defaultValue={year} label={""}*/}
             {/*        step={1}/>*/}
-            <div className="flex w-full justify-center gap-20 pt-6">
+            <div className="flex w-full justify-center gap-20 pt-3">
                 <div className="w-[200px] self-end" data-testid="year-slider">
                     <ColoredSlider
                         orientation="horizontal"
@@ -186,8 +186,8 @@ export const customLabel = (props) => {
 
     return (
         <g>
-            <text x={x + width / 2} y={y - radius} fill="rgb(156, 163, 175)" textAnchor="middle"
-                  className="font-sans text-md font-md">
+            <text x={x + width / 2} y={y - radius} fill="#fff" textAnchor="middle"
+                  className="font-sans text-2xl font-bold">
                 {getFormattedCost(value)}
             </text>
         </g>
@@ -202,5 +202,5 @@ export function getFormattedCost(cost: number) {
     }).format(cost);
 }
 export function getBarLabel(text, isValueTiny = false): ReactElement {
-    return <LabelList position={isValueTiny? "right": "middle"} fill="rgba(var(--color-title), 0.7)" className="font-sans font-medium tracking-wide" style={{paddingLeft: "5px", textOverflow: "visible"}}>{text}</LabelList>
+    return <LabelList position={isValueTiny? "middle": "middle"} fill="#fff" className="font-sans font-medium tracking-wide" style={{paddingLeft: "5px", textOverflow: "visible"}}>{text}</LabelList>
 }
