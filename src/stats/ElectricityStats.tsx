@@ -15,7 +15,7 @@ export function ElectricityStats(params: PredictionParams) {
     const solarCostParams = calcSolarCostMonthly(params);
 
     return (
-        <div className="w-[450px] flex flex-col" data-testid="electricity-stats">
+        <div className="w-[400px] flex flex-col" data-testid="electricity-stats">
             <div className="pt-36 pb-10">
                 <PriceHeading text={`STROM-RECHNUNG ALT : ${totalCost}€`} />
                 <AccordionGroup variant="plain">

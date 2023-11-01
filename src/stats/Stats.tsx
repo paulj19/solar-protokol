@@ -29,17 +29,17 @@ import {calcTotalSaved} from "@/utils/ElectricityCostCalculator";
 import CumStatsChart from "@/src/stats/CumStatsChart";
 
 export default function Stats() {
-    const navigate = useNavigate();
-    const [searchParams] = useSearchParams();
-    const clientId = searchParams.get('clientId');
-    const pDate = searchParams.get('pDate');
-    useEffect(() => {
-        if (!clientId || !pDate) {
-            navigate('/');
-        }
-    }, []);
-    // const clientId = "43"
-    // const pDate = "2023-11-09"
+    // const navigate = useNavigate();
+    // const [searchParams] = useSearchParams();
+    // const clientId = searchParams.get('clientId');
+    // const pDate = searchParams.get('pDate');
+    // useEffect(() => {
+    //     if (!clientId || !pDate) {
+    //         navigate('/');
+    //     }
+    // }, []);
+    const clientId = "43"
+    const pDate = "2023-11-09"
     const [year, setYear] = useState<number>(0);
     const {
         data: generalParams,
@@ -66,9 +66,11 @@ export default function Stats() {
         <>
             <h1 className="m-auto font-medium font-sans text-4xl tracking-wide text-gray-300">{"Jahr " + (new Date().getFullYear() + year)}</h1>
             <div className="w-full h-full" data-testid="stats">
-                <div className="flex pb-10 gap-3 justify-center h-[650px]">
-                    <StatsChart {...predictionParams} />
-                    <CumStatsChart {...predictionParams} />
+                <div className="flex w-[1800px] pb-10 h-[650px]">
+                    <div className="flex w-[1400px] justify-end h-[650px] pr-24">
+                        <StatsChart {...predictionParams} />
+                        <CumStatsChart {...predictionParams} />
+                    </div>
                     <ElectricityStats {...predictionParams} />
                 </div>
                 <div className="flex m-auto flex-col pt-4">
@@ -96,21 +98,21 @@ export default function Stats() {
                 </div>
             </div>
             <div className="absolute bottom-7 left-7" data-testid="backward-fab">
-                <Tooltip title="comparison chart" arrow>
-                    <Fab variant="circular"  sx={{backgroundColor: "#474747", color: "#878787de"}} component={Link} to={`/solarElecChart?pDate=${pDate}&clientId=${clientId}`}
-                         aria-label="add">
-                        <ArrowBack/>
-                    </Fab>
-                </Tooltip>
+                {/*<Tooltip title="comparison chart" arrow>*/}
+                {/*<Fab variant="circular"  sx={{backgroundColor: "#474747", color: "#878787de"}} component={Link} to={`/solarElecChart?pDate=${pDate}&clientId=${clientId}`}*/}
+                {/*     aria-label="add">*/}
+                {/*    <ArrowBack/>*/}
+                {/*</Fab>*/}
+                {/*</Tooltip>*/}
             </div>
             <div className="absolute bottom-7 right-7" data-testid="forward-fab">
-                <Tooltip title="generation consumption chart" arrow>
-                    <Fab variant="circular" sx={{backgroundColor: "#474747", color: "#878787de"}} component={Link}
-                         to={`/generationConsumChart?pDate=${pDate}&clientId=${clientId}`}
-                         aria-label="add">
-                        <ArrowForward/>
-                    </Fab>
-                </Tooltip>
+                {/*<Tooltip title="generation consumption chart" arrow>*/}
+                {/*    <Fab variant="circular" sx={{backgroundColor: "#474747", color: "#878787de"}} component={Link}*/}
+                {/*         to={`/generationConsumChart?pDate=${pDate}&clientId=${clientId}`}*/}
+                {/*         aria-label="add">*/}
+                {/*        <ArrowForward/>*/}
+                {/*    </Fab>*/}
+                {/*</Tooltip>*/}
             </div>
         </>
     )
@@ -201,6 +203,9 @@ export function getFormattedCost(cost: number) {
         maximumFractionDigits: 0,
     }).format(cost);
 }
+
 export function getBarLabel(text, isValueTiny = false): ReactElement {
-    return <LabelList position={isValueTiny? "middle": "middle"} fill="#fff" className="font-sans font-medium tracking-wide" style={{paddingLeft: "5px", textOverflow: "visible"}}>{text}</LabelList>
+    return <LabelList position={isValueTiny ? "middle" : "middle"} fill="#fff"
+                      className="font-sans font-medium tracking-wide"
+                      style={{paddingLeft: "5px", textOverflow: "visible"}}>{text}</LabelList>
 }
