@@ -139,6 +139,15 @@ export function getConsumptionMonthly(consumptionYearly: number): Array<number> 
     }, []);
 }
 
+export function calcMaxElecCost(params: PredictionParams): number {
+    return calcElectricityCostMonthly(params);
+}
+export function calcMaxSolarFeedInGen(params: PredictionParams): number {
+    const rent = calcRent(params);
+    const feedInTariffMonthly = calcFeedInTariffMonthly(params);
+    return rent - feedInTariffMonthly;
+}
+
 function calcBasePrice({ year, clientParams: { basePrice }, generalParams: { inflationRate, electricityIncreaseRate } }: PredictionParams): number {
     return round(priceIncrease(basePrice, inflationRate + electricityIncreaseRate, year));
 }

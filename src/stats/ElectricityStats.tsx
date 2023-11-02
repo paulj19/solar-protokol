@@ -16,7 +16,7 @@ export function ElectricityStats(params: PredictionParams) {
 
     return (
         <div className="w-[400px] flex flex-col" data-testid="electricity-stats">
-            <div className="pt-36 pb-10">
+            <div className="pt-10 pb-10">
                 <PriceHeading text={`STROM-RECHNUNG ALT : ${totalCost}€`} />
                 <AccordionGroup variant="plain">
                     <Accordion>

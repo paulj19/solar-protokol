@@ -27,6 +27,10 @@ import {
 } from 'recharts';
 import {calcTotalSaved} from "@/utils/ElectricityCostCalculator";
 import CumStatsChart from "@/src/stats/CumStatsChart";
+import AccordionGroup from "@mui/joy/AccordionGroup";
+import Accordion from "@mui/joy/Accordion";
+import AccordionDetails from "@mui/joy/AccordionDetails";
+import AccordionSummary from "@mui/joy/AccordionSummary";
 
 export default function Stats() {
     // const navigate = useNavigate();
@@ -40,7 +44,7 @@ export default function Stats() {
     // }, []);
     const clientId = "43"
     const pDate = "2023-11-09"
-    const [year, setYear] = useState<number>(0);
+    const [year, setYear] = useState<number>(10);
     const {
         data: generalParams,
         isLoading: isGeneralParamLoading,
@@ -71,7 +75,18 @@ export default function Stats() {
                         <StatsChart {...predictionParams} />
                         <CumStatsChart {...predictionParams} />
                     </div>
-                    <ElectricityStats {...predictionParams} />
+                    <div className="pt-32 pb-10">
+                        <AccordionGroup variant="plain">
+                            <Accordion>
+                                <AccordionSummary><span
+                                    className='text-legend'>Rechnung Details</span></AccordionSummary>
+                                {/* <AccordionSummary><span className='text-legend'> PV Rate</span></AccordionSummary> */}
+                                <AccordionDetails>
+                                    <ElectricityStats {...predictionParams} />
+                                </AccordionDetails>
+                            </Accordion>
+                        </AccordionGroup>
+                    </div>
                 </div>
                 <div className="flex m-auto flex-col pt-4">
                     <TotalCostSavings {...predictionParams} />
@@ -89,6 +104,7 @@ export default function Stats() {
                         min={0}
                         max={25}
                         step={1}
+                        defaultValue={year}
                         marks={getSliderMarks()}
                         onChange={(e, value) => setYear(Number(value))}
                         sx={{
@@ -205,7 +221,7 @@ export function getFormattedCost(cost: number) {
 }
 
 export function getBarLabel(text, isValueTiny = false): ReactElement {
-    return <LabelList position={isValueTiny ? "middle" : "middle"} fill="#fff"
-                      className="font-sans font-medium tracking-wide"
-                      style={{paddingLeft: "5px", textOverflow: "visible"}}>{text}</LabelList>
+    return !isValueTiny ? <LabelList position={isValueTiny ? "middle" : "middle"} fill="#fff"
+                                     className="font-sans font-medium tracking-wide"
+                                     style={{paddingLeft: "5px", textOverflow: "visible"}}>{text}</LabelList> : null
 }
