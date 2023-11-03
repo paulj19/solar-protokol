@@ -86,12 +86,12 @@ function SolarCosts({
                 <Cost cost={rent} />
             </div>
             <div className="self-center text-lg">-</div>
-            <div className={styles.costElements}>
+            <div>
                 <div className={styles.costLabel}>{"Einspeisevergütung"}</div>
                 <Cost cost={feedInTariffMonthly} />
             </div>
             <div className="self-center">=</div>
-            <div className={styles.costElements}>
+            <div>
                 <div className={styles.costLabel}>{"Summe"}</div>
                 <Cost cost={rent - feedInTariffMonthly} />
             </div>

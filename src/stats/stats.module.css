@@ -93,4 +93,5 @@
 .costLabel {
     font-size: small;
     padding: 10px;
+    white-space: nowrap;
 }

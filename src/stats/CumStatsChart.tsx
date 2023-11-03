@@ -38,9 +38,9 @@ export default function CumStatsChart(params: PredictionParams) {
                     <Legend wrapperStyle={{bottom: 12}} formatter={value => <span
                         className="text-[#fff] opacity-70 tracking-wide">{value}</span>}/>
                     <defs>
-                        <linearGradient id='stat-solar' gradientTransform="rotate(90)" spreadMethod='reflect'>
-                            <stop offset='20%' stopColor='rgb(var(--color-bar))'/>
-                            <stop offset='90%' stopColor={'rgb(var(--stats-chart-solar))'}/>
+                        <linearGradient id='stat-solar-total' gradientTransform="rotate(90)" spreadMethod='reflect'>
+                            <stop offset='20%' stopColor={"#0d7a34"}/>
+                            <stop offset='90%' stopColor="rgb(var(--stats-chart-solar))"/>
                         </linearGradient>
                         <linearGradient id='stat-elec' gradientTransform="rotate(90)" spreadMethod='reflect'>
                             <stop offset='20%' stopColor="rgb(var(--stats-chart-elecShade))"/>
@@ -51,7 +51,7 @@ export default function CumStatsChart(params: PredictionParams) {
                          label={customLabel} radius={2}>
                         {getBarLabel(`GESAMTKOSTEN BIS ${selectedYear} OHNE SOLAR`, (totalElecCost / elecTotal) < 0.15)}
                     </Bar>
-                    <Bar stackId="a" dataKey="totalSolarCost" name={"MIT ENPAL"} fill={`url(#stat-solar)`}
+                    <Bar dataKey="totalSolarCost" name={"MIT ENPAL"} fill={`url(#stat-solar-total)`}
                          label={customLabel} radius={2}>
                         {getBarLabel(`GESAMTKOSTEN BIS ${selectedYear} MIT SOLAR`, (totalSolarCost / solarTotal) < 0.21)}
                     </Bar>

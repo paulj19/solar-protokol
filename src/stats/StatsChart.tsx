@@ -18,7 +18,7 @@ import {
     LabelList,
     Label, Text
 } from 'recharts';
-import Stats, {getBarLabel, customLabel} from "@/src/stats/Stats";
+import Stats, {getBarLabel, customLabel, getBarLabelCost} from "@/src/stats/Stats";
 import React from "react";
 
 export default function StatsChart(params: PredictionParams) {
@@ -29,11 +29,12 @@ export default function StatsChart(params: PredictionParams) {
     const solarCost = rent - feedInTariffMonthly;
     const maxElecCost = calcMaxElecCost({...params, year: 25});
     const maxSolarFeedIn = calcMaxSolarFeedInGen({...params, year: 25});
+    console.log("totalSolar", totalSolarCost)
     return (
         <div className="min-w-[400px]" data-testid="comparisonStats-chart">
             <ResponsiveContainer>
                 <BarChart
-                    data={[{electricityCost, electricityCostNew, solarCost}]}
+                    data={[{electricityCost, electricityCostNew, solarCost, rent, feedInTariff: feedInTariffMonthly * -1}]}
                     margin={{
                         right: 10,
                         left: 10,
@@ -44,11 +45,11 @@ export default function StatsChart(params: PredictionParams) {
                     {/* <CartesianGrid strokeDasharray="3 3" /> */}
                     {/*//todo fix me*/}
                     {/*<XAxis />*/}
-                    <YAxis ticks={getYAxisTicks(maxElecCost, maxSolarFeedIn, solarCost, params.year)} hide={true}/>
+                    <YAxis ticks={getYAxisTicks(maxElecCost, maxSolarFeedIn)} domain={["dataMin", "dataMax"]} hide={true}/>
                     {/*<YAxis/>*/}
                     {/*<Tooltip/>*/}
                     <Legend wrapperStyle={{bottom: 12}} formatter={value => <span
-                        className="text-[#fff] opacity-70 tracking-wide">{value}</span>}/>
+                        className="text-[#fff] opacity-70 tracking-wide ">{value}</span>}/>
                     <defs>
                         <linearGradient id='stat-solar' gradientTransform="rotate(90)" spreadMethod='reflect'>
                             <stop offset='20%' stopColor='rgb(var(--stats-chart-solar))'/>
@@ -62,21 +63,37 @@ export default function StatsChart(params: PredictionParams) {
                             <stop offset='20%' stopColor="rgb(var(--stats-chart-elecShade))"/>
                             <stop offset='90%' stopColor="rgb(var(--stats-chart-elec))"/>
                         </linearGradient>
+                        <linearGradient id='stat-rent' gradientTransform="rotate(90)" spreadMethod='reflect'>
+                            <stop offset='20%' stopColor={"#0d7a34"}/>
+                            <stop offset='90%' stopColor="rgb(var(--stats-chart-solar))"/>
+                        </linearGradient>
                     </defs>
                     <Bar dataKey="electricityCost" name={"OHNE ENPAL"} fill={`url(#stat-elec)`}
                          label={customLabel} radius={2}>
                         {getBarLabel("STROMRECHNUNG ALT")}
                     </Bar>
-                    <Bar stackId="a" dataKey="electricityCostNew" name={"MIT ENPAL"} fill="#00a115"
+                    <Bar stackId="a" dataKey="electricityCostNew" name={"MIT ENPAL"} fill="#0d7a34"
                          legendType={'none'} radius={2}
                          label={props => solarCost < 0 ? customLabel({...props, value: totalSolarCost}) : null}
                     >
-                        {electricityCostNew ? getBarLabel(`STROMRECHNUNG NEU ${electricityCostNew} €`, (electricityCostNew /(solarCost + electricityCostNew) < 0.12)) : null}
+                        {electricityCostNew ? getBarLabel(`Stromrechnung neu`, (electricityCostNew < 12)) : null}
+                        {electricityCostNew ? getBarLabelCost(`${electricityCostNew} €`) : null}
                     </Bar>
-                    <Bar stackId="a" dataKey="solarCost" name={"MIT ENPAL"}
-                         fill={solarCost >= 0 ? `url(#stat-solar)` : `url(#stat-solar-negative)`}
-                         label={props => props.value > 0 ? customLabel(props) : null} radius={2}>
-                        {solarCost !== 0 ? getBarLabel(`PV-Rate ${solarCost} €`, (solarCost /(solarCost + electricityCostNew) < 0.15)) : null}
+                    <Bar stackId="a" dataKey="rent" name={"MIT ENPAL"}
+                         fill={`url(#stat-rent)`}
+                         legendType='none'
+                         label={props => props.value > 0 ? customLabel({...props, value: totalSolarCost}) : null}
+                        // shape={BarWithBorder(3, "#ff0000")}
+                         radius={2}>
+                        {rent !== 0 ? getBarLabel(`ENPAL MIETE`) : null}
+                        {rent !== 0 ? getBarLabelCost(`${rent} €`) : null}
+                    </Bar>
+                    <Bar stackId="a" dataKey="feedInTariff" name={"MIT ENPAL"}
+                         fill={"#1fa24e"}
+                         label={props => props.value > 0 ? customLabel({...props, value: totalSolarCost}) : null}
+                         radius={2}>
+                        {solarCost !== 0 ? getBarLabel(`Einspeise-\nvergütung`, (solarCost / (solarCost + electricityCostNew) < 0.15)) : null}
+                        {solarCost !== 0 ? getBarLabelCost(`${-1 * feedInTariffMonthly} €`) : null}
                     </Bar>
                 </BarChart>
             </ResponsiveContainer>
@@ -84,12 +101,24 @@ export default function StatsChart(params: PredictionParams) {
     );
 }
 
-function getYAxisTicks(maxElecCost, maxFeedIn, solarCost, year): Array<number> {
+function getYAxisTicks(maxElecCost, maxFeedIn): Array<number> {
     const ticks = []
-    const roundedMaxFeedIn = year === 0 ? Math.round(solarCost / -10) * -10: Math.round(maxFeedIn / -10) * -10;
-    for (let i = solarCost >= 0 ? 0 : roundedMaxFeedIn; (i - 50) <= maxElecCost; i += 50) {
+    // const roundedMaxFeedIn = year === 0 ? Math.round(solarCost / -10) * -10: Math.round(maxFeedIn / -10) * -10;
+    const roundedMaxFeedIn = Math.round(maxFeedIn / -10) * -10;
+    for (let i = roundedMaxFeedIn; (i - 50) <= maxElecCost; i += 50) {
         ticks.push(i);
     }
     return ticks;
 }
 
+const BarWithBorder = (borderHeight, borderColor) => {
+    return (props) => {
+        const { fill, x, y, width, height } = props;
+        return (
+            <g>
+                <rect x={x} y={y} width={width} height={height} stroke="none" fill={fill} />
+                <rect x={x} y={y} width={width} height={borderHeight} stroke="none" fill={borderColor} />
+            </g>
+        );
+    };
+};
