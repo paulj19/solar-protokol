@@ -91,7 +91,9 @@ export default function GenerationConsumChart(): ReactElement {
                                tickMargin={15} dx={-20}/>
                         <YAxis axisLine={false} tick={{fill: '#e3a600'}}
                                tickLine={false} tickMargin={15} ticks={getYAxisTicks(generationConsumParams)}/>
-                        <Tooltip/>
+                        <Tooltip
+                            content={<CustomTooltip />}
+                        />
                         <Legend layout="centric" verticalAlign="top" align="right" iconSize={30}
                                 formatter={(value) => LegendFormatter(value, clientParams.productionYearly, clientParams.consumptionYearly, showConsumption)}/>
                         {/*<Legend layout="horizontal" verticalAlign="top" align="left" iconSize={30} />*/}
@@ -104,7 +106,7 @@ export default function GenerationConsumChart(): ReactElement {
                                 <stop offset='90%' stopColor='#e3a600'/>
                             </linearGradient>
                         </defs>
-                        <Bar dataKey='generation' fill="rgb(var(--color-bar))" barSize={70}
+                        <Bar dataKey='generation' fill={`url(#gen-bar)`} barSize={70}
                              label={renderCustomizedLabel}>
                             {generationConsumParams.map((entry, index) => (
                                 <Cell key="generation-bar" fill={`url(#gen-bar)`}/>
@@ -174,7 +176,7 @@ function LegendFormatter(value, productionYearly, consumptionYearly, showConsump
     const innerSum = "font-sans text-2xl font-bold text-start";
     if (value === "generation") {
         return (
-            <div className={outerDiv}>
+            <div className={outerDiv + " text-[#e37500]"}>
                 <div className={innerTitle}>STROMPRODUKTION</div>
                 <div
                     className={innerSum}>{productionYearly + " KwH PRO JAHR"}</div>
@@ -237,3 +239,17 @@ const theme = createTheme({
         }
     }
 });
+
+const CustomTooltip = ({active, payload, label}) => {
+    if (active && payload && payload.length) {
+        return (
+            <div className="bg-gray-700 p-2 border rounded-sm opacity-95 text-gray-300">
+                <div className="text-xl font-medium">{`Im ${label}`}</div>
+                <div className="text-xl font-medium">{`STROMPRODUKTION: ${payload[0].value} KwH`}</div>
+            </div>
+        );
+    }
+
+    return null;
+};
+
