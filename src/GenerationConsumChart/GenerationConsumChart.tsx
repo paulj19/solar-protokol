@@ -179,14 +179,14 @@ function LegendFormatter(value, productionYearly, consumptionYearly, showConsump
             <div className={outerDiv + " text-[#e37500]"}>
                 <div className={innerTitle}>STROMPRODUKTION</div>
                 <div
-                    className={innerSum}>{productionYearly + " KwH PRO JAHR"}</div>
+                    className={innerSum}>{productionYearly + " kWh PRO JAHR"}</div>
             </div>)
     } else if (value === "consumption" && showConsumption) {
         return (
             <div className={outerDiv + " pt-3"}>
                 <div className={innerTitle}>STROMVERBRAUCH</div>
                 <div
-                    className={innerSum}>{consumptionYearly + " KwH PRO JAHR"}</div>
+                    className={innerSum}>{consumptionYearly + " kWh PRO JAHR"}</div>
             </div>)
     }
 }

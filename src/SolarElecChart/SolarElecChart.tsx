@@ -40,10 +40,11 @@ enum STATE {
     ELEC_BAR,
     ELEC_LINE,
     SOLAR_LINE,
+    SOLAR_TEXT,
     AREA
 }
 
-const STATES = [[STATE.ELEC_BAR], [STATE.ELEC_BAR, STATE.ELEC_LINE], [STATE.ELEC_LINE], [STATE.ELEC_LINE, STATE.SOLAR_LINE], [STATE.ELEC_LINE, STATE.SOLAR_LINE, STATE.AREA]]
+const STATES = [[STATE.ELEC_BAR], [STATE.ELEC_BAR, STATE.ELEC_LINE], [STATE.ELEC_LINE], [STATE.ELEC_LINE, STATE.SOLAR_LINE],[STATE.ELEC_LINE, STATE.SOLAR_LINE, STATE.SOLAR_TEXT], [STATE.ELEC_LINE, STATE.SOLAR_LINE, STATE.AREA, STATE.SOLAR_TEXT]]
 
 export default function SolarElecChart() {
     const {setTheme} = useTheme();
@@ -113,7 +114,7 @@ export default function SolarElecChart() {
         }
         return acc.concat(item);
     }, []);
-    const {totalElecCost, totalSolarCost} = calcTotalSaved({year: 25, clientParams, generalParams});
+    const {totalElecCost, totalSolarCost} = calcTotalSaved({year: 25, clientParams, generalParams: {...generalParams, inflationRate, elecIncreaseRate}});
 
     function stateHasSolarLine() {
         return STATES[settings.currentState]?.includes(STATE.SOLAR_LINE);
@@ -125,8 +126,8 @@ export default function SolarElecChart() {
                 <>
                     <h1 className="font-bold text-3xl font-sans text-gray-300 ml-[14%] pb-2">IHRE MONATLICHE
                         STROMRECHNUNG IN DER ZUKUNFT</h1>
-                    <div className="flex gap-8 pt-4 min-h-[750px] w-full h-full">
-                        <ResponsiveContainer className="max-w-[70%]">
+                    <div className="flex gap-1 pt-4 min-h-[750px] w-full h-full">
+                        <ResponsiveContainer className="max-w-[80%]">
                             <ComposedChart
                                 data={comparisonDataWithRange}
                                 margin={{
@@ -211,17 +212,18 @@ export default function SolarElecChart() {
                             </ComposedChart>
                         </ResponsiveContainer>
                         {settings.currentState !== 0 ? <div
-                            className="text-gray-300 text-font-medium text-sm pt-2 tracking-wide gap-4 flex flex-col w-[30%]">
+                            className="text-gray-300 text-font-medium text-sm pt-2 tracking-wide gap-4 flex flex-col w-[20%]">
                             <h2 className="text-2xl font-bold">IHRE STROMKOSTEN IN DEN NÄCHSTEN 25 JAHREN</h2>
                             <p className="text-3xl text-red-600 font-bold">{'OHNE SOLAR'}{<p
                                 className="text-5xl text-red-600 font-bold">{formatEuroCurrency(totalElecCost)}</p>}</p>
-                            {stateHasSolarLine() ?
+                            {stateHasSolarLine() && STATES[settings.currentState]?.includes(STATE.SOLAR_TEXT) ?
                                 <>
+                                    {
                                     <p className="text-3xl text-green-600 font-bold leading-6 pt-8">{'MIT SOLAR'}
                                         {<p className="text-5xl font-bold">{formatEuroCurrency(totalSolarCost)}</p>}
-                                    </p>
-                                    {(totalElecCost - totalSolarCost) > 0 ?
-                                        <p className="text-3xl font-bold text-[rgb(var(--color-bar))] leading-6 pt-8">{'ERSPARNIS'}
+                                    </p>}
+                                    {(totalElecCost - totalSolarCost) > 0 && STATES[settings.currentState]?.includes(STATE.AREA)  ?
+                                        <p className="text-3xl font-bold text-green-600 leading-6 pt-8">{'ERSPARNIS'}
                                             {
                                                 <p className="text-5xl ">{formatEuroCurrency(totalElecCost - totalSolarCost)}</p>}
                                         </p> : null}
@@ -500,7 +502,7 @@ const CustomTooltip = ({active, payload, label, currentYear}) => {
         return (
             <div className="bg-gray-700 p-2 border rounded-sm opacity-95 text-[rgb(var(--color-bar))]">
                 <div className="text-xl font-medium">{`JAHR ${label + currentYear}`}</div>
-                <div className="text-xl font-medium">{`MONATL.ABSCHLAG ${payload[0].value} €`}</div>
+                <div className="text-xl font-medium">{`MONATL.KOSTEN ${payload[0].value} €`}</div>
             </div>
         );
     }

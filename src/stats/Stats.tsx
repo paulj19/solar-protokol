@@ -75,11 +75,12 @@ export default function Stats() {
                         <StatsChart {...predictionParams} />
                         <CumStatsChart {...predictionParams} />
                     </div>
-                    <div className="pt-32 pb-10">
+                    <div className="flex flex-col">
+                    <div className="pt-14 pb-10">
                         <AccordionGroup variant="plain">
                             <Accordion>
                                 <AccordionSummary><span
-                                    className='text-legend'>Rechnung Details</span></AccordionSummary>
+                                  className='text-legend'>Rechnung Details</span></AccordionSummary>
                                 {/* <AccordionSummary><span className='text-legend'> PV Rate</span></AccordionSummary> */}
                                 <AccordionDetails>
                                     <ElectricityStats {...predictionParams} />
@@ -87,9 +88,10 @@ export default function Stats() {
                             </Accordion>
                         </AccordionGroup>
                     </div>
-                </div>
-                <div className="flex m-auto flex-col pt-4">
+                <div className="flex m-auto flex-col pt-24">
                     <TotalCostSavings {...predictionParams} />
+                </div>
+                    </div>
                 </div>
             </div>
             {/*<Slider ticks={[0, 5, 10, 15, 20, 25]} onChangeHandler={setYear} defaultValue={year} label={""}*/}
@@ -122,7 +124,7 @@ export default function Stats() {
                 </Tooltip>
             </div>
             <div className="absolute bottom-7 right-7" data-testid="forward-fab">
-                <Tooltip title="generation consumption chart" arrow>
+                <Tooltip title="generation consumption chart" arrow> 
                     <Fab variant="circular" sx={{backgroundColor: "#474747", color: "#878787de"}} component={Link}
                          to={`/generationConsumChart?pDate=${pDate}&clientId=${clientId}`}
                          aria-label="add">
@@ -222,7 +224,7 @@ export function getFormattedCost(cost: number) {
 
 export function getBarLabel(text, isValueTiny = false): ReactElement {
     return !isValueTiny ? <LabelList position={"middle"} fill={"rgb(243 244 246)"}
-                                     className="font-sans font-medium tracking-wide"
+                                     className="font-sans font-medium tracking-wide whitespace-pre-line"
                                      style={{paddingLeft: "5px", textOverflow: "visible"}}>{text}</LabelList> : null
 }
 export function getBarLabelCost(text): ReactElement {

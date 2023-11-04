@@ -34,7 +34,7 @@ export default function StatsChart(params: PredictionParams) {
         <div className="min-w-[400px]" data-testid="comparisonStats-chart">
             <ResponsiveContainer>
                 <BarChart
-                    data={[{electricityCost, electricityCostNew, solarCost, rent, feedInTariff: feedInTariffMonthly * -1}]}
+                    data={[{electricityCost, electricityCostNew, solarCost, rent}]}
                     margin={{
                         right: 10,
                         left: 10,
@@ -45,7 +45,7 @@ export default function StatsChart(params: PredictionParams) {
                     {/* <CartesianGrid strokeDasharray="3 3" /> */}
                     {/*//todo fix me*/}
                     {/*<XAxis />*/}
-                    <YAxis ticks={getYAxisTicks(maxElecCost, maxSolarFeedIn)} domain={["dataMin", "dataMax"]} hide={true}/>
+                    <YAxis ticks={getYAxisTicks(maxElecCost, maxSolarFeedIn)} domain={["dataMin", "dataMax"]} hide={true} />
                     {/*<YAxis/>*/}
                     {/*<Tooltip/>*/}
                     <Legend wrapperStyle={{bottom: 12}} formatter={value => <span
@@ -76,24 +76,20 @@ export default function StatsChart(params: PredictionParams) {
                          legendType={'none'} radius={2}
                          label={props => solarCost < 0 ? customLabel({...props, value: totalSolarCost}) : null}
                     >
-                        {electricityCostNew ? getBarLabel(`Stromrechnung neu`, (electricityCostNew < 12)) : null}
+                        {electricityCostNew ? getBarLabel(`STROMRECHNUNG NEU`, (electricityCostNew < 12)) : null}
                         {electricityCostNew ? getBarLabelCost(`${electricityCostNew} €`) : null}
                     </Bar>
-                    <Bar stackId="a" dataKey="rent" name={"MIT ENPAL"}
-                         fill={`url(#stat-rent)`}
-                         legendType='none'
-                         label={props => props.value > 0 ? customLabel({...props, value: totalSolarCost}) : null}
-                        // shape={BarWithBorder(3, "#ff0000")}
-                         radius={2}>
-                        {rent !== 0 ? getBarLabel(`ENPAL MIETE`) : null}
-                        {rent !== 0 ? getBarLabelCost(`${rent} €`) : null}
-                    </Bar>
-                    <Bar stackId="a" dataKey="feedInTariff" name={"MIT ENPAL"}
+                    <Bar stackId="a" dataKey="solarCost" name={"MIT ENPAL"}
                          fill={"#1fa24e"}
                          label={props => props.value > 0 ? customLabel({...props, value: totalSolarCost}) : null}
                          radius={2}>
-                        {solarCost !== 0 ? getBarLabel(`Einspeise-\nvergütung`, (solarCost / (solarCost + electricityCostNew) < 0.15)) : null}
-                        {solarCost !== 0 ? getBarLabelCost(`${-1 * feedInTariffMonthly} €`) : null}
+    <LabelList position={"insideTop"} fill={"rgb(243 244 246)"}
+                                     className="font-sans font-medium tracking-wide whitespace-pre-line"
+                                     style={{paddingLeft: "5px", textOverflow: "visible", whiteSpace: "pre-line"}}>{`ENPAL\n MONATL. RATE ${rent} €`}</LabelList>
+    <LabelList position={solarCost > 0 ? "center": "insideBottom"} fill={"rgb(243 244 246)"}
+                                     className="font-sans font-medium tracking-wide whitespace-pre-line"
+                                     style={{paddingLeft: "5px", textOverflow: "visible", whiteSpace: "pre-line"}}>{`EINSPEISE-\nVERGÜTUNG${-1 * feedInTariffMonthly} €`}</LabelList>
+                        {solarCost !== 0 ? getBarLabelCost(`${solarCost} €`) : null}
                     </Bar>
                 </BarChart>
             </ResponsiveContainer>
@@ -105,7 +101,7 @@ function getYAxisTicks(maxElecCost, maxFeedIn): Array<number> {
     const ticks = []
     // const roundedMaxFeedIn = year === 0 ? Math.round(solarCost / -10) * -10: Math.round(maxFeedIn / -10) * -10;
     const roundedMaxFeedIn = Math.round(maxFeedIn / -10) * -10;
-    for (let i = roundedMaxFeedIn; (i - 50) <= maxElecCost; i += 50) {
+    for (let i = 0; (i - 50) <= maxElecCost; i += 50) {
         ticks.push(i);
     }
     return ticks;
@@ -122,3 +118,11 @@ const BarWithBorder = (borderHeight, borderColor) => {
         );
     };
 };
+
+                    // <Bar stackId="a" dataKey="rent" name={"MIT ENPAL"}
+                    //      fill={`url(#stat-rent)`}
+                    //      legendType='none'
+                    //      label={props => props.value > 0 ? customLabel({...props, value: totalSolarCost}) : null}
+                    //     // shape={BarWithBorder(3, "#ff0000")}
+                    //      radius={2}>
+                    // </Bar>
