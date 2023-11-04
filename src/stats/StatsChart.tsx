@@ -76,7 +76,7 @@ export default function StatsChart(params: PredictionParams) {
                          legendType={'none'} radius={2}
                          label={props => solarCost < 0 ? customLabel({...props, value: totalSolarCost}) : null}
                     >
-                        {electricityCostNew ? getBarLabel(`STROMRECHNUNG NEU`, (electricityCostNew < 12)) : null}
+                        {electricityCostNew ? getBarLabel(`STROMRECH. NEU`) : null}
                         {electricityCostNew ? getBarLabelCost(`${electricityCostNew} €`) : null}
                     </Bar>
                     <Bar stackId="a" dataKey="solarCost" name={"MIT ENPAL"}
@@ -85,10 +85,10 @@ export default function StatsChart(params: PredictionParams) {
                          radius={2}>
     <LabelList position={"insideTop"} fill={"rgb(243 244 246)"}
                                      className="font-sans font-medium tracking-wide whitespace-pre-line"
-                                     style={{paddingLeft: "5px", textOverflow: "visible", whiteSpace: "pre-line"}}>{`ENPAL\n MONATL. RATE ${rent} €`}</LabelList>
+                                     style={{paddingLeft: "5px", textOverflow: "visible", whiteSpace: "pre-line"}}>{solarCost > 0 ? `ENPAL\n MONATL. RATE ${rent} €`:  `RATE ${rent} €`}</LabelList>
     <LabelList position={solarCost > 0 ? "center": "insideBottom"} fill={"rgb(243 244 246)"}
                                      className="font-sans font-medium tracking-wide whitespace-pre-line"
-                                     style={{paddingLeft: "5px", textOverflow: "visible", whiteSpace: "pre-line"}}>{`EINSPEISE-\nVERGÜTUNG${-1 * feedInTariffMonthly} €`}</LabelList>
+                                     style={{paddingLeft: "5px", textOverflow: "visible", whiteSpace: "pre-line"}}>{solarCost > 0 ? `EINSPEISE-\nVERGÜTUNG${-1 * feedInTariffMonthly} €` : `EV${-1 * feedInTariffMonthly}€` }</LabelList>
                         {solarCost !== 0 ? getBarLabelCost(`${solarCost} €`) : null}
                     </Bar>
                 </BarChart>
