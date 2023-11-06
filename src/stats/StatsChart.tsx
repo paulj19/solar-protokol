@@ -29,7 +29,6 @@ export default function StatsChart(params: PredictionParams) {
     const solarCost = rent - feedInTariffMonthly;
     const maxElecCost = calcMaxElecCost({...params, year: 25});
     const maxSolarFeedIn = calcMaxSolarFeedInGen({...params, year: 25});
-    console.log("totalSolar", totalSolarCost)
     return (
         <div className="min-w-[400px]" data-testid="comparisonStats-chart">
             <ResponsiveContainer>

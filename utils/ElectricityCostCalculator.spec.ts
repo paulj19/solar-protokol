@@ -121,7 +121,6 @@ describe("ElectricityCostCalculator", () => {
             const {solarCost} = calcSolarCostMonthly({...params, year: i});
             solarCost_.push(solarCost);
         }
-        console.log("YYY", solarCost_)
         expect(solarCost_).toEqual(expectedSolarCost);
     });
 
@@ -156,7 +155,6 @@ describe("ElectricityCostCalculator", () => {
             { year: 25, electricityCost: 276, solarCost: 2 }
         ]
         const resultFeedInTariff = calcPredictions(params);
-        console.log("XXX", resultFeedInTariff)
         expect(resultFeedInTariff).toEqual(expectedFeedInTarrif);
     });
 
@@ -166,7 +164,6 @@ describe("ElectricityCostCalculator", () => {
         const expectedElecTotalSaved = 1236;
         const expectedSolarTotalSaved = 1224;
         const {totalSaved, totalElecCost, totalSolarCost} = calcTotalSaved(params);
-        console.log("ZZZ", totalSaved, totalElecCost, totalSolarCost)
         expect(totalSaved).toEqual(expectedTotalSaved);
         expect(totalElecCost).toEqual(expectedElecTotalSaved);
         expect(totalSolarCost).toEqual(expectedSolarTotalSaved);
@@ -178,7 +175,6 @@ describe("ElectricityCostCalculator", () => {
         const expectedElecTotalSaved = 54972;
         const expectedSolarTotalSaved = 30432;
         const {totalSaved, totalElecCost, totalSolarCost} = calcTotalSaved(params);
-        console.log("ZZZ", totalSaved, totalElecCost, totalSolarCost)
         expect(totalSaved).toEqual(expectedTotalSaved);
         expect(totalElecCost).toEqual(expectedElecTotalSaved);
         expect(totalSolarCost).toEqual(expectedSolarTotalSaved);

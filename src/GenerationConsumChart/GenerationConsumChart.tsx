@@ -155,7 +155,6 @@ export default function GenerationConsumChart(): ReactElement {
 
 function XXX(props) {
     const {payload} = props
-    console.log(payload)
     return (
         <div className="flex flex-row gap-2 align-middle">
             {payload.map(item => {
