@@ -21,7 +21,7 @@ export function EditGeneralParams({setOpenModal}) {
     }
     const onSubmit = async (data) => {
         try {
-            if (!data.feedInPrice || !data.rent || !data.inflationRate || !data.electricityIncreaseRate || !data.rentDiscountAmount || !data.rentDiscountPeriod || !data.yearLimit) {
+            if (!data.feedInPrice || !data.rent || !data.inflationRate || !data.electricityIncreaseRate || !data.yearLimit) {
                 setSnackData({open: true, severity: "error", message: ERROR_TEXT});
                 return;
             }
@@ -43,8 +43,8 @@ export function EditGeneralParams({setOpenModal}) {
             setSnackData({open: true, severity: "success", message: "Einstellungen gespeichert!"});
             setTimeout(() => setOpenModal(false), CLOSE_MODAL_DELAY);
         } catch (e) {
-            setSnackData({open: true, severity: "error", message: ERROR_TEXT});
             console.error("error on edit general params", e);
+            setSnackData({open: true, severity: "error", message: ERROR_TEXT});
         }
     };
 
