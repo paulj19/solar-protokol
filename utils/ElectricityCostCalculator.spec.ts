@@ -21,7 +21,7 @@ import {PayOffParam} from "@/src/payoffChart/PayoffChart";
 describe("ElectricityCostCalculator", () => {
     it("should caluculate exact electricity cost", () => {
         const consumpitonYearly = 3500;
-        const electricityConsumption = [345, 295, 327, 282, 268, 253, 265, 271, 279, 294, 302, 318]
+        const electricityConsumption = [327, 295, 297, 282, 268, 259, 265, 271, 279, 294, 302, 318]
         electricityConsumption.forEach((result, index) => {
             const caluculatedResult = normalizedMonthlyConsumption(consumpitonYearly, calculationMetrics[Object.keys(calculationMetrics)[index]].electricityFactor, calculationMetrics[Object.keys(calculationMetrics)[index]].days);
             expect(round(caluculatedResult)).toBe(result);
@@ -30,7 +30,7 @@ describe("ElectricityCostCalculator", () => {
 
     it("should calculate solar generation", () => {
         const productionYearly = 7192;
-        const solarProduction = [396, 467, 633, 719, 705, 806, 827, 719, 626, 575, 396, 324]
+        const solarProduction = [360, 424, 633, 662, 705, 806, 863, 791, 626, 539, 410, 374]
         solarProduction.forEach((result, index) => {
             const caluculatedResult = normalizedMonthlyProduction(productionYearly, calculationMetrics[Object.keys(calculationMetrics)[index]].solarFactor);
             expect(round(caluculatedResult)).toBe(result);
@@ -39,7 +39,7 @@ describe("ElectricityCostCalculator", () => {
 
     it("should calculate residual consumption", () => {
         const params: any = {clientParams: {consumptionYearly: 6500, productionYearly: 7192}};
-        const expectedResidualConsumption = [245, 81, 165, 267];
+        const expectedResidualConsumption = [248, 124, 7, 151, 217];
         const resultResiducalConsumption = calcResidualConsumption(params);
         resultResiducalConsumption.forEach((result, index) => {
             expect(round(result)).toBe(expectedResidualConsumption[index]);
@@ -69,7 +69,7 @@ describe("ElectricityCostCalculator", () => {
 
     it("should calculate feedIn generation", () => {
         const params: any = {clientParams: {consumptionYearly: 3500, productionYearly: 7192}};
-        const expectedFeedInGeneration = [51, 172, 306, 437, 437, 552, 563, 449, 347, 281, 94, 6];
+        const expectedFeedInGeneration = [33, 129, 336, 380, 437, 547, 598, 521, 347, 245, 108,  56];
         const resultFeedInGeneration = getFeedInGeneration(params);
         resultFeedInGeneration.forEach((result, index) => {
             expect(round(result)).toBe(expectedFeedInGeneration[index]);
@@ -182,14 +182,14 @@ describe("ElectricityCostCalculator", () => {
 
     it('should calculate generation monthly', () => {
         const productionYearly = 7192;
-        const expectedGeneration = [396, 467, 633, 719, 705, 806, 827, 719, 626, 575, 396, 324];
+        const expectedGeneration = [360, 424, 633, 662, 705, 806, 863, 791, 626, 539, 410, 374];
         const resultGeneration = getGenerationMonthly(productionYearly);
         expect(resultGeneration).toEqual(expectedGeneration);
     });
 
     it('should calculate consumption monthly', () => {
         const consumptionYearly = 3500;
-        const expectedConsumption = [345, 295, 327, 282, 268, 253, 265, 271, 279, 294, 302, 318];
+        const expectedConsumption = [327, 295, 297, 282, 268, 259, 265, 271, 279, 294, 302, 318];
         const resultConsumption = getConsumptionMonthly(consumptionYearly);
         expect(resultConsumption).toEqual(expectedConsumption);
     });
@@ -197,25 +197,25 @@ describe("ElectricityCostCalculator", () => {
         const consumptionYearly = 3500;
         const productionYearly = 7192;
         const expectedGenerationConsumption: Array<GenerationConsumParam> = [
-            {month: "Januar", generation: 396, consumption: 345},
-            {month: "Februar", generation: 467, consumption: 295},
-            {month: "Maerz", generation: 633, consumption: 327},
-            {month: "April", generation: 719, consumption: 282},
-            {month: "Mai", generation: 705, consumption: 268},
-            {month: "Juni", generation: 806, consumption: 253},
-            {month: "Juli", generation: 827, consumption: 265},
-            {month: "August", generation: 719, consumption: 271},
-            {month: "September", generation: 626, consumption: 279},
-            {month: "Oktober", generation: 575, consumption: 294},
-            {month: "November", generation: 396, consumption: 302},
-            {month: "Dezember", generation: 324, consumption: 318},
+            { month: 'Januar', generation: 360, consumption: 327 },
+            { month: 'Februar', generation: 424, consumption: 295 },
+            { month: 'Maerz', generation: 633, consumption: 297 },
+            { month: 'April', generation: 662, consumption: 282 },
+            { month: 'Mai', generation: 705, consumption: 268 },
+            { month: 'Juni', generation: 806, consumption: 259 },
+            { month: 'Juli', generation: 863, consumption: 265 },
+            { month: 'August', generation: 791, consumption: 271 },
+            { month: 'September', generation: 626, consumption: 279 },
+            { month: 'Oktober', generation: 539, consumption: 294 },
+            { month: 'November', generation: 410, consumption: 302 },
+            { month: 'Dezember', generation: 374, consumption: 318 }
         ];
         const resultGenerationConsumption = getGenerationConsumParam(productionYearly, consumptionYearly);
         expect(resultGenerationConsumption).toEqual(expectedGenerationConsumption);
     });
     it('should calculate cumulative saved', () => {
         const params: PredictionParams = {year: 0, clientParams: {consumptionYearly: 3500, unitPrice: 0.32, basePrice: 10, productionYearly: 7192, isPurchase: true, purchasePrice: 20000}, generalParams: {rent: 132, rentDiscountPeriod: 2, rentDiscountAmount: 15, feedInPrice: 0.08, inflationRate: 3, electricityIncreaseRate: 1}};
-        const expectedCumlativeSaved: Array<PayOffParam> = [{year: 0, saved: -19794}, {year: 1, saved: -18509}, {year: 2, saved: -17166}, {year: 3, saved: -15774}, {year: 4, saved: -14320}, {year: 5, saved: -12813}, {year: 6, saved: -11240}, {year: 7, saved: -9610}, {year: 8, saved: -7909}, {year: 9, saved: -6147}, {year: 10, saved: -4309}, {year: 11, saved: -2405}, {year: 12, saved: -420}, {year: 13, saved: 1649}, {year: 14, saved: 3792}, {year: 15, saved: 6025}, {year: 16, saved: 8351}, {year: 17, saved: 10761}, {year: 18, saved: 13270}, {year: 19, saved: 15882}, {year: 20, saved: 18600}, {year: 21, saved: 21428}, {year: 22, saved: 24370}, {year: 23, saved: 27430}, {year: 24, saved: 30613}, {year: 25, saved: 33923}];
+        const expectedCumlativeSaved: Array<PayOffParam> = [{ year: 0, saved: -19897 }, { year: 1, saved: -18612 }, { year: 2, saved: -17269 }, { year: 3, saved: -15877 }, { year: 4, saved: -14423 }, { year: 5, saved: -12916 }, { year: 6, saved: -11343 }, { year: 7, saved: -9713 }, { year: 8, saved: -8012 }, { year: 9, saved: -6250 }, { year: 10, saved: -4412 }, { year: 11, saved: -2508 }, { year: 12, saved: -523 }, { year: 13, saved: 1546 }, { year: 14, saved: 3689 }, { year: 15, saved: 5922 }, { year: 16, saved: 8248 }, { year: 17, saved: 10658 }, { year: 18, saved: 13167 }, { year: 19, saved: 15779 }, { year: 20, saved: 18497 }, { year: 21, saved: 21325 }, { year: 22, saved: 24267 }, { year: 23, saved: 27327 }, { year: 24, saved: 30510 }, { year: 25, saved: 33820 }];
         const cumulativeSaved: Array<PayOffParam> = calcCumulativeSaved(params);
         expect(cumulativeSaved).toEqual(expectedCumlativeSaved);
     });

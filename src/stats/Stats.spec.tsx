@@ -7,7 +7,9 @@ describe('Stats', () => {
     it('should render Stats', () => {
         renderWithWrappers(<Stats/>)
         expect(screen.getByTestId('electricity-stats')).toBeInTheDocument();
-        expect(screen.getByTestId('comparisonStats-chart')).toBeInTheDocument();
-        expect(screen.getByTestId('solar-stats')).toBeInTheDocument();
+        expect(screen.getByTestId('stats-chart')).toBeInTheDocument();
+        expect(screen.getByTestId('stats-chart')).toBeInTheDocument();
+        expect(screen.getByTestId('cum-chart')).toBeInTheDocument();
+        expect(screen.getByTestId('electricity-stats')).toBeInTheDocument();
     });
 });

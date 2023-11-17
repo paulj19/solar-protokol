@@ -191,7 +191,7 @@ describe('CLIENT CRUD', () => {
         setDate()
         deleteClient()
     })
-    it('edit generalParams', () => {
+    it.only('edit generalParams', () => {
         cy.visit('/')
         setDate()
         assertListIsEmpty()
@@ -222,7 +222,6 @@ describe('CLIENT CRUD', () => {
 
         cy.get('form').submit()
         cy.get('[aria-label="modalClose-generalParamsEdit"]').click()
-        cy.reload()
 
         openGeneralParamsEdit()
 

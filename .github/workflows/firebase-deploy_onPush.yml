@@ -3,15 +3,15 @@ on:
   push:
     branches:
       - xxx
-  # workflow_run:
-  #   workflows:
-  #     - unit and e2e tests
-  #   types:
-  #     - completed
+  workflow_run:
+     workflows:
+       - unit and e2e tests
+     types:
+       - completed
 jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
-    # if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
       - uses: actions/checkout@v3
       - run: npm ci && npm run build

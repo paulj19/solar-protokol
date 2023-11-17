@@ -30,7 +30,7 @@ export default function StatsChart(params: PredictionParams) {
     const maxElecCost = calcMaxElecCost({...params, year: 25});
     const maxSolarFeedIn = calcMaxSolarFeedInGen({...params, year: 25});
     return (
-        <div className="min-w-[400px]" data-testid="comparisonStats-chart">
+        <div className="min-w-[400px]" data-testid="stats-chart">
             <ResponsiveContainer>
                 <BarChart
                     data={[{electricityCost, electricityCostNew, solarCost, rent}]}

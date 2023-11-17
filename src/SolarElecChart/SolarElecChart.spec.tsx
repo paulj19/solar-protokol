@@ -7,7 +7,7 @@ describe('SolarElecChart', () => {
     it('should render SolarElecChart', () => {
         renderWithWrappers(<SolarElecChart/>)
         expect(screen.getByTestId('solar-elec-chart')).toBeInTheDocument();
-        expect(screen.getByTestId('solar-toggle')).toBeInTheDocument();
+        expect(screen.getByLabelText('state-stepper')).toBeInTheDocument();
         expect(screen.getByTestId('settings')).toBeInTheDocument();
         expect(screen.getByTestId('forward-fab')).toBeInTheDocument();
     });

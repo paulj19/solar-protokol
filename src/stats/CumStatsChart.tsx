@@ -21,7 +21,7 @@ export default function CumStatsChart(params: PredictionParams) {
     const { totalElecCost: elecTotal, totalSolarCost: solarTotal} = calcTotalSaved({...params, year: 25});
     const selectedYear = params.year + new Date().getFullYear();
     return (
-        <div className="min-w-[400px]" data-testid="comparisonStats-chart">
+        <div className="min-w-[400px]" data-testid="cum-chart">
             <ResponsiveContainer>
                 <BarChart
                     data={[{totalElecCost, totalSolarCost}]}
