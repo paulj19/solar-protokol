@@ -158,7 +158,6 @@ function XXX(props) {
     return (
         <div className="flex flex-row gap-2 align-middle">
             {payload.map(item => {
-                console.log(item)
                 return (<><Surface width={10} height={10}>
                         <Symbols cx={5} cy={5} type="" size={190}/>
                     </Surface>

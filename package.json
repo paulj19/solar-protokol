@@ -32,7 +32,9 @@
     "eslint": "8.46.0",
     "eslint-config-next": "13.4.12",
     "firebase-tools": "^11.19.0",
+    "fuse.js": "^7.0.0",
     "lodash": "^4.17.21",
+    "material-ui-search-bar": "^1.0.1",
     "msw": "^1.2.3",
     "next": "13.4.12",
     "next-themes": "^0.2.1",
@@ -47,6 +49,7 @@
     "resize-observer-polyfill": "^1.5.1",
     "styled-components": "^5.3.11",
     "typescript": "5.1.6",
+    "usehooks-ts": "^2.9.1",
     "yup": "^1.2.0"
   },
   "devDependencies": {

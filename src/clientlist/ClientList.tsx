@@ -1,6 +1,6 @@
 import {useDeleteClientMutation, useGetClientListByPDateQuery} from "../context/RootApi";
 import {ClientRow} from "./ClientRow";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {DateChooser} from "../components/DateChooser";
 import Modal from "@mui/joy/Modal";
 import {CreateClient} from "@/src/components/CreateClient";
@@ -13,16 +13,35 @@ import {format, startOfToday} from "date-fns";
 import {Client} from "@/types/types";
 import {Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle} from "@material-ui/core";
 import {Alert, Snackbar} from "@mui/material";
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import SearchIcon from '@mui/icons-material/Search';
+import {useToggle} from "usehooks-ts";
+import SearchBar from "material-ui-search-bar";
+import Fuse, {FuseResult} from 'fuse.js'
 
 export default function ClientList() {
-    const [modalParams, setModalParams] = useState<{ openModal: boolean, clientIdToEdit: string }>({openModal: false, clientIdToEdit: null});
+    const [searchView, toggleSearchView] = useToggle();
+    const [modalParams, setModalParams] = useState<{ openModal: boolean, clientIdToEdit: string }>({
+        openModal: false,
+        clientIdToEdit: null
+    });
     const [selectedDate, setSelectedDate] = useState<string>(format(startOfToday(), 'yyyy-MM-dd'))
     const [deleteData, setDeleteData] = useState({openDeleteDialog: false, pDate: null, clientId: null});
     const [snackData, setSnackData] = useState({open: false, severity: null, message: null});
-    const {data: clientList, isLoading: isClientListLoading, isError: isClientListError} = useGetClientListByPDateQuery({startDate: selectedDate, endDate: selectedDate});
+    let {
+        data: clientList,
+        isLoading: isClientListLoading,
+        isFetching: isClientListFetching,
+        isError: isClientListError
+    } = useGetClientListByPDateQuery(searchView ? {} : {startDate: selectedDate, endDate: selectedDate});
     const [deleteClient] = useDeleteClientMutation();
+    const [filteredList, setFilteredList] = useState(null);
 
-    if (isClientListLoading) {
+    if (searchView && !filteredList && !isClientListFetching) {
+        setFilteredList(clientList);
+    }
+
+    if (isClientListLoading || (isClientListFetching && searchView)) {
         return <Loading/>;
     }
     if (isClientListError) {
@@ -32,6 +51,7 @@ export default function ClientList() {
     function onDeleteClientClose() {
         setDeleteData({openDeleteDialog: false, pDate: null, clientId: null});
     }
+
     const handleSnackClose = () => {
         setSnackData({open: false, severity: null, message: null});
     };
@@ -51,11 +71,66 @@ export default function ClientList() {
         onDeleteClientClose();
     }
 
+    const fuse = new Fuse(clientList, {
+        // isCaseSensitive: false,
+        includeScore: true,
+        shouldSort: true,
+        includeMatches: true,
+        // findAllMatches: false,
+        // minMatchCharLength: 3,
+        // location: 0,
+        threshold: 0.4,
+        // distance: 100,
+        // useExtendedSearch: false,
+        // ignoreLocation: false,
+        // ignoreFieldNorm: false,
+        // fieldNormWeight: 1,
+        keys: [
+            "nickname",
+        ]
+    })
+
+    function getSearchResult(query): Array<any> {
+        return fuse.search(query)?.map((result: FuseResult<any>) => ({
+            ...result.item,
+            nickname: Array.from(result.item.nickname).map((c, i) =>
+            {
+                for (let j = 0; j < result.matches[0].indices.length; j++) {
+                    if (i >= result.matches[0].indices[j][0] && i <= result.matches[0].indices[j][1]) {
+                        return `<span class="bg-yellow-300">${c}</span>`;
+                    }
+                }
+                return c;
+            }).join('')
+        }))
+    }
+
+    const currentList = searchView ? filteredList : clientList;
+
     return (
         <div className="flex flex-col items-center justify-around w-full">
-            <DateChooser selectedDate={selectedDate} setSelectedDate={setSelectedDate}/>
+            <span>
+                {searchView ? <SearchBar style={{display: "inline-flex", width: "260px", height: "38px", borderTopRightRadius: "0px", borderBottomRightRadius: "0px"}}
+                                         data-testid="searchbar"
+                                         onChange={(query) => {
+                                             if (query === "")  {
+                                                 setFilteredList(clientList);
+                                                 return;
+                                             }
+                                             setFilteredList(getSearchResult(query));
+                                         }}
+                                         placeholder="Name Suchen"/> :
+                    <DateChooser selectedDate={selectedDate} setSelectedDate={setSelectedDate}/>}
+                <Button startIcon={searchView ? <CalendarMonthIcon style={{marginRight: "-8px"}}/> : <SearchIcon style={{marginRight: "-8px"}}/>}
+                        variant="outlined" style={{width: "10px", height: "40px", borderTopLeftRadius: "0px", borderBottomLeftRadius: "0px", borderColor: "rgb(209 213 219)"}}
+                        aria-label="search-toggle"
+                        onClick={() => {
+                            toggleSearchView();
+                        }}
+                />
+            </span>
             {
-                clientList?.length ?
+                currentList?.length ?
                     <table className="w-full table-auto font-sans text-sm my-5 text-left"
                            data-testid="client-list-table">
                         <thead>
@@ -70,17 +145,17 @@ export default function ClientList() {
                         </thead>
                         <tbody>
                         {
-                            clientList.map((client: Client) => {
+                            currentList.map((client: Client) => {
                                 return (
-                                    <ClientRow key={client.id} {...{client, setModalParams, triggerDeleteClient}} />
+                                    <ClientRow key={client.id} {...{client: {...client, presentationDate: new Date(client.presentationDate)}, setModalParams, triggerDeleteClient, searchView}} />
                                 )
                             })
                         }
                         </tbody>
-                    </table> : <p className="p-5" data-testid="no-client-msg">noch keine Einträge, neue hinzufügen</p>
+                    </table> : <p className="p-5" data-testid="no-client-msg">{"noch keine Einträge, neue hinzufügen"}</p>
 
             }
-            <Button
+            {!searchView && <Button
                 variant="outlined"
                 color="inherit"
                 startIcon={<Add/>}
@@ -90,7 +165,7 @@ export default function ClientList() {
                 onClick={() => setModalParams({openModal: true, clientIdToEdit: null})}
             >
                 Neukunde
-            </Button>
+            </Button>}
             <Modal open={modalParams.openModal}
                    onClose={() => setModalParams({openModal: false, clientIdToEdit: null})}
                    aria-label="create-client-modal"
@@ -127,7 +202,8 @@ export default function ClientList() {
                 </DialogActions>
             </Dialog>
             <Snackbar open={snackData.open} autoHideDuration={3000}
-                      anchorOrigin={{vertical: 'bottom', horizontal: 'center'}} onClose={handleSnackClose}  aria-label="deleteClient-snackbar">
+                      anchorOrigin={{vertical: 'bottom', horizontal: 'center'}} onClose={handleSnackClose}
+                      aria-label="deleteClient-snackbar">
                 <Alert severity={snackData.severity ?? "info"} sx={{width: '100%'}}>
                     {snackData.message}
                 </Alert>

@@ -1,11 +1,7 @@
 import {createSelector} from '@reduxjs/toolkit';
 import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react'
-import {create} from 'domain';
-import {createScanner} from 'typescript';
-import arg from "arg";
-import {ResultType} from "@remix-run/router/utils";
-import {BaseQueryMeta, BaseQueryResult} from "@reduxjs/toolkit/src/query/baseQueryTypes";
 import {isEmpty} from "@/utils/util";
+import {Client} from "@/types/types";
 
 let currentStartDate;
 let currentEndDate;
@@ -52,7 +48,7 @@ export const rootApi = createApi({
                 return {
                     url: `/clientList/uid_1.json?`,
                     method: "get",
-                    params: {
+                    params: startDate && endDate && {
                         orderBy: '"$key"',
                         startAt: `"${startDate}"`,
                         endAt: `"${endDate}"`,
@@ -60,10 +56,13 @@ export const rootApi = createApi({
                 }
             },
             transformResponse(result, meta, arg) {
-                if(!isEmpty(result)) {
+                if (!isEmpty(result)) {
                     const clients = Object.assign({}, ...Object.values(result));
-                    return Object.values(clients).sort((a, b) => {
-                        return a.presentationDate.localeCompare(b.presentationDate)});
+                    return Object.values(clients).sort((a: Client, b: Client) => {
+                        const aa = new Date(a.presentationDate.slice(0,15));
+                        const bb = new Date(b.presentationDate.slice(0,15));
+                        return  aa > bb ? 1 : (aa < bb) ? -1 : Date.parse(a.presentationDate) - Date.parse(b.presentationDate);
+                    })
                 }
                 return [];
             },
@@ -88,7 +87,10 @@ export const rootApi = createApi({
                     body: data,
                 }
             },
-            invalidatesTags: (result, error, {pDate, data}) => ([{type: "ClientList", id: pDate}, {type: "Client", id: Object.values(data)[0].id}])
+            invalidatesTags: (result, error, {pDate, data}) => ([{type: "ClientList", id: pDate}, {
+                type: "Client",
+                id: Object.values(data)[0].id
+            }])
         }),
         getHighestClientId: builder.query({
             query: (userId) => ({

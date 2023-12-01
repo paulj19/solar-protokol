@@ -1,51 +1,4 @@
-import {selector} from "postcss-selector-parser";
-import {screen} from "@testing-library/react";
-import {be} from "date-fns/locale";
-import * as process from "process";
-import {not} from "rxjs/internal/util/not";
-import {STATUS_COMPLETED, STATUS_OPEN} from "@/utils/CommonVars";
-
-function assertListIsEmpty() {
-    cy.get('table tbody tr').should('have.length', 0);
-    cy.get(`[data-testid="no-client-msg"]`).should('be.visible');
-}
-
-function deleteClient() {
-    cy.get('button[aria-label="delete-client"]').click()
-    cy.get('button[aria-label="deleteClient-confirm"]').click()
-    cy.get('[aria-label="deleteClient-snackbar"]').should('be.visible');
-}
-
-function createClient() {
-    cy.get('button[aria-label="add-client"]').click({force: true})
-    cy.wait(1000)
-    cy.get('input[name="nickname"]').type('test nickname')
-    cy.get('textarea[name="remarks"]').type('test remarks')
-    // cy.get('input[name="id"]').should('have.value', '1')
-
-    cy.get('textarea[name="basePrice"]').should('not.be.empty')
-    cy.get('textarea[name="unitPrice"]').should('not.be.empty')
-    cy.get('textarea[name="consumptionYearly"]').should('not.be.empty')
-    cy.get('textarea[name="productionYearly"]').should('not.be.empty')
-
-    cy.get('[name="basePrice"]').clear().type('20')
-    cy.get('[name="unitPrice"]').clear().type('40')
-    cy.get('[name="consumptionYearly"]').clear().type('2500')
-    cy.get('[name="productionYearly"]').clear().type('5000')
-
-    cy.get('form').submit()
-    cy.get(`[aria-label="clientCreate-snackbar"]`).should('be.visible');
-
-    cy.get('[aria-label="modal-close"]').click()
-
-    cy.get('table tbody tr').should('have.length', 1)
-    cy.get('table tbody tr td').eq(0).should('contain', '10:00')
-    cy.get('table tbody tr td').eq(2).should('contain', 'test nickname')
-    cy.get('table tbody tr td').eq(3).should('contain', 'test remarks')
-    cy.get('table tbody tr td').eq(4).should('contain', STATUS_OPEN)
-    cy.get('[aria-label="present-client"]').should('be.visible');
-    cy.get('[aria-label="edit-client"]').should('be.visible');
-}
+import {STATUS_COMPLETED} from "@/utils/CommonVars";
 
 function solarElecChart() {
     cy.url().then((url) => {
@@ -82,10 +35,6 @@ function openGeneralParamsEdit() {
     cy.get(`[data-testid="modal-editGeneralParams"]`).should('be.visible');
 }
 
-function setDate() {
-    cy.get('[data-testid="clientList-datePicker"]').type('12.12.2023')
-}
-
 describe('CLIENT CRUD', () => {
     before(() => {
         cy.request('GET', Cypress.env('NEXT_PUBLIC_FIREBASE_URL') + '/generalParams.json').should((response) => {
@@ -109,16 +58,16 @@ describe('CLIENT CRUD', () => {
     })
     it('create client', () => {
         cy.visit('/')
-        setDate()
-        assertListIsEmpty()
-        createClient()
-        deleteClient()
+        cy.setDate()
+        cy.assertListIsEmpty()
+        cy.createClient()
+        cy.deleteClient()
     })
     it('edit client', () => {
         cy.visit('/')
-        setDate()
-        assertListIsEmpty()
-        createClient()
+        cy.setDate()
+        cy.assertListIsEmpty()
+        cy.createClient()
         cy.get('[aria-label="edit-client"]').click()
         cy.get('input[name="nickname"]').clear().type('test nickname edited')
         cy.get('textarea[name="remarks"]').clear().type('test remarks edited')
@@ -133,7 +82,7 @@ describe('CLIENT CRUD', () => {
 
         cy.get('[aria-label="modal-close"]').click()
         cy.reload()
-        setDate()
+        cy.setDate()
 
         cy.get('[aria-label="edit-client"]').click()
         cy.get('input[name="nickname"]').should('have.value', 'test nickname edited')
@@ -149,14 +98,14 @@ describe('CLIENT CRUD', () => {
 
         cy.get('[aria-label="modal-close"]').click()
 
-        deleteClient()
+        cy.deleteClient()
     })
 
     it('present client', () => {
         cy.visit('/')
-        setDate()
-        assertListIsEmpty()
-        createClient()
+        cy.setDate()
+        cy.assertListIsEmpty()
+        cy.createClient()
         cy.get('[aria-label="present-client"]').click()
         solarElecChart()
         cy.get('[data-testid="forward-fab"]').click()
@@ -165,16 +114,16 @@ describe('CLIENT CRUD', () => {
         generationConsumChart()
         cy.get('[data-testid="end-fab"]').click()
         cy.url().should('eq', Cypress.config().baseUrl + '/')
-        setDate()
+        cy.setDate()
         cy.get('table tbody tr td').eq(4).should('contain', STATUS_COMPLETED)
-        deleteClient()
+        cy.deleteClient()
     })
 
     it('traverse back and forth', () => {
         cy.visit('/')
-        setDate()
-        assertListIsEmpty()
-        createClient()
+        cy.setDate()
+        cy.assertListIsEmpty()
+        cy.createClient()
 
         cy.get('[aria-label="present-client"]').click()
         solarElecChart()
@@ -188,14 +137,14 @@ describe('CLIENT CRUD', () => {
         solarElecChart()
 
         goToClientList()
-        setDate()
-        deleteClient()
+        cy.setDate()
+        cy.deleteClient()
     })
-    it.only('edit generalParams', () => {
+    it('edit generalParams', () => {
         cy.visit('/')
-        setDate()
-        assertListIsEmpty()
-        createClient()
+        cy.setDate()
+        cy.assertListIsEmpty()
+        cy.createClient()
 
         cy.get('[aria-label="present-client"]').click()
         solarElecChart()
@@ -235,8 +184,8 @@ describe('CLIENT CRUD', () => {
 
         cy.get('[aria-label="modalClose-generalParamsEdit"]').click()
         goToClientList()
-        setDate()
-        deleteClient()
+        cy.setDate()
+        cy.deleteClient()
     })
 
     // afterEach(() => {
