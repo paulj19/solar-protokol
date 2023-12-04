@@ -20,7 +20,7 @@ export default function SolarProtokol({Component, pageProps}) {
     return (
         !design ?
             <NoSSR>
-                <ThemeProvider attribute="class">
+                <ThemeProvider>
                     <Provider store={store}>
                         <LocalizationProvider dateAdapter={AdapterDateFns}>
                             <BrowserRouter>
