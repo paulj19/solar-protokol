@@ -127,6 +127,19 @@ a {
   }
 
   html[data-theme='home'] {
+    --color-title: 255, 245, 0;
+    --alpha-title: 0.93;
+    --color-legend: 180, 172, 2;
+    --alpha-legend: 0.71;
+    --color-axis: 9, 153, 255;
+    --alpha-axis: 0.71;
+    --slider-thumb: 31, 45, 55;
+    --stats-chart-solar: 59, 161, 86;
+    --stats-chart-elec: 150, 0, 0;
+    --stats-chart-elecShade: 250, 59, 59;
+    --color-bar: 241, 231, 39;
+    --color-line: 230, 0, 0;
+    background-image: none;
   }
 }
 
