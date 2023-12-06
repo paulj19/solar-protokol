@@ -191,28 +191,6 @@ export default function ClientList() {
             >
                 Neukunde
             </Button>}
-            {!searchView && <Button
-                variant="outlined"
-                color="inherit"
-                startIcon={<Add/>}
-                size="medium"
-                aria-label="add-client"
-                autoFocus={false}
-                onClick={() => {
-                    console.info("sentry info")
-                    console.warn("sentry warn")
-                    console.error("sentry test error")
-                    try {
-                        throw Error("sentry test throw")
-                    } catch (e) {
-                        console.error(e)
-                        throw Error("rethrowing" + e.message)
-                    }
-                }
-                }
-            >
-                Neukunde test
-            </Button>}
             <Modal open={modalParams.openModal}
                    onClose={() => setModalParams({openModal: false, clientIdToEdit: null})}
                    aria-label="create-client-modal"
