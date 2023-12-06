@@ -62,10 +62,17 @@ export default function ClientList() {
 
     async function handleDeleteClient() {
         try {
-            await deleteClient({pDate: format(new Date(deleteData.pDate), "yyyy-MM-dd"), clientId: "cid_" + deleteData.clientId}).unwrap();
+            await deleteClient({
+                pDate: format(new Date(deleteData.pDate), "yyyy-MM-dd"),
+                clientId: "cid_" + deleteData.clientId
+            }).unwrap();
             setSnackData({open: true, severity: "success", message: "Gelöscht"});
         } catch (e) {
-            setSnackData({open: true, severity: "error", message: "Es ist ein Fehler aufgetreten. Bitte aktualisieren Sie die Seite und versuchen Sie es erneut."});
+            setSnackData({
+                open: true,
+                severity: "error",
+                message: "Es ist ein Fehler aufgetreten. Bitte aktualisieren Sie die Seite und versuchen Sie es erneut."
+            });
             console.error("error deleting client", e)
         }
         onDeleteClientClose();
@@ -93,8 +100,7 @@ export default function ClientList() {
     function getSearchResult(query): Array<any> {
         return fuse.search(query)?.map((result: FuseResult<any>) => ({
             ...result.item,
-            nickname: Array.from(result.item.nickname).map((c, i) =>
-            {
+            nickname: Array.from(result.item.nickname).map((c, i) => {
                 for (let j = 0; j < result.matches[0].indices.length; j++) {
                     if (i >= result.matches[0].indices[j][0] && i <= result.matches[0].indices[j][1]) {
                         return `<span class="bg-yellow-300">${c}</span>`;
@@ -110,10 +116,16 @@ export default function ClientList() {
     return (
         <div className="flex flex-col items-center justify-around w-full">
             <span>
-                {searchView ? <SearchBar style={{display: "inline-flex", width: "260px", height: "38px", borderTopRightRadius: "0px", borderBottomRightRadius: "0px"}}
+                {searchView ? <SearchBar style={{
+                        display: "inline-flex",
+                        width: "260px",
+                        height: "38px",
+                        borderTopRightRadius: "0px",
+                        borderBottomRightRadius: "0px"
+                    }}
                                          data-testid="searchbar"
                                          onChange={(query) => {
-                                             if (query === "")  {
+                                             if (query === "") {
                                                  setFilteredList(clientList);
                                                  return;
                                              }
@@ -121,8 +133,15 @@ export default function ClientList() {
                                          }}
                                          placeholder="Name Suchen"/> :
                     <DateChooser selectedDate={selectedDate} setSelectedDate={setSelectedDate}/>}
-                <Button startIcon={searchView ? <CalendarMonthIcon style={{marginRight: "-8px"}}/> : <SearchIcon style={{marginRight: "-8px"}}/>}
-                        variant="outlined" style={{width: "10px", height: "40px", borderTopLeftRadius: "0px", borderBottomLeftRadius: "0px", borderColor: "rgb(209 213 219)"}}
+                <Button startIcon={searchView ? <CalendarMonthIcon style={{marginRight: "-8px"}}/> :
+                    <SearchIcon style={{marginRight: "-8px"}}/>}
+                        variant="outlined" style={{
+                    width: "10px",
+                    height: "40px",
+                    borderTopLeftRadius: "0px",
+                    borderBottomLeftRadius: "0px",
+                    borderColor: "rgb(209 213 219)"
+                }}
                         aria-label="search-toggle"
                         onClick={() => {
                             toggleSearchView();
@@ -147,12 +166,18 @@ export default function ClientList() {
                         {
                             currentList.map((client: Client) => {
                                 return (
-                                    <ClientRow key={client.id} {...{client: {...client, presentationDate: new Date(client.presentationDate)}, setModalParams, triggerDeleteClient, searchView}} />
+                                    <ClientRow key={client.id} {...{
+                                        client: {
+                                            ...client,
+                                            presentationDate: new Date(client.presentationDate)
+                                        }, setModalParams, triggerDeleteClient, searchView
+                                    }} />
                                 )
                             })
                         }
                         </tbody>
-                    </table> : <p className="p-5" data-testid="no-client-msg">{"noch keine Einträge, neue hinzufügen"}</p>
+                    </table> :
+                    <p className="p-5" data-testid="no-client-msg">{"noch keine Einträge, neue hinzufügen"}</p>
 
             }
             {!searchView && <Button
@@ -165,6 +190,28 @@ export default function ClientList() {
                 onClick={() => setModalParams({openModal: true, clientIdToEdit: null})}
             >
                 Neukunde
+            </Button>}
+            {!searchView && <Button
+                variant="outlined"
+                color="inherit"
+                startIcon={<Add/>}
+                size="medium"
+                aria-label="add-client"
+                autoFocus={false}
+                onClick={() => {
+                    console.info("sentry info")
+                    console.warn("sentry warn")
+                    console.error("sentry test error")
+                    try {
+                        throw Error("sentry test throw")
+                    } catch (e) {
+                        console.error(e)
+                        throw Error("rethrowing" + e.message)
+                    }
+                }
+                }
+            >
+                Neukunde test
             </Button>}
             <Modal open={modalParams.openModal}
                    onClose={() => setModalParams({openModal: false, clientIdToEdit: null})}
