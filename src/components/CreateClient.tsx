@@ -20,7 +20,7 @@ import {useRef, useState} from "react";
 import {Checkbox, Typography} from "@mui/joy";
 import Loading from "@/src/components/Loading";
 import ErrorScreen from "@/src/components/ErrorScreen";
-import {CLOSE_MODAL_DELAY, ERROR_TEXT} from "@/utils/CommonVars";
+import {CLOSE_MODAL_DELAY, ERROR_TEXT, ERROR_TEXT_FIELD} from "@/utils/CommonVars";
 
 export function CreateClient({selectedDate, clientToEdit, setModalParams}) {
     const {data, isLoading: isIdLoading, isFetching: isIdFetching, isError} = useGetHighestClientIdQuery("uid_1", {skip: Boolean(clientToEdit)});
@@ -60,10 +60,10 @@ export function CreateClient({selectedDate, clientToEdit, setModalParams}) {
     const onSubmit = async (data) => {
         try {
             //todo presentationDate is duplicated, etc.
-            if (!data.id || !data.presentationDate || !data.basePrice || !data.unitPrice || !data.consumptionYearly || !data.productionYearly) {
-                setSnackData({open: true, severity: "error", message: ERROR_TEXT});
-                return;
-            }
+            // if (!data.id || !data.presentationDate || data.basePrice == null || data.unitPrice == null || data.consumptionYearly == null || data.productionYearly == null) {
+            //     setSnackData({open: true, severity: "error", message: ERROR_TEXT_FIELD});
+            //     return;
+            // }
             const unitPrice = data.unitPrice / 100;
             //todo check if presentationDate is in string
             const presentationDate = format(new Date(data.presentationDate), "yyyy-MM-dd");
@@ -107,7 +107,7 @@ export function CreateClient({selectedDate, clientToEdit, setModalParams}) {
                 fontWeight="sm"
                 textAlign="center"
             >
-                {clientToEdit ? "Kundendaten  Bearbeiten": "Neuen Kundendaten erstellen"}
+                {clientToEdit ? "Kundendaten  Bearbeiten" : "Neuen Kundendaten erstellen"}
             </Typography>
             <div className="flex justify-center items-center pt-10 pb-7">
                 <form onSubmit={handleSubmit(onSubmit)} onReset={() => reset()}
@@ -146,29 +146,38 @@ export function CreateClient({selectedDate, clientToEdit, setModalParams}) {
                         <Controller
                             name="basePrice"
                             control={control}
-                            render={({field}) => <TextField {...field} label="Grundpreis" InputProps={{
+                            render={({field}) => <TextField {...field} label="Grundpreis" onChange={(e) => {
+                                field.onChange(parseInt(e.target.value))
+                            }} InputProps={{
                                 endAdornment: <InputAdornment
-                                    position="start">€</InputAdornment>, type: 'number', required: true
+                                    position="start">€</InputAdornment>, type: 'number', required: true,
                             }}/>}
                         />
                         <Controller
                             name="unitPrice"
                             control={control}
-                            render={({field}) => <TextField {...field} label="Verbrauchspreis" InputProps={{
-                                endAdornment: <InputAdornment position="start">Cents/Kwh</InputAdornment>, type: 'number',
+                            render={({field}) => <TextField {...field} label="Verbrauchspreis" onChange={(e) => {
+                                field.onChange(parseInt(e.target.value))
+                            }} InputProps={{
+                                endAdornment: <InputAdornment position="start">Cents/Kwh</InputAdornment>,
+                                type: 'number',
                             }} inputProps={{pattern: "[0-9]+"}}/>}
                         />
                         <Controller
                             name="consumptionYearly"
                             control={control}
-                            render={({field}) => <TextField {...field} label="Stromverbrauch pro Jahr" InputProps={{
+                            render={({field}) => <TextField {...field} label="Stromverbrauch pro Jahr" onChange={(e) => {
+                                field.onChange(parseInt(e.target.value))
+                            }} InputProps={{
                                 endAdornment: <InputAdornment position="start">Kwh</InputAdornment>, type: 'number',
                             }}/>}
                         />
                         <Controller
                             name="productionYearly"
                             control={control}
-                            render={({field}) => <TextField {...field} label="Stromproduktion pro Jahr" InputProps={{
+                            render={({field}) => <TextField {...field} label="Stromproduktion pro Jahr" onChange={(e) => {
+                                field.onChange(parseInt(e.target.value))
+                            }} InputProps={{
                                 endAdornment: <InputAdornment position="start">Kwh</InputAdornment>, type: 'number',
                             }}/>}
                         />
@@ -198,6 +207,9 @@ export function CreateClient({selectedDate, clientToEdit, setModalParams}) {
                                            InputProps={{
                                                endAdornment: <InputAdornment
                                                    position="start">€</InputAdornment>, type: 'number',
+                                           }}
+                                           onChange={(e) => {
+                                               field.onChange(parseInt(e.target.value))
                                            }}
                                 />}
                         />

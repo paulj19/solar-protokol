@@ -24,26 +24,32 @@ jobs:
         with:
           runTests: false
           build: npm run build
-      - name: Save build folder
-        uses: actions/upload-artifact@v3
-        with:
-          name: build
-          if-no-files-found: error
-          path: .next
-  e2e_tests:
-    runs-on: ubuntu-22.04
-    needs: install
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Download the build folder
-        uses: actions/download-artifact@v3
-        with:
-          name: build
-          path: .next
       - name: Cypress run
         uses: cypress-io/github-action@v6
         with:
           start: npm start
           browser: chrome
           headed: true
+#      - name: Save build folder
+#        uses: actions/upload-artifact@v3
+#        with:
+#          name: build
+#          if-no-files-found: error
+#          path: .next
+#  e2e_tests:
+#    runs-on: ubuntu-22.04
+#    needs: install
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v4
+#      - name: Download the build folder
+#        uses: actions/download-artifact@v3
+#        with:
+#          name: build
+#          path: .next
+#      - name: Cypress run
+#        uses: cypress-io/github-action@v6
+#        with:
+#          start: npm start
+#          browser: chrome
+#          headed: true

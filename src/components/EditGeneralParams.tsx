@@ -21,25 +21,17 @@ export function EditGeneralParams({setOpenModal}) {
     }
     const onSubmit = async (data) => {
         try {
-            if (!data.feedInPrice || !data.rent || !data.inflationRate || !data.electricityIncreaseRate || !data.yearLimit) {
-                setSnackData({open: true, severity: "error", message: ERROR_TEXT});
-                return;
-            }
+            // if (!data.feedInPrice || !data.rent || !data.inflationRate || !data.electricityIncreaseRate || !data.yearLimit) {
+            //     setSnackData({open: true, severity: "error", message: ERROR_TEXT});
+            //     return;
+            // }
             //todo convert to watch
-            if (parseInt(data.rentDiscountAmount) > parseInt(data.rent)) {
+            if (data.rentDiscountAmount > data.rent) {
                 setSnackData({open: true, severity: "error", message: "Rabatt darf nicht größer als PV-Rate sein"});
                 return;
             }
             const feedInPrice = data.feedInPrice / 100;
-            const generalParams = {
-                feedInPrice: feedInPrice, rent: parseInt(data.rent),
-                inflationRate: parseInt(data.inflationRate),
-                electricityIncreaseRate: parseInt(data.electricityIncreaseRate),
-                rentDiscountAmount : parseInt(data.rentDiscountAmount),
-                rentDiscountPeriod: parseInt(data.rentDiscountPeriod),
-                yearLimit: parseInt(data.yearLimit)
-            };
-            await updateGeneralParams(generalParams).unwrap()
+            await updateGeneralParams({...data, feedInPrice}).unwrap()
             setSnackData({open: true, severity: "success", message: "Einstellungen gespeichert!"});
             setTimeout(() => setOpenModal(false), CLOSE_MODAL_DELAY);
         } catch (e) {
@@ -70,28 +62,36 @@ export function EditGeneralParams({setOpenModal}) {
                     <Controller
                         name="feedInPrice"
                         control={control}
-                        render={({field}) => <TextField {...field} label="Einspeisevergütung" InputProps={{
+                        render={({field}) => <TextField {...field} label="Einspeisevergütung" onChange={(e) => {
+                            field.onChange(Number(e.target.value))
+                        }} InputProps={{
                             endAdornment: <InputAdornment position="start">Cents</InputAdornment>, type: 'number',
                         }}/>}
                     />
                     <Controller
                         name="rent"
                         control={control}
-                        render={({field}) => <TextField {...field} label="PV-Rate Enpal" InputProps={{
+                        render={({field}) => <TextField {...field} label="PV-Rate Enpal" onChange={(e) => {
+                            field.onChange(Number(e.target.value))
+                        }} InputProps={{
                             endAdornment: <InputAdornment position="start">€</InputAdornment>, type: 'number',
                         }}/>}
                     />
                     <Controller
                         name="inflationRate"
                         control={control}
-                        render={({field}) => <TextField {...field} label="Inflation Rate" InputProps={{
+                        render={({field}) => <TextField {...field} label="Inflation Rate" onChange={(e) => {
+                            field.onChange(Number(e.target.value))
+                        }} InputProps={{
                             endAdornment: <InputAdornment position="start">Prozent</InputAdornment>, type: 'number',
                         }}/>}
                     />
                     <Controller
                         name="electricityIncreaseRate"
                         control={control}
-                        render={({field}) => <TextField {...field} label="Strompreissteigerung" InputProps={{
+                        render={({field}) => <TextField {...field} label="Strompreissteigerung" onChange={(e) => {
+                            field.onChange(Number(e.target.value))
+                        }} InputProps={{
                             endAdornment: <InputAdornment position="start">Prozent</InputAdornment>, type: 'number',
                         }}/>}
                     />
@@ -99,21 +99,27 @@ export function EditGeneralParams({setOpenModal}) {
                         <Controller
                             name="rentDiscountAmount"
                             control={control}
-                            render={({field}) => <TextField {...field} label="Rabatt" InputProps={{
+                            render={({field}) => <TextField {...field} label="Rabatt" onChange={(e) => {
+                                field.onChange(Number(e.target.value))
+                            }} InputProps={{
                                 endAdornment: <InputAdornment position="start">€/monat</InputAdornment>, type: 'number',
                             }}/>}
                         />
                         <Controller
                             name="rentDiscountPeriod"
                             control={control}
-                            render={({field}) => <TextField {...field} label="Rabatt Jahre" InputProps={{
+                            render={({field}) => <TextField {...field} label="Rabatt Jahre" onChange={(e) => {
+                                field.onChange(Number(e.target.value))
+                            }} InputProps={{
                                 endAdornment: <InputAdornment position="start">Jahre</InputAdornment>, type: 'number',
                             }}/>}
                         />
                         <Controller
                             name="yearLimit"
                             control={control}
-                            render={({field}) => <TextField {...field} label="Anzahl der Jahre in Grafik" InputProps={{
+                            render={({field}) => <TextField {...field} label="Anzahl der Jahre in Grafik" onChange={(e) => {
+                                field.onChange(Number(e.target.value))
+                            }} InputProps={{
                                 endAdornment: <InputAdornment position="start">Jahre</InputAdornment>, type: 'number',
                             }}/>}
                         />
