@@ -216,7 +216,7 @@ export default function ClientList() {
                 </DialogTitle>
                 <DialogContent>
                     <DialogContentText id="alert-dialog-description">
-                        Sind Du sicher, dass Du diesen Client löschen möchtest?
+                        Bist Du sicher, dass Du diesen Client löschen möchtest?
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>

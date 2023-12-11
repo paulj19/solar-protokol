@@ -14,41 +14,44 @@ import GenerationConsumChart from "@/src/GenerationConsumChart/GenerationConsumC
 import {NotFound} from "next/dist/client/components/error";
 import {ThemeProvider} from "next-themes";
 import PayoffChart from "@/src/payoffChart/PayoffChart";
+import {SessionProvider} from "next-auth/react";
 
-export default function SolarProtokol({Component, pageProps}) {
-    const design = false;
+export default function SolarProtokol({Component, pageProps: {session, ...pageProps}}) {
+    const design = true;
     return (
         !design ?
+            <NoSSR>
+                <SessionProvider session={session}>
+                    <ThemeProvider>
+                        <Provider store={store}>
+                            <LocalizationProvider dateAdapter={AdapterDateFns}>
+                                <BrowserRouter>
+                                    <Layout>
+                                        <Routes>
+                                            <Route path="/" element={<Home/>}/>
+                                            <Route path="/solarElecChart" element={<SolarElecChart/>}/>
+                                            <Route path="/payoffChart" element={<PayoffChart/>}/>
+                                            <Route path="/stats" element={<Stats/>}/>
+                                            <Route path="/generationConsumChart" element={<GenerationConsumChart/>}/>
+                                            <Route path="*" element={<NotFound/>}/>
+                                        </Routes>
+                                    </Layout>
+                                </BrowserRouter>
+                            </LocalizationProvider>
+                        </Provider>
+                    </ThemeProvider>
+                </SessionProvider>
+            </NoSSR> :
             <NoSSR>
                 <ThemeProvider>
                     <Provider store={store}>
                         <LocalizationProvider dateAdapter={AdapterDateFns}>
-                            <BrowserRouter>
-                                <Layout>
-                                    <Routes>
-                                        <Route path="/" element={<Home/>}/>
-                                        <Route path="/solarElecChart" element={<SolarElecChart/>}/>
-                                        <Route path="/payoffChart" element={<PayoffChart/>}/>
-                                        <Route path="/stats" element={<Stats/>}/>
-                                        <Route path="/generationConsumChart" element={<GenerationConsumChart/>}/>
-                                        <Route path="*" element={<NotFound/>}/>
-                                    </Routes>
-                                </Layout>
-                            </BrowserRouter>
+                            <Layout>
+                                <Component {...pageProps}/>
+                            </Layout>
                         </LocalizationProvider>
                     </Provider>
                 </ThemeProvider>
-            </NoSSR> :
-            <NoSSR>
-                <html data-theme="gray-bg" suppressHydrationWarning>
-                <Provider store={store}>
-                    <LocalizationProvider dateAdapter={AdapterDateFns}>
-                        <Layout>
-                            <Component/>
-                        </Layout>
-                    </LocalizationProvider>
-                </Provider>
-                </html>
             </NoSSR>
     )
 }
