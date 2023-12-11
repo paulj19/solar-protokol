@@ -186,7 +186,7 @@ export function CreateClient({selectedDate, clientToEdit, setModalParams}) {
                         <Controller
                             name="heatingCost"
                             control={control}
-                            render={({field}) => <TextField {...field} label="Heizungkosten pro Jahr" onChange={(e) => {
+                            render={({field}) => <TextField {...field} label="Wärmekosten pro Jahr" onChange={(e) => {
                                 field.onChange(Number(e.target.value))
                             }} InputProps={{
                                 endAdornment: <InputAdornment position="start">€</InputAdornment>, type: 'number', required: true,
