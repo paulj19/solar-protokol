@@ -104,7 +104,7 @@ export default function Stats() {
                         aria-label="year-slider"
                         // defaultValue={year}
                         min={0}
-                        max={25}
+                        max={30}
                         step={1}
                         defaultValue={year}
                         marks={getSliderMarks()}
@@ -138,7 +138,7 @@ export default function Stats() {
 
 function getSliderMarks(): Array<Mark> {
     const marks = [];
-    for (let i = 0; i <= 25; i += 5) {
+    for (let i = 0; i <= 30; i += 5) {
         marks.push({value: i, label: <span className="text-gray-400 font-medium">{i}</span>});
     }
     return marks;

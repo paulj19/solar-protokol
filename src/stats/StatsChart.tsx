@@ -27,8 +27,8 @@ export default function StatsChart(params: PredictionParams) {
 
     const electricityCostNew = basePrice + residualConsumptionCostMonthly;
     const solarCost = rent - feedInTariffMonthly;
-    const maxElecCost = calcMaxElecCost({...params, year: 25});
-    const maxSolarFeedIn = calcMaxSolarFeedInGen({...params, year: 25});
+    const maxElecCost = calcMaxElecCost({...params, year: 30});
+    const maxSolarFeedIn = calcMaxSolarFeedInGen({...params, year: 30});
     return (
         <div className="min-w-[400px]" data-testid="stats-chart">
             <ResponsiveContainer>
@@ -37,7 +37,8 @@ export default function StatsChart(params: PredictionParams) {
                     margin={{
                         right: 10,
                         left: 10,
-                        bottom: 20
+                        bottom: 20,
+                        top: 23
                     }}
                     stackOffset="sign"
                 >

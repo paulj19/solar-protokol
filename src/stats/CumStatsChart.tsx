@@ -18,7 +18,7 @@ import React from "react";
 
 export default function CumStatsChart(params: PredictionParams) {
     const {totalElecCost, totalSolarCost} = calcTotalSaved(params);
-    const { totalElecCost: elecTotal, totalSolarCost: solarTotal} = calcTotalSaved({...params, year: 25});
+    const { totalElecCost: elecTotal, totalSolarCost: solarTotal} = calcTotalSaved({...params, year: 30});
     const selectedYear = params.year + new Date().getFullYear();
     return (
         <div className="min-w-[400px]" data-testid="cum-chart">
@@ -29,7 +29,7 @@ export default function CumStatsChart(params: PredictionParams) {
                         right: 10,
                         left: 10,
                         bottom: 20,
-                        top: -80
+                        top: -50
                     }}
                 >
                     {/* <CartesianGrid strokeDasharray="3 3" /> */}

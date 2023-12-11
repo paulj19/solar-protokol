@@ -114,7 +114,8 @@ export default function SolarElecChart() {
         }
         return acc.concat(item);
     }, []);
-    const {totalElecCost, totalSolarCost, totalTransportCost, totalHeatingCost} = calcTotalSaved({year: 25, clientParams, generalParams: {...generalParams, inflationRate, elecIncreaseRate}});
+    // const {totalElecCost, totalSolarCost, totalTransportCost, totalHeatingCost} = calcTotalSaved({year: 30, clientParams, generalParams: {...generalParams, inflationRate, elecIncreaseRate}});
+    const {totalSaved, totalElecCost, totalSolarCost, totalTransportCost, totalHeatingCost} = calcTotalSaved({year: 30, clientParams, generalParams: {...generalParams, inflationRate: inflationRate ?? generalParams.inflationRate, elecIncreaseRate: elecIncreaseRate ?? generalParams.elecIncreaseRate}});
 
     function stateHasSolarLine() {
         return STATES[settings.currentState]?.includes(STATE.SOLAR_LINE);
@@ -138,7 +139,7 @@ export default function SolarElecChart() {
                                 }}
                             >
                                 {/*<CartesianGrid stroke="#000000" strokeWidth={1} horizontalPoints={[10]} hori vertical={false}/>*/}
-                                <XAxis dataKey="year" ticks={[0, 5, 10, 15, 20, 25]}
+                                <XAxis dataKey="year" ticks={[0, 5, 10, 15, 20, 25, 30]}
                                        tickFormatter={value => `${value + currentYear}`}
                                        tick={{fill: 'rgba(var(--color-axis), var(--alpha-axis))'}}
                                        tickSize={8} tickMargin={15} strokeWidth={0.7}
@@ -240,7 +241,7 @@ export default function SolarElecChart() {
                         </ResponsiveContainer>
                         {settings.currentState !== 0 ? <div
                             className="text-gray-300 text-font-medium text-sm pt-2 tracking-wide gap-4 flex flex-col w-[20%]">
-                            <h2 className="text-2xl font-bold">IHRE STROMKOSTEN IN DEN NÄCHSTEN 25 JAHREN</h2>
+                            <h2 className="text-2xl font-bold">IHRE STROMKOSTEN IN DEN NÄCHSTEN 30 JAHREN</h2>
                             <p className="text-3xl text-red-600 font-bold">{'STROM'}{<p
                                 className="text-5xl text-red-600 font-bold">{formatEuroCurrency(totalElecCost)}</p>}</p>
                             <p className="text-3xl text-[#FFFF00] font-bold">{'WÄRME'}{<p
