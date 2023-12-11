@@ -10,6 +10,7 @@ export type GeneralParams = {
 export type ClientParams = {
     basePrice: number;
     unitPrice: number;
+    unitPriceSolar: number;
     consumptionYearly: number;
     productionYearly: number;
     isPurchase: boolean;

@@ -31,6 +31,7 @@ export function CreateClient({selectedDate, clientToEdit, setModalParams}) {
         status: "open",
         basePrice: 10,
         unitPrice: 32,
+        unitPriceSolar: 22,
         consumptionYearly: 3500,
         transportCost: 1200,
         heatingCost: 1200,
@@ -41,7 +42,7 @@ export function CreateClient({selectedDate, clientToEdit, setModalParams}) {
     const [updateHighestClientId] = useUpdateHighestClientIdMutation();
     const [addNewClient, result] = useAddClientMutation();
     const {control, reset, formState, handleSubmit, watch} = useForm({
-        values: clientToEdit ? {...clientToEdit, presentationDate: new Date(clientToEdit.presentationDate), unitPrice: clientToEdit.unitPrice * 100} : {
+        values: clientToEdit ? {...clientToEdit, presentationDate: new Date(clientToEdit.presentationDate), unitPrice: clientToEdit.unitPrice * 100, unitPriceSolar: clientToEdit.unitPriceSolar * 100} : {
             ...defaultValues,
             presentationDate: prevPresentationDate.current ? addHours(prevPresentationDate.current, 1) : setHours(new Date(selectedDate), 10),
             id: data ? data.highestClientId + 1 : 0,
@@ -67,6 +68,7 @@ export function CreateClient({selectedDate, clientToEdit, setModalParams}) {
             //     return;
             // }
             const unitPrice = data.unitPrice / 100;
+            const unitPriceSolar = data.unitPriceSolar / 100;
             //todo check if presentationDate is in string
             const presentationDate = format(new Date(data.presentationDate), "yyyy-MM-dd");
             let purchasePrice = data.purchasePrice;
@@ -74,7 +76,7 @@ export function CreateClient({selectedDate, clientToEdit, setModalParams}) {
                 purchasePrice = null;
             }
 
-            const client = {...data, presentationDate: data.presentationDate.toString(), unitPrice, purchasePrice}
+            const client = {...data, presentationDate: data.presentationDate.toString(), unitPrice, unitPriceSolar, purchasePrice}
 
             await addNewClient({pDate: presentationDate, data: {["uid_1/" + presentationDate + "/cid_" + client.id]: client}}).unwrap()
 
@@ -127,6 +129,7 @@ export function CreateClient({selectedDate, clientToEdit, setModalParams}) {
                             render={({field}) => <TextField {...field} label="Bemerkungen" minRows={5} multiline
                                                             inputProps={{maxLength: 128}}/>}
                         />
+                        <span>
                         <InputLabel id="select-label">Status</InputLabel>
                         <Controller
                             name="status"
@@ -143,8 +146,10 @@ export function CreateClient({selectedDate, clientToEdit, setModalParams}) {
                         <Controller
                             name="id"
                             control={control}
-                            render={({field}) => <TextField {...field} label="client id" disabled/>}
+                            render={({field}) => <TextField {...field} label="client id" disabled
+                                                            sx={{marginLeft: "10px"}}/>}
                         />
+                            </span>
                         <Controller
                             name="basePrice"
                             control={control}
@@ -166,21 +171,36 @@ export function CreateClient({selectedDate, clientToEdit, setModalParams}) {
                             }} inputProps={{pattern: "[0-9]+"}}/>}
                         />
                         <Controller
+                            name="unitPriceSolar"
+                            control={control}
+                            render={({field}) => <TextField {...field} label="Rest-Strom Verbrauchspreis mit PV"
+                                                            onChange={(e) => {
+                                                                field.onChange(Number(e.target.value))
+                                                            }} InputProps={{
+                                endAdornment: <InputAdornment position="start">Cents/Kwh</InputAdornment>,
+                                type: 'number', required: true,
+                            }} inputProps={{pattern: "[0-9]+"}}/>}
+                        />
+                        <Controller
                             name="consumptionYearly"
                             control={control}
-                            render={({field}) => <TextField {...field} label="Stromverbrauch pro Jahr" onChange={(e) => {
-                                field.onChange(Number(e.target.value))
-                            }} InputProps={{
-                                endAdornment: <InputAdornment position="start">Kwh</InputAdornment>, type: 'number', required: true,
+                            render={({field}) => <TextField {...field} label="Stromverbrauch pro Jahr"
+                                                            onChange={(e) => {
+                                                                field.onChange(Number(e.target.value))
+                                                            }} InputProps={{
+                                endAdornment: <InputAdornment
+                                    position="start">Kwh</InputAdornment>, type: 'number', required: true,
                             }}/>}
                         />
                         <Controller
                             name="transportCost"
                             control={control}
-                            render={({field}) => <TextField {...field} label="Mobilitätkosten pro Jahr" onChange={(e) => {
-                                field.onChange(Number(e.target.value))
-                            }} InputProps={{
-                                endAdornment: <InputAdornment position="start">€</InputAdornment>, type: 'number', required: true,
+                            render={({field}) => <TextField {...field} label="Mobilitätkosten pro Jahr"
+                                                            onChange={(e) => {
+                                                                field.onChange(Number(e.target.value))
+                                                            }} InputProps={{
+                                endAdornment: <InputAdornment
+                                    position="start">€</InputAdornment>, type: 'number', required: true,
                             }}/>}
                         />
                         <Controller
@@ -189,7 +209,8 @@ export function CreateClient({selectedDate, clientToEdit, setModalParams}) {
                             render={({field}) => <TextField {...field} label="Wärmekosten pro Jahr" onChange={(e) => {
                                 field.onChange(Number(e.target.value))
                             }} InputProps={{
-                                endAdornment: <InputAdornment position="start">€</InputAdornment>, type: 'number', required: true,
+                                endAdornment: <InputAdornment
+                                    position="start">€</InputAdornment>, type: 'number', required: true,
                             }}/>}
                         />
                     </div>
@@ -227,10 +248,12 @@ export function CreateClient({selectedDate, clientToEdit, setModalParams}) {
                         <Controller
                             name="productionYearly"
                             control={control}
-                            render={({field}) => <TextField {...field} label="Stromproduktion pro Jahr" onChange={(e) => {
-                                field.onChange(Number(e.target.value))
-                            }} InputProps={{
-                                endAdornment: <InputAdornment position="start">Kwh</InputAdornment>, type: 'number', required: true,
+                            render={({field}) => <TextField {...field} label="Stromproduktion pro Jahr"
+                                                            onChange={(e) => {
+                                                                field.onChange(Number(e.target.value))
+                                                            }} InputProps={{
+                                endAdornment: <InputAdornment
+                                    position="start">Kwh</InputAdornment>, type: 'number', required: true,
                             }}/>}
                         />
                     </div>

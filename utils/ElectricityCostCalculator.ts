@@ -126,7 +126,9 @@ export function calcFeedInTariffMonthly(params: PredictionParams): number {
 
 export function calcResidualConsumptionCostMonthly(params: PredictionParams): number {
     const residualConsumptionYearly = calcResidualConsumption(params).reduce((sum, residualConsumption) => sum + residualConsumption, 0);
-    return round((residualConsumptionYearly / 12) * calcUnitPrice(params));
+    const {year, clientParams: {unitPriceSolar}, generalParams: {inflationRate, electricityIncreaseRate}} = params;
+
+    return round((residualConsumptionYearly / 12) * priceIncrease(unitPriceSolar, inflationRate + electricityIncreaseRate, year));
 }
 
 export function calcConsumptionCostMonthly(params: PredictionParams): number {
@@ -190,11 +192,7 @@ function calcBasePrice({
     return round(priceIncrease(basePrice, inflationRate + electricityIncreaseRate, year));
 }
 
-function calcUnitPrice({
-                           year,
-                           clientParams: {unitPrice},
-                           generalParams: {inflationRate, electricityIncreaseRate}
-                       }: PredictionParams): number {
+function calcUnitPrice({year, clientParams: {unitPrice}, generalParams: {inflationRate, electricityIncreaseRate}}: PredictionParams): number {
     return priceIncrease(unitPrice, inflationRate + electricityIncreaseRate, year);
 }
 
