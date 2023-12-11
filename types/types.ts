@@ -14,6 +14,8 @@ export type ClientParams = {
     productionYearly: number;
     isPurchase: boolean;
     purchasePrice: number | undefined;
+    transportCost: number;
+    heatingCost: number;
 }
 
 export type PredictionParams = {
@@ -32,6 +34,9 @@ export type CostPredictions = {
     year: number;
     electricityCost: number;
     solarCost: number;
+    transportCost: number;
+    heatingCost: number;
+    totalElecCost: number;
 }
 //create type Client with all corresponding fields
 export type Client = {

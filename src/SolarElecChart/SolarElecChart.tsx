@@ -49,17 +49,17 @@ const STATES = [[STATE.ELEC_BAR], [STATE.ELEC_BAR, STATE.ELEC_LINE], [STATE.ELEC
 export default function SolarElecChart() {
     const {setTheme} = useTheme();
     setTheme('gray-bg');
-    const navigate = useNavigate();
-    const [searchParams] = useSearchParams();
-    const clientId = searchParams.get('clientId');
-    const pDate = searchParams.get('pDate');
-    // const clientId = "43"
-    // const pDate = "2023-11-09"
-    useEffect(() => {
-        if (!clientId || !pDate) {
-            navigate('/');
-        }
-    }, []);
+    // const navigate = useNavigate();
+    // const [searchParams] = useSearchParams();
+    // const clientId = searchParams.get('clientId');
+    // const pDate = searchParams.get('pDate');
+    const clientId = "1037"
+    const pDate = "2023-12-11"
+    // useEffect(() => {
+    //     if (!clientId || !pDate) {
+    //         navigate('/');
+    //     }
+    // }, []);
     const [inflationRate, setInflationRate] = useState<number>(null)
     const [elecIncreaseRate, setElecIncreaseRate] = useState<number>(null)
     const [settings, changeSettings] = useState<Settings>({currentState: 0});
@@ -97,24 +97,24 @@ export default function SolarElecChart() {
         // if (i % 5 !== 0) {
         //     return acc;
         // }
-        if (item.electricityCost >= item.solarCost) {
+        if (item.totalElecCost >= item.solarCost) {
             if (i >= 1 && xx === false) {
-                const intersectionResut = intersect(array[i - 1].year, array[i - 1].solarCost, item.year, item.solarCost, array[i - 1].year, array[i - 1].electricityCost, item.year, item.electricityCost);
+                const intersectionResut = intersect(array[i - 1].year, array[i - 1].solarCost, item.year, item.solarCost, array[i - 1].year, array[i - 1].totalElecCost, item.year, item.totalElecCost);
                 if (intersectionResut) {
                     const {x, y}: any = intersectionResut;
-                    const intersection = {year: Math.floor(x), electricityCost: y, solarCost: y, range: [y, y]}
+                    const intersection = {year: Math.floor(x), electricityCost: y, solarCost: y, range: [y, y], transportCost: item.transportCost, heatingCost: item.heatingCost, totalElecCost: item.totalElecCost}
                     acc = acc.concat(intersection);
                     xx = true;
                 }
             }
-            const range = item.electricityCost !== undefined && item.solarCost !== undefined
-                ? [item.electricityCost - 1, item.solarCost + 1]
+            const range = item.totalElecCost !== undefined && item.solarCost !== undefined
+                ? [item.totalElecCost - 1, item.solarCost + 1]
                 : [];
             item['range'] = range;
         }
         return acc.concat(item);
     }, []);
-    const {totalElecCost, totalSolarCost} = calcTotalSaved({year: 25, clientParams, generalParams: {...generalParams, inflationRate, elecIncreaseRate}});
+    const {totalElecCost, totalSolarCost, totalTransportCost, totalHeatingCost} = calcTotalSaved({year: 25, clientParams, generalParams: {...generalParams, inflationRate, elecIncreaseRate}});
 
     function stateHasSolarLine() {
         return STATES[settings.currentState]?.includes(STATE.SOLAR_LINE);
@@ -183,7 +183,7 @@ export default function SolarElecChart() {
                                 {/*</defs>*/}
                                 <Legend layout="centric" verticalAlign="top" align="right"
                                         formatter={(value) => LegendFormatter(value, inflationRate ?? generalParams.inflationRate, elecIncreaseRate ?? generalParams.electricityIncreaseRate)}/>
-                                <Line type="linear" dataKey="electricityCost" name="PREISENTWICKLUNG OHNE SOLAR"
+                                <Line type="linear" dataKey="totalElecCost" name="PREISENTWICKLUNG OHNE SOLAR"
                                       stroke="#FF0000"
                                       legendType={STATES[settings.currentState]?.includes(STATE.ELEC_LINE) ? 'line' : 'none'}
                                       strokeWidth={STATES[settings.currentState]?.includes(STATE.ELEC_BAR) ? 8.5 : 5.5}
@@ -200,32 +200,65 @@ export default function SolarElecChart() {
                                       legendType='none' tooltipType='none'
                                       hide={!STATES[settings.currentState]?.includes(STATE.AREA)}
                                 />
-                                <Bar dataKey="electricityCost" fill="rgb(var(--color-bar))" barSize={30}
+                                <Bar dataKey="transportCost" fill="brown" barSize={30}
+                                     name="MOBILITÄT"
+                                     label='none'
+                                    legendType={STATES[settings.currentState]?.includes(STATE.ELEC_BAR) ? 'rect' : 'none'}
+                                     hide={!STATES[settings.currentState]?.includes(STATE.ELEC_BAR)}
+                                     stackId="a"
+                                     order="2"
+                                />
+                                {/*{comparisonDataWithRange.map((entry, index) => (*/}
+                                {/*    <Cell key="elec-bar" fill={`url(#elec-bar)`}/>*/}
+                                {/*))}*/}
+                                {/*</Bar>*/}
+                                <Bar dataKey="heatingCost" fill="yellow" barSize={30}
+                                     name="WÄRME"
+                                     label='none'
+                                    legendType={STATES[settings.currentState]?.includes(STATE.ELEC_BAR) ? 'rect' : 'none'}
+                                     hide={!STATES[settings.currentState]?.includes(STATE.ELEC_BAR)}
+                                     stackId="a"
+                                     order="0"
+                                />
+                                <Bar dataKey="electricityCost" fill="red" barSize={30}
                                      name="STROMRECHNUNG PRO MONAT"
                                      label='none'
                                      legendType={STATES[settings.currentState]?.includes(STATE.ELEC_BAR) ? 'rect' : 'none'}
-                                     hide={!STATES[settings.currentState]?.includes(STATE.ELEC_BAR)}>
-                                    {comparisonDataWithRange.map((entry, index) => (
-                                        <Cell key="elec-bar" fill={`url(#elec-bar)`}/>
-                                    ))}
-                                </Bar>
+                                     hide={!STATES[settings.currentState]?.includes(STATE.ELEC_BAR)}
+                                     stackId="a"
+                                     order="1"
+                                    />
+                                    {/*{comparisonDataWithRange.map((entry, index) => (*/}
+                                    {/*    <Cell key="elec-bar" fill={`url(#elec-bar)`}/>*/}
+                                    {/*))}*/}
+                                {/*</Bar>*/}
+                                    {/*{comparisonDataWithRange.map((entry, index) => (*/}
+                                    {/*    <Cell key="elec-bar" fill={`url(#elec-bar)`}/>*/}
+                                    {/*))}*/}
+                                {/*</Bar>*/}
                             </ComposedChart>
                         </ResponsiveContainer>
                         {settings.currentState !== 0 ? <div
                             className="text-gray-300 text-font-medium text-sm pt-2 tracking-wide gap-4 flex flex-col w-[20%]">
                             <h2 className="text-2xl font-bold">IHRE STROMKOSTEN IN DEN NÄCHSTEN 25 JAHREN</h2>
-                            <p className="text-3xl text-red-600 font-bold">{'OHNE SOLAR'}{<p
+                            <p className="text-3xl text-red-600 font-bold">{'STROM'}{<p
                                 className="text-5xl text-red-600 font-bold">{formatEuroCurrency(totalElecCost)}</p>}</p>
+                            <p className="text-3xl text-[#f59e42] font-bold">{'MOBILITÄT'}{<p
+                                className="text-5xl text-[#f59e42] font-bold">{formatEuroCurrency(totalTransportCost)}</p>}</p>
+                            <p className="text-3xl text-[#FFFF00] font-bold">{'WÄRME'}{<p
+                                className="text-5xl text-[#FFFF00] font-bold">{formatEuroCurrency(totalTransportCost)}</p>}</p>
+                            <p className="text-3xl text-red-600 font-bold">{'INSGESAMT'}{<p
+                                className="text-5xl text-red-600 font-bold">{formatEuroCurrency(totalElecCost + totalTransportCost + totalHeatingCost)}</p>}</p>
                             {stateHasSolarLine() && STATES[settings.currentState]?.includes(STATE.SOLAR_TEXT) ?
                                 <>
                                     {
                                     <p className="text-3xl text-green-600 font-bold leading-6 pt-8">{'MIT SOLAR'}
                                         {<p className="text-5xl font-bold">{formatEuroCurrency(totalSolarCost)}</p>}
                                     </p>}
-                                    {(totalElecCost - totalSolarCost) > 0 && STATES[settings.currentState]?.includes(STATE.AREA)  ?
+                                    {((totalElecCost + totalTransportCost + totalHeatingCost) - totalSolarCost) > 0 && STATES[settings.currentState]?.includes(STATE.AREA)  ?
                                         <p className="text-3xl font-bold text-green-600 leading-6 pt-8">{'ERSPARNIS'}
                                             {
-                                                <p className="text-5xl ">{formatEuroCurrency(totalElecCost - totalSolarCost)}</p>}
+                                                <p className="text-5xl ">{formatEuroCurrency((totalElecCost + totalTransportCost + totalHeatingCost) - totalSolarCost)}</p>}
                                         </p> : null}
                                 </> : null}
                         </div> : null}
@@ -361,13 +394,13 @@ export default function SolarElecChart() {
                 </AccordionGroup>
             </div>
             <div className="absolute bottom-7 right-7" data-testid="forward-fab">
-                <Tooltip title="comparison stat" arrow>
-                    <Fab variant="circular" sx={{backgroundColor: "#474747", color: "#878787de"}} component={Link}
-                         to={`/stats?pDate=${pDate}&clientId=${clientId}`}
-                         aria-label="add">
-                        <ArrowForward/>
-                    </Fab>
-                </Tooltip>
+                {/*<Tooltip title="comparison stat" arrow>*/}
+                {/*    <Fab variant="circular" sx={{backgroundColor: "#474747", color: "#878787de"}} component={Link}*/}
+                {/*         to={`/stats?pDate=${pDate}&clientId=${clientId}`}*/}
+                {/*         aria-label="add">*/}
+                {/*        <ArrowForward/>*/}
+                {/*    </Fab>*/}
+                {/*</Tooltip>*/}
             </div>
         </>
     )
@@ -375,7 +408,7 @@ export default function SolarElecChart() {
 }
 
 function getYAxisTicks(comparisonDataWithRange, showSolar): Array<number> {
-    const highestYValue = comparisonDataWithRange[comparisonDataWithRange.length - 1].electricityCost;
+    const highestYValue = comparisonDataWithRange[comparisonDataWithRange.length - 1].totalElecCost;
     let lowestYValue = 0;
     if (showSolar) {
         const lowestSolarCost = Math.min(...comparisonDataWithRange.map(item => item.solarCost));

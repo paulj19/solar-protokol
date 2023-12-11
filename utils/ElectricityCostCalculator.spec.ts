@@ -13,7 +13,7 @@ import {
     getGenerationMonthly,
     normalizedMonthlyConsumption,
     normalizedMonthlyProduction, GenerationConsumParam,
-    round, getGenerationConsumParam, calcCumulativeSaved
+    round, getGenerationConsumParam, calcCumulativeSaved, calcTransportCostMonthly, calcHeatingCostMonthly
 } from "@/utils/ElectricityCostCalculator";
 import {PredictionParams} from "@/types/types";
 import {PayOffParam} from "@/src/payoffChart/PayoffChart";
@@ -219,4 +219,17 @@ describe("ElectricityCostCalculator", () => {
     //    const cumulativeSaved: Array<PayOffParam> = calcCumulativeSaved(params);
     //    expect(cumulativeSaved).toEqual(expectedCumlativeSaved);
     //});
+    it('should calculate transport cost monthly', () => {
+        const params: PredictionParams = {year: 5, clientParams: {transportCost: 1200}, generalParams: {inflationRate: 3}};
+        const expectedTransportCost = 116;
+        const resultTransportCost = calcTransportCostMonthly(params);
+        expect(resultTransportCost).toEqual(expectedTransportCost);
+    })
+
+    it.only('should calculate heating cost monthly', () => {
+        const params: PredictionParams = {year: 5, clientParams: {heatingCost: 1200}, generalParams: {inflationRate: 3}};
+        const expectedHeatingCost = 116;
+        const resultHeatingCost = calcHeatingCostMonthly(params);
+        expect(resultHeatingCost).toEqual(expectedHeatingCost );
+    })
 });
