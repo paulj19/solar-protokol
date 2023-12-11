@@ -44,22 +44,22 @@ enum STATE {
     AREA
 }
 
-const STATES = [[STATE.ELEC_BAR], [STATE.ELEC_BAR, STATE.ELEC_LINE], [STATE.ELEC_LINE], [STATE.ELEC_LINE, STATE.SOLAR_LINE],[STATE.ELEC_LINE, STATE.SOLAR_LINE, STATE.SOLAR_TEXT], [STATE.ELEC_LINE, STATE.SOLAR_LINE, STATE.AREA, STATE.SOLAR_TEXT]]
+const STATES = [[STATE.ELEC_BAR], [STATE.ELEC_BAR, STATE.ELEC_LINE], [STATE.ELEC_LINE], [STATE.ELEC_LINE, STATE.SOLAR_LINE], [STATE.ELEC_LINE, STATE.SOLAR_LINE, STATE.SOLAR_TEXT], [STATE.ELEC_LINE, STATE.SOLAR_LINE, STATE.AREA, STATE.SOLAR_TEXT]]
 
 export default function SolarElecChart() {
     const {setTheme} = useTheme();
     setTheme('gray-bg');
-    // const navigate = useNavigate();
-    // const [searchParams] = useSearchParams();
-    // const clientId = searchParams.get('clientId');
-    // const pDate = searchParams.get('pDate');
-    const clientId = "1037"
-    const pDate = "2023-12-11"
-    // useEffect(() => {
-    //     if (!clientId || !pDate) {
-    //         navigate('/');
-    //     }
-    // }, []);
+    const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
+    const clientId = searchParams.get('clientId');
+    const pDate = searchParams.get('pDate');
+    // const clientId = "1042"
+    // const pDate = "2023-12-11"
+    useEffect(() => {
+        if (!clientId || !pDate) {
+            navigate('/');
+        }
+    }, []);
     const [inflationRate, setInflationRate] = useState<number>(null)
     const [elecIncreaseRate, setElecIncreaseRate] = useState<number>(null)
     const [settings, changeSettings] = useState<Settings>({currentState: 0});
@@ -203,7 +203,7 @@ export default function SolarElecChart() {
                                 <Bar dataKey="transportCost" fill="brown" barSize={30}
                                      name="MOBILITÄT"
                                      label='none'
-                                    legendType={STATES[settings.currentState]?.includes(STATE.ELEC_BAR) ? 'rect' : 'none'}
+                                     legendType={STATES[settings.currentState]?.includes(STATE.ELEC_BAR) && clientParams.transportCost ? 'rect' : 'none'}
                                      hide={!STATES[settings.currentState]?.includes(STATE.ELEC_BAR)}
                                      stackId="a"
                                      order="2"
@@ -215,7 +215,7 @@ export default function SolarElecChart() {
                                 <Bar dataKey="heatingCost" fill="yellow" barSize={30}
                                      name="WÄRME"
                                      label='none'
-                                    legendType={STATES[settings.currentState]?.includes(STATE.ELEC_BAR) ? 'rect' : 'none'}
+                                     legendType={STATES[settings.currentState]?.includes(STATE.ELEC_BAR) && clientParams.heatingCost ? 'rect' : 'none'}
                                      hide={!STATES[settings.currentState]?.includes(STATE.ELEC_BAR)}
                                      stackId="a"
                                      order="0"
@@ -227,14 +227,14 @@ export default function SolarElecChart() {
                                      hide={!STATES[settings.currentState]?.includes(STATE.ELEC_BAR)}
                                      stackId="a"
                                      order="1"
-                                    />
-                                    {/*{comparisonDataWithRange.map((entry, index) => (*/}
-                                    {/*    <Cell key="elec-bar" fill={`url(#elec-bar)`}/>*/}
-                                    {/*))}*/}
+                                />
+                                {/*{comparisonDataWithRange.map((entry, index) => (*/}
+                                {/*    <Cell key="elec-bar" fill={`url(#elec-bar)`}/>*/}
+                                {/*))}*/}
                                 {/*</Bar>*/}
-                                    {/*{comparisonDataWithRange.map((entry, index) => (*/}
-                                    {/*    <Cell key="elec-bar" fill={`url(#elec-bar)`}/>*/}
-                                    {/*))}*/}
+                                {/*{comparisonDataWithRange.map((entry, index) => (*/}
+                                {/*    <Cell key="elec-bar" fill={`url(#elec-bar)`}/>*/}
+                                {/*))}*/}
                                 {/*</Bar>*/}
                             </ComposedChart>
                         </ResponsiveContainer>
@@ -243,19 +243,19 @@ export default function SolarElecChart() {
                             <h2 className="text-2xl font-bold">IHRE STROMKOSTEN IN DEN NÄCHSTEN 25 JAHREN</h2>
                             <p className="text-3xl text-red-600 font-bold">{'STROM'}{<p
                                 className="text-5xl text-red-600 font-bold">{formatEuroCurrency(totalElecCost)}</p>}</p>
+                            <p className="text-3xl text-[#FFFF00] font-bold">{'WÄRME'}{<p
+                                className="text-5xl text-[#FFFF00] font-bold">{formatEuroCurrency(totalHeatingCost)}</p>}</p>
                             <p className="text-3xl text-[#f59e42] font-bold">{'MOBILITÄT'}{<p
                                 className="text-5xl text-[#f59e42] font-bold">{formatEuroCurrency(totalTransportCost)}</p>}</p>
-                            <p className="text-3xl text-[#FFFF00] font-bold">{'WÄRME'}{<p
-                                className="text-5xl text-[#FFFF00] font-bold">{formatEuroCurrency(totalTransportCost)}</p>}</p>
                             <p className="text-3xl text-red-600 font-bold">{'INSGESAMT'}{<p
                                 className="text-5xl text-red-600 font-bold">{formatEuroCurrency(totalElecCost + totalTransportCost + totalHeatingCost)}</p>}</p>
                             {stateHasSolarLine() && STATES[settings.currentState]?.includes(STATE.SOLAR_TEXT) ?
                                 <>
                                     {
-                                    <p className="text-3xl text-green-600 font-bold leading-6 pt-8">{'MIT SOLAR'}
-                                        {<p className="text-5xl font-bold">{formatEuroCurrency(totalSolarCost)}</p>}
-                                    </p>}
-                                    {((totalElecCost + totalTransportCost + totalHeatingCost) - totalSolarCost) > 0 && STATES[settings.currentState]?.includes(STATE.AREA)  ?
+                                        <p className="text-3xl text-green-600 font-bold leading-6 pt-8">{'MIT SOLAR'}
+                                            {<p className="text-5xl font-bold">{formatEuroCurrency(totalSolarCost)}</p>}
+                                        </p>}
+                                    {((totalElecCost + totalTransportCost + totalHeatingCost) - totalSolarCost) > 0 && STATES[settings.currentState]?.includes(STATE.AREA) ?
                                         <p className="text-3xl font-bold text-green-600 leading-6 pt-8">{'ERSPARNIS'}
                                             {
                                                 <p className="text-5xl ">{formatEuroCurrency((totalElecCost + totalTransportCost + totalHeatingCost) - totalSolarCost)}</p>}
@@ -394,13 +394,13 @@ export default function SolarElecChart() {
                 </AccordionGroup>
             </div>
             <div className="absolute bottom-7 right-7" data-testid="forward-fab">
-                {/*<Tooltip title="comparison stat" arrow>*/}
-                {/*    <Fab variant="circular" sx={{backgroundColor: "#474747", color: "#878787de"}} component={Link}*/}
-                {/*         to={`/stats?pDate=${pDate}&clientId=${clientId}`}*/}
-                {/*         aria-label="add">*/}
-                {/*        <ArrowForward/>*/}
-                {/*    </Fab>*/}
-                {/*</Tooltip>*/}
+                <Tooltip title="comparison stat" arrow>
+                    <Fab variant="circular" sx={{backgroundColor: "#474747", color: "#878787de"}} component={Link}
+                         to={`/stats?pDate=${pDate}&clientId=${clientId}`}
+                         aria-label="add">
+                        <ArrowForward/>
+                    </Fab>
+                </Tooltip>
             </div>
         </>
     )

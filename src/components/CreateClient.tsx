@@ -32,6 +32,8 @@ export function CreateClient({selectedDate, clientToEdit, setModalParams}) {
         basePrice: 10,
         unitPrice: 32,
         consumptionYearly: 3500,
+        transportCost: 1200,
+        heatingCost: 1200,
         productionYearly: 7000,
         isPurchase: false,
         purchasePrice: 20000,
@@ -147,7 +149,7 @@ export function CreateClient({selectedDate, clientToEdit, setModalParams}) {
                             name="basePrice"
                             control={control}
                             render={({field}) => <TextField {...field} label="Grundpreis" onChange={(e) => {
-                                field.onChange(parseInt(e.target.value))
+                                field.onChange(Number(e.target.value))
                             }} InputProps={{
                                 endAdornment: <InputAdornment
                                     position="start">€</InputAdornment>, type: 'number', required: true,
@@ -157,28 +159,37 @@ export function CreateClient({selectedDate, clientToEdit, setModalParams}) {
                             name="unitPrice"
                             control={control}
                             render={({field}) => <TextField {...field} label="Verbrauchspreis" onChange={(e) => {
-                                field.onChange(parseInt(e.target.value))
+                                field.onChange(Number(e.target.value))
                             }} InputProps={{
                                 endAdornment: <InputAdornment position="start">Cents/Kwh</InputAdornment>,
-                                type: 'number',
+                                type: 'number', required: true,
                             }} inputProps={{pattern: "[0-9]+"}}/>}
                         />
                         <Controller
                             name="consumptionYearly"
                             control={control}
                             render={({field}) => <TextField {...field} label="Stromverbrauch pro Jahr" onChange={(e) => {
-                                field.onChange(parseInt(e.target.value))
+                                field.onChange(Number(e.target.value))
                             }} InputProps={{
-                                endAdornment: <InputAdornment position="start">Kwh</InputAdornment>, type: 'number',
+                                endAdornment: <InputAdornment position="start">Kwh</InputAdornment>, type: 'number', required: true,
                             }}/>}
                         />
                         <Controller
-                            name="productionYearly"
+                            name="transportCost"
                             control={control}
-                            render={({field}) => <TextField {...field} label="Stromproduktion pro Jahr" onChange={(e) => {
-                                field.onChange(parseInt(e.target.value))
+                            render={({field}) => <TextField {...field} label="Mobilitätkosten pro Jahr" onChange={(e) => {
+                                field.onChange(Number(e.target.value))
                             }} InputProps={{
-                                endAdornment: <InputAdornment position="start">Kwh</InputAdornment>, type: 'number',
+                                endAdornment: <InputAdornment position="start">€</InputAdornment>, type: 'number', required: true,
+                            }}/>}
+                        />
+                        <Controller
+                            name="heatingCost"
+                            control={control}
+                            render={({field}) => <TextField {...field} label="Heizungkosten pro Jahr" onChange={(e) => {
+                                field.onChange(Number(e.target.value))
+                            }} InputProps={{
+                                endAdornment: <InputAdornment position="start">€</InputAdornment>, type: 'number', required: true,
                             }}/>}
                         />
                     </div>
@@ -209,9 +220,18 @@ export function CreateClient({selectedDate, clientToEdit, setModalParams}) {
                                                    position="start">€</InputAdornment>, type: 'number',
                                            }}
                                            onChange={(e) => {
-                                               field.onChange(parseInt(e.target.value))
+                                               field.onChange(Number(e.target.value))
                                            }}
                                 />}
+                        />
+                        <Controller
+                            name="productionYearly"
+                            control={control}
+                            render={({field}) => <TextField {...field} label="Stromproduktion pro Jahr" onChange={(e) => {
+                                field.onChange(Number(e.target.value))
+                            }} InputProps={{
+                                endAdornment: <InputAdornment position="start">Kwh</InputAdornment>, type: 'number', required: true,
+                            }}/>}
                         />
                     </div>
                     <Button variant="contained" color="inherit" type="submit">Speichern</Button>
