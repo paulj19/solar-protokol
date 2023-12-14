@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {ReactElement, useEffect, useState} from 'react';
 import {
     Area,
     Bar, CartesianGrid,
@@ -115,7 +115,7 @@ export default function SolarElecChart() {
         return acc.concat(item);
     }, []);
     // const {totalElecCost, totalSolarCost, totalTransportCost, totalHeatingCost} = calcTotalSaved({year: 30, clientParams, generalParams: {...generalParams, inflationRate, elecIncreaseRate}});
-    const {totalSaved, totalElecCost, totalSolarCost, totalTransportCost, totalHeatingCost} = calcTotalSaved({year: 30, clientParams, generalParams: {...generalParams, inflationRate: inflationRate ?? generalParams.inflationRate, elecIncreaseRate: elecIncreaseRate ?? generalParams.elecIncreaseRate}});
+    const {totalSaved, totalElecCost, totalSolarCost, totalTransportCost, totalHeatingCost} = calcTotalSaved({year: 30, clientParams, generalParams: {...generalParams, inflationRate: inflationRate ?? generalParams.inflationRate, electricityIncreaseRate: elecIncreaseRate ?? generalParams.electricityIncreaseRate}});
 
     function stateHasSolarLine() {
         return STATES[settings.currentState]?.includes(STATE.SOLAR_LINE);
@@ -528,7 +528,6 @@ function formatEuroCurrency(totalSaved) {
         currency: 'EUR',
         maximumFractionDigits: 0,
     }).format(totalSaved);
-
 }
 
 const CustomTooltip = ({active, payload, label, currentYear}) => {
@@ -572,3 +571,17 @@ function LegendFormatter(value, inflationRate, elecIncreaseRate) {
             </span>)
 }
 
+function CustomLegend(props): ReactElement {
+    const {payload} = props;
+    return <div>
+        {payload.map((item, index) => {
+            return (
+                <div key={`legend-${index}`} className="flex gap-2">
+                    <span className="text-gray-300">{item.value}</span>
+                </div>
+            );
+        })}
+
+    </div>
+
+}

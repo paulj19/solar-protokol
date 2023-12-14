@@ -62,13 +62,13 @@ export function calcPredictions(params: PredictionParams): Array<CostPredictions
 export function calcTransportCostMonthly({
                                              year,
                                              clientParams: {transportCost},
-                                             generalParams: {inflationRate}
+                                             generalParams: {inflationRate, electricityIncreaseRate}
                                          }): number {
-    return round(priceIncrease((transportCost / 12), inflationRate, year));
+    return round(priceIncrease((transportCost / 12), inflationRate + electricityIncreaseRate, year));
 }
 
-export function calcHeatingCostMonthly({year, clientParams: {heatingCost}, generalParams: {inflationRate}}): number {
-    return round(priceIncrease((heatingCost / 12), inflationRate, year));
+export function calcHeatingCostMonthly({year, clientParams: {heatingCost}, generalParams: {inflationRate, electricityIncreaseRate}}): number {
+    return round(priceIncrease((heatingCost / 12), inflationRate + electricityIncreaseRate, year));
 }
 
 export function calcTotalSaved(params: PredictionParams): any {
