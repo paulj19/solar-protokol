@@ -31,6 +31,7 @@ import AccordionGroup from "@mui/joy/AccordionGroup";
 import Accordion from "@mui/joy/Accordion";
 import AccordionDetails from "@mui/joy/AccordionDetails";
 import AccordionSummary from "@mui/joy/AccordionSummary";
+import {PredictionParams} from "@/types/types";
 
 export default function Stats() {
     const navigate = useNavigate();
@@ -65,7 +66,7 @@ export default function Stats() {
     //isError -> error page, put in rootApi, if undefined show error
     //do all error checks
 
-    const predictionParams = {year, clientParams, generalParams};
+    const predictionParams: PredictionParams = {year, clientParams, generalParams};
     return (
         <>
             <h1 className="m-auto font-medium font-sans text-4xl tracking-wide text-gray-300">{"Jahr " + (new Date().getFullYear() + year)}</h1>
@@ -76,27 +77,27 @@ export default function Stats() {
                         <CumStatsChart {...predictionParams} />
                     </div>
                     <div className="flex flex-col">
-                    <div className="pt-14 pb-10">
-                        <AccordionGroup variant="plain">
-                            <Accordion>
-                                <AccordionSummary><span
-                                  className='text-legend'>Rechnung Details</span></AccordionSummary>
-                                {/* <AccordionSummary><span className='text-legend'> PV Rate</span></AccordionSummary> */}
-                                <AccordionDetails>
-                                    <ElectricityStats {...predictionParams} />
-                                </AccordionDetails>
-                            </Accordion>
-                        </AccordionGroup>
-                    </div>
-                <div className="flex m-auto flex-col pt-24">
-                    <TotalCostSavings {...predictionParams} />
-                </div>
+                        <div className="pt-14 pb-10">
+                            <AccordionGroup variant="plain">
+                                <Accordion>
+                                    <AccordionSummary><span
+                                        className='text-legend'>Rechnung Details</span></AccordionSummary>
+                                    {/* <AccordionSummary><span className='text-legend'> PV Rate</span></AccordionSummary> */}
+                                    <AccordionDetails>
+                                        <ElectricityStats {...predictionParams} />
+                                    </AccordionDetails>
+                                </Accordion>
+                            </AccordionGroup>
+                        </div>
+                        <div className="flex m-auto flex-col pt-24">
+                            <TotalCostSavings {...predictionParams} />
+                        </div>
                     </div>
                 </div>
             </div>
             {/*<Slider ticks={[0, 5, 10, 15, 20, 25]} onChangeHandler={setYear} defaultValue={year} label={""}*/}
             {/*        step={1}/>*/}
-            <div className="flex w-full justify-center gap-20 pt-3">
+            <div className="flex w-full justify-center">
                 <div className="w-[200px] self-end" data-testid="year-slider">
                     <ColoredSlider
                         orientation="horizontal"
@@ -104,10 +105,10 @@ export default function Stats() {
                         aria-label="year-slider"
                         // defaultValue={year}
                         min={0}
-                        max={30}
+                        max={generalParams.yearLimitPrediction}
                         step={1}
                         defaultValue={year}
-                        marks={getSliderMarks()}
+                        marks={getSliderMarks(generalParams.yearLimitPrediction)}
                         onChange={(e, value) => setYear(Number(value))}
                         sx={{
                             "--Slider-markSize": "3px"
@@ -117,14 +118,15 @@ export default function Stats() {
             </div>
             <div className="absolute bottom-7 left-7" data-testid="backward-fab">
                 <Tooltip title="comparison chart" arrow>
-                <Fab variant="circular"  sx={{backgroundColor: "#474747", color: "#878787de"}} component={Link} to={`/solarElecChart?pDate=${pDate}&clientId=${clientId}`}
-                     aria-label="add">
-                    <ArrowBack/>
-                </Fab>
+                    <Fab variant="circular" sx={{backgroundColor: "#474747", color: "#878787de"}} component={Link}
+                         to={`/solarElecChart?pDate=${pDate}&clientId=${clientId}`}
+                         aria-label="add">
+                        <ArrowBack/>
+                    </Fab>
                 </Tooltip>
             </div>
             <div className="absolute bottom-7 right-7" data-testid="forward-fab">
-                <Tooltip title="generation consumption chart" arrow> 
+                <Tooltip title="generation consumption chart" arrow>
                     <Fab variant="circular" sx={{backgroundColor: "#474747", color: "#878787de"}} component={Link}
                          to={`/generationConsumChart?pDate=${pDate}&clientId=${clientId}`}
                          aria-label="add">
@@ -136,11 +138,12 @@ export default function Stats() {
     )
 }
 
-function getSliderMarks(): Array<Mark> {
+function getSliderMarks(tickLimit: number): Array<Mark> {
     const marks = [];
-    for (let i = 0; i <= 30; i += 5) {
+    for (let i = 0; i < tickLimit; i += 5) {
         marks.push({value: i, label: <span className="text-gray-400 font-medium">{i}</span>});
     }
+    marks.push({value: tickLimit, label: <span className="text-gray-400 font-medium">{tickLimit}</span>});
     return marks;
 }
 
@@ -227,8 +230,9 @@ export function getBarLabel(text, isValueTiny = false): ReactElement {
                                      className="font-sans font-medium tracking-wide whitespace-pre-line"
                                      style={{paddingLeft: "5px", textOverflow: "visible"}}>{text}</LabelList> : null
 }
+
 export function getBarLabelCost(text): ReactElement {
     return <LabelList position={"right"} fill="#fff"
-                                     className="font-sans font-medium tracking-wide "
-                                     style={{paddingLeft: "5px", textOverflow: "visible"}}>{text}</LabelList>
+                      className="font-sans font-medium tracking-wide "
+                      style={{paddingLeft: "5px", textOverflow: "visible"}}>{text}</LabelList>
 }

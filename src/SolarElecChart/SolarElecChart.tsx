@@ -115,7 +115,7 @@ export default function SolarElecChart() {
         return acc.concat(item);
     }, []);
     // const {totalElecCost, totalSolarCost, totalTransportCost, totalHeatingCost} = calcTotalSaved({year: 30, clientParams, generalParams: {...generalParams, inflationRate, elecIncreaseRate}});
-    const {totalSaved, totalElecCost, totalSolarCost, totalTransportCost, totalHeatingCost} = calcTotalSaved({year: 30, clientParams, generalParams: {...generalParams, inflationRate: inflationRate ?? generalParams.inflationRate, electricityIncreaseRate: elecIncreaseRate ?? generalParams.electricityIncreaseRate}});
+    const {totalSaved, totalElecCost, totalSolarCost, totalTransportCost, totalHeatingCost} = calcTotalSaved({year: generalParams.yearLimitPrediction, clientParams, generalParams: {...generalParams, inflationRate: inflationRate ?? generalParams.inflationRate, electricityIncreaseRate: elecIncreaseRate ?? generalParams.electricityIncreaseRate}});
 
     function stateHasSolarLine() {
         return STATES[settings.currentState]?.includes(STATE.SOLAR_LINE);
@@ -139,7 +139,7 @@ export default function SolarElecChart() {
                                 }}
                             >
                                 {/*<CartesianGrid stroke="#000000" strokeWidth={1} horizontalPoints={[10]} hori vertical={false}/>*/}
-                                <XAxis dataKey="year" ticks={[0, 5, 10, 15, 20, 25, 30]}
+                                <XAxis dataKey="year" ticks={getXAxisMarks(generalParams.yearLimitPrediction)}
                                        tickFormatter={value => `${value + currentYear}`}
                                        tick={{fill: 'rgba(var(--color-axis), var(--alpha-axis))'}}
                                        tickSize={8} tickMargin={15} strokeWidth={0.7}
@@ -149,6 +149,7 @@ export default function SolarElecChart() {
                                     tickFormatter={formatYAxisTicks} strokeWidth={0.7}
                                     tick={{fill: 'rgba(var(--color-axis), var(--alpha-axis))'}} tickSize={8}
                                     tickMargin={15} width={80}
+                                    domain={["dataMin", "dataMax"]}
                                 >
                                     <Label
                                         style={{
@@ -241,7 +242,7 @@ export default function SolarElecChart() {
                         </ResponsiveContainer>
                         {settings.currentState !== 0 ? <div
                             className="text-gray-300 text-font-medium text-sm pt-2 tracking-wide gap-4 flex flex-col w-[20%]">
-                            <h2 className="text-2xl font-bold">IHRE STROMKOSTEN IN DEN NÄCHSTEN 30 JAHREN</h2>
+                            <h2 className="text-2xl font-bold">{`IHRE STROMKOSTEN IN DEN NÄCHSTEN ${generalParams.yearLimitPrediction} JAHREN`}</h2>
                             <p className="text-3xl text-red-600 font-bold">{'STROM'}{<p
                                 className="text-5xl text-red-600 font-bold">{formatEuroCurrency(totalElecCost)}</p>}</p>
                             <p className="text-3xl text-[#FFFF00] font-bold">{'WÄRME'}{<p
@@ -584,4 +585,12 @@ function CustomLegend(props): ReactElement {
 
     </div>
 
+}
+function getXAxisMarks(tickLimit: number): Array<number> {
+    const marks = [];
+    for (let i = 0; i < tickLimit; i += 5) {
+        marks.push(i);
+    }
+    marks.push(tickLimit)
+    return marks;
 }

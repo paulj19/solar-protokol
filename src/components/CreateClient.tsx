@@ -23,7 +23,12 @@ import ErrorScreen from "@/src/components/ErrorScreen";
 import {CLOSE_MODAL_DELAY, ERROR_TEXT, ERROR_TEXT_FIELD} from "@/utils/CommonVars";
 
 export function CreateClient({selectedDate, clientToEdit, setModalParams}) {
-    const {data, isLoading: isIdLoading, isFetching: isIdFetching, isError} = useGetHighestClientIdQuery("uid_1", {skip: Boolean(clientToEdit)});
+    const {
+        data,
+        isLoading: isIdLoading,
+        isFetching: isIdFetching,
+        isError
+    } = useGetHighestClientIdQuery("uid_1", {skip: Boolean(clientToEdit)});
     const prevPresentationDate = useRef<Date>();
     const defaultValues = {
         nickname: "",
@@ -42,7 +47,12 @@ export function CreateClient({selectedDate, clientToEdit, setModalParams}) {
     const [updateHighestClientId] = useUpdateHighestClientIdMutation();
     const [addNewClient, result] = useAddClientMutation();
     const {control, reset, formState, handleSubmit, watch} = useForm({
-        values: clientToEdit ? {...clientToEdit, presentationDate: new Date(clientToEdit.presentationDate), unitPrice: clientToEdit.unitPrice * 100, unitPriceSolar: clientToEdit.unitPriceSolar * 100} : {
+        values: clientToEdit ? {
+            ...clientToEdit,
+            presentationDate: new Date(clientToEdit.presentationDate),
+            unitPrice: clientToEdit.unitPrice * 100,
+            unitPriceSolar: clientToEdit.unitPriceSolar * 100
+        } : {
             ...defaultValues,
             presentationDate: prevPresentationDate.current ? addHours(prevPresentationDate.current, 1) : setHours(new Date(selectedDate), 10),
             id: data ? data.highestClientId + 1 : 0,
@@ -76,9 +86,18 @@ export function CreateClient({selectedDate, clientToEdit, setModalParams}) {
                 purchasePrice = null;
             }
 
-            const client = {...data, presentationDate: data.presentationDate.toString(), unitPrice, unitPriceSolar, purchasePrice}
+            const client = {
+                ...data,
+                presentationDate: data.presentationDate.toString(),
+                unitPrice,
+                unitPriceSolar,
+                purchasePrice
+            }
 
-            await addNewClient({pDate: presentationDate, data: {["uid_1/" + presentationDate + "/cid_" + client.id]: client}}).unwrap()
+            await addNewClient({
+                pDate: presentationDate,
+                data: {["uid_1/" + presentationDate + "/cid_" + client.id]: client}
+            }).unwrap()
 
             if (!clientToEdit) {
                 await updateHighestClientId({"uid_1": client.id}).unwrap().catch((e) => {
@@ -193,14 +212,14 @@ export function CreateClient({selectedDate, clientToEdit, setModalParams}) {
                             }}/>}
                         />
                         <Controller
-                            name="transportCost"
+                            name="productionYearly"
                             control={control}
-                            render={({field}) => <TextField {...field} label="Mobilitätkosten pro Jahr"
+                            render={({field}) => <TextField {...field} label="Stromproduktion pro Jahr"
                                                             onChange={(e) => {
                                                                 field.onChange(Number(e.target.value))
                                                             }} InputProps={{
                                 endAdornment: <InputAdornment
-                                    position="start">€</InputAdornment>, type: 'number', required: true,
+                                    position="start">Kwh</InputAdornment>, type: 'number', required: true,
                             }}/>}
                         />
                         <Controller
@@ -246,14 +265,14 @@ export function CreateClient({selectedDate, clientToEdit, setModalParams}) {
                                 />}
                         />
                         <Controller
-                            name="productionYearly"
+                            name="transportCost"
                             control={control}
-                            render={({field}) => <TextField {...field} label="Stromproduktion pro Jahr"
+                            render={({field}) => <TextField {...field} label="Mobilitätkosten pro Jahr"
                                                             onChange={(e) => {
                                                                 field.onChange(Number(e.target.value))
                                                             }} InputProps={{
                                 endAdornment: <InputAdornment
-                                    position="start">Kwh</InputAdornment>, type: 'number', required: true,
+                                    position="start">€</InputAdornment>, type: 'number', required: true,
                             }}/>}
                         />
                     </div>

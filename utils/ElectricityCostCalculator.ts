@@ -42,7 +42,7 @@ export function calcPredictions(params: PredictionParams): Array<CostPredictions
     let solarCost;
     let transportCost;
     let heatingCost;
-    for (let i = 0; i <= 30; i += 1) {
+    for (let i = 0; i <= params.generalParams.yearLimitPrediction; i += 1) {
         electricityCost = calcElectricityCostMonthly({...params, year: i});
         solarCost = calcSolarCostMonthly({...params, year: i}).solarCost;
         transportCost = calcTransportCostMonthly({...params, year: i})
@@ -95,7 +95,7 @@ export function calcCumulativeSaved(params: PredictionParams): Array<PayOffParam
     const currentYearSaved = calcElectricityCostMonthly({...params, year: 0}) * (11 - getMonth(new Date()));
     totalSaved += currentYearSaved;
     cumulativeSaved.push({year: 0, saved: totalSaved});
-    for (let i = 1; i <= 30; i += 1) {
+    for (let i = 1; i <= params.generalParams.yearLimitPrediction; i += 1) {
         const currentYearSaved = round(params.clientParams.consumptionYearly * calcUnitPrice({
             ...params,
             year: i
@@ -204,8 +204,8 @@ function calcFeedInPrice({
     return feedInPrice;
 }
 
-function calcRent({year, generalParams: {rent, rentDiscountPeriod, rentDiscountAmount}}: PredictionParams): number {
-    if (year > 25) {
+function calcRent({year, generalParams: {rent, rentDiscountPeriod, rentDiscountAmount, yearLimitRent}}: PredictionParams): number {
+    if (year > yearLimitRent) {
         return 0;
     }
     if (year < rentDiscountPeriod) {

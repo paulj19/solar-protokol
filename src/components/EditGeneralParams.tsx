@@ -8,10 +8,19 @@ import ErrorScreen from "@/src/components/ErrorScreen";
 import {CLOSE_MODAL_DELAY, ERROR_TEXT} from "@/utils/CommonVars";
 
 export function EditGeneralParams({setOpenModal}) {
-    const {data: values, isLoading: isGeneralParamLoading, isError: isGeneralParamQueryError} = useGetGeneralParamsQuery(undefined);
+    const {
+        data: values,
+        isLoading: isGeneralParamLoading,
+        isError: isGeneralParamQueryError
+    } = useGetGeneralParamsQuery(undefined);
     const [updateGeneralParams] = useUpdateGeneralParamsMutation();
     const [snackData, setSnackData] = useState({open: false, severity: null, message: null});
-    const {control, reset, formState, handleSubmit} = useForm({values: {...values, feedInPrice: values?.feedInPrice * 100,}});
+    const {control, reset, formState, handleSubmit} = useForm({
+        values: {
+            ...values,
+            feedInPrice: values?.feedInPrice * 100,
+        }
+    });
 
     if (isGeneralParamLoading) {
         return <Loading/>;
@@ -52,13 +61,13 @@ export function EditGeneralParams({setOpenModal}) {
                 textColor="inherit"
                 fontWeight="sm"
                 textAlign="center"
-                pb={6}
+                alignItems="center"
             >
                 Einstellungen
             </Typography>
-            <div className="flex justify-center items-center" data-testid="modal-editGeneralParams">
+            <div className="flex justify-center align-top" data-testid="modal-editGeneralParams">
                 <form onSubmit={handleSubmit(onSubmit)} onReset={() => reset()}
-                      className="grid grid-cols-2 gap-3 w-[70%]">
+                      className="grid grid-cols-2 gap-3">
                     <Controller
                         name="feedInPrice"
                         control={control}
@@ -92,38 +101,49 @@ export function EditGeneralParams({setOpenModal}) {
                         render={({field}) => <TextField {...field} label="Strompreissteigerung" onChange={(e) => {
                             field.onChange(Number(e.target.value))
                         }} InputProps={{
-                            endAdornment: <InputAdornment position="start">Prozent</InputAdornment>, type: 'number',
+                            endAdornment: <InputAdornment position="start">Prozent</InputAdornment>, type: 'number'
                         }}/>}
                     />
-                    <div className="flex justify-between col-span-2 gap-2">
-                        <Controller
-                            name="rentDiscountAmount"
-                            control={control}
-                            render={({field}) => <TextField {...field} label="Rabatt" onChange={(e) => {
-                                field.onChange(Number(e.target.value))
-                            }} InputProps={{
-                                endAdornment: <InputAdornment position="start">€/monat</InputAdornment>, type: 'number',
-                            }}/>}
-                        />
-                        <Controller
-                            name="rentDiscountPeriod"
-                            control={control}
-                            render={({field}) => <TextField {...field} label="Rabatt Jahre" onChange={(e) => {
-                                field.onChange(Number(e.target.value))
-                            }} InputProps={{
-                                endAdornment: <InputAdornment position="start">Jahre</InputAdornment>, type: 'number',
-                            }}/>}
-                        />
-                        <Controller
-                            name="yearLimit"
-                            control={control}
-                            render={({field}) => <TextField {...field} label="Anzahl der Jahre in Grafik" onChange={(e) => {
-                                field.onChange(Number(e.target.value))
-                            }} InputProps={{
-                                endAdornment: <InputAdornment position="start">Jahre</InputAdornment>, type: 'number',
-                            }}/>}
-                        />
-                    </div>
+                    <Controller
+                        name="rentDiscountAmount"
+                        control={control}
+                        render={({field}) => <TextField {...field} label="Rabatt" onChange={(e) => {
+                            field.onChange(Number(e.target.value))
+                        }} InputProps={{
+                            endAdornment: <InputAdornment position="start">€/monat</InputAdornment>, type: 'number',
+                        }}/>}
+                    />
+                    <Controller
+                        name="rentDiscountPeriod"
+                        control={control}
+                        render={({field}) => <TextField {...field} label="Rabatt Jahre" onChange={(e) => {
+                            field.onChange(Number(e.target.value))
+                        }} InputProps={{
+                            endAdornment: <InputAdornment position="start">Jahre</InputAdornment>, type: 'number',
+                        }}/>}
+                    />
+                    <Controller
+                        name="yearLimitPrediction"
+                        control={control}
+                        render={({field}) => <TextField {...field} label="Anzahl der Jahre in Grafik" onChange={(e) => {
+                            field.onChange(Number(e.target.value))
+                        }} InputProps={{
+                            endAdornment: <InputAdornment position="start">Jahre</InputAdornment>,
+                            type: 'number',
+                            required: true,
+                            inputProps: {min: 0, max: 60}
+                        }}
+                        />}
+                    />
+                    <Controller
+                        name="yearLimitRent"
+                        control={control}
+                        render={({field}) => <TextField {...field} label="Mietzahlungsdauer" onChange={(e) => {
+                            field.onChange(Number(e.target.value))
+                        }} InputProps={{
+                            endAdornment: <InputAdornment position="start">Jahre</InputAdornment>, type: 'number',
+                        }}/>}
+                    />
                     <Button variant="contained" color="inherit" type="submit">Speichern</Button>
                     <Button variant="contained" color="inherit" type="reset">Zurücksetzen</Button>
                 </form>

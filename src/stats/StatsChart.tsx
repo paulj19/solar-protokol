@@ -27,8 +27,8 @@ export default function StatsChart(params: PredictionParams) {
 
     const electricityCostNew = basePrice + residualConsumptionCostMonthly;
     const solarCost = rent - feedInTariffMonthly;
-    const maxElecCost = calcMaxElecCost({...params, year: 30});
-    const maxSolarFeedIn = calcMaxSolarFeedInGen({...params, year: 30});
+    const maxElecCost = calcMaxElecCost({...params, year: params.generalParams.yearLimitPrediction});
+    const maxSolarFeedIn = calcMaxSolarFeedInGen({...params, year: params.generalParams.yearLimitPrediction});
     return (
         <div className="min-w-[400px]" data-testid="stats-chart">
             <ResponsiveContainer>
@@ -38,14 +38,14 @@ export default function StatsChart(params: PredictionParams) {
                         right: 10,
                         left: 10,
                         bottom: 20,
-                        top: 23
+                        top: 20
                     }}
                     stackOffset="sign"
                 >
                     {/* <CartesianGrid strokeDasharray="3 3" /> */}
                     {/*//todo fix me*/}
                     {/*<XAxis />*/}
-                    <YAxis ticks={getYAxisTicks(maxElecCost, maxSolarFeedIn)} domain={["dataMin", "dataMax"]} hide={true} />
+                    <YAxis ticks={getYAxisTicks(maxElecCost, maxSolarFeedIn)} domain={["dataMin", "dataMax"]} hide={true}/>
                     {/*<YAxis/>*/}
                     {/*<Tooltip/>*/}
                     <Legend wrapperStyle={{bottom: 12}} formatter={value => <span
