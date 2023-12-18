@@ -198,7 +198,7 @@ export default function ClientList() {
                 <ModalDialog
                     color="neutral"
                     variant="outlined"
-                    className="h-fit w-[70%] justify-center"
+                    className="w-[70%] justify-center"
                 >
                     <ModalClose aria-label="modal-close"/>
                     <CreateClient selectedDate={selectedDate} setModalParams={setModalParams}

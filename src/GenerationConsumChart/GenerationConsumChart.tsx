@@ -77,7 +77,6 @@ export default function GenerationConsumChart(): ReactElement {
             <div data-testid="generationConsum-chart" className="w-[80%] h-[90%] ">
                 <ResponsiveContainer>
                     <ComposedChart
-
                         data={generationConsumParams}
                         margin={{
                             top: 20,
