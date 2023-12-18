@@ -140,6 +140,7 @@ export default function SolarElecChart() {
                             >
                                 {/*<CartesianGrid stroke="#000000" strokeWidth={1} horizontalPoints={[10]} hori vertical={false}/>*/}
                                 <XAxis dataKey="year" ticks={getXAxisMarks(generalParams.yearLimitPrediction)}
+                                       aria-label="x-axis"
                                        tickFormatter={value => `${value + currentYear}`}
                                        tick={{fill: 'rgba(var(--color-axis), var(--alpha-axis))'}}
                                        tickSize={8} tickMargin={15} strokeWidth={0.7}
@@ -205,6 +206,7 @@ export default function SolarElecChart() {
                                 <Bar dataKey="transportCost" fill="brown" barSize={30}
                                      name="MOBILITÄT"
                                      label='none'
+                                     aria-label="bar-transportCost"
                                      legendType={STATES[settings.currentState]?.includes(STATE.ELEC_BAR) && clientParams.transportCost ? 'rect' : 'none'}
                                      hide={!STATES[settings.currentState]?.includes(STATE.ELEC_BAR)}
                                      stackId="a"
@@ -217,6 +219,7 @@ export default function SolarElecChart() {
                                 <Bar dataKey="heatingCost" fill="yellow" barSize={30}
                                      name="WÄRME"
                                      label='none'
+                                     aria-label="bar-heatingCost"
                                      legendType={STATES[settings.currentState]?.includes(STATE.ELEC_BAR) && clientParams.heatingCost ? 'rect' : 'none'}
                                      hide={!STATES[settings.currentState]?.includes(STATE.ELEC_BAR)}
                                      stackId="a"
@@ -225,6 +228,7 @@ export default function SolarElecChart() {
                                 <Bar dataKey="electricityCost" fill="red" barSize={30}
                                      name="STROMRECHNUNG PRO MONAT"
                                      label='none'
+                                     aria-label="bar-electricityCost"
                                      legendType={STATES[settings.currentState]?.includes(STATE.ELEC_BAR) ? 'rect' : 'none'}
                                      hide={!STATES[settings.currentState]?.includes(STATE.ELEC_BAR)}
                                      stackId="a"
@@ -532,6 +536,7 @@ function formatEuroCurrency(totalSaved) {
 }
 
 const CustomTooltip = ({active, payload, label, currentYear}) => {
+    console.log("payload", payload)
     if (active && payload && payload.length) {
         return (
             <div className="bg-gray-700 p-2 border rounded-sm opacity-95 text-[rgb(var(--color-bar))]">

@@ -122,7 +122,7 @@ export function CreateClient({selectedDate, clientToEdit, setModalParams}) {
     };
 
     return (
-        <>
+        <div className="overflow-auto">
             <Typography
                 component="h2"
                 level="h2"
@@ -132,7 +132,7 @@ export function CreateClient({selectedDate, clientToEdit, setModalParams}) {
             >
                 {clientToEdit ? "Kundendaten  Bearbeiten" : "Neuen Kundendaten erstellen"}
             </Typography>
-            <div className="flex justify-center items-center pt-10 pb-7">
+            <div className="flex justify-center items-center pt-9 pb-7">
                 <form onSubmit={handleSubmit(onSubmit)} onReset={() => reset()}
                       className="grid grid-cols-2 gap-3 w-[80%]">
                     <div className="flex flex-col justify-between gap-3">
@@ -286,6 +286,6 @@ export function CreateClient({selectedDate, clientToEdit, setModalParams}) {
                     </Alert>
                 </Snackbar>
             </div>
-        </>
+        </div>
     );
 }

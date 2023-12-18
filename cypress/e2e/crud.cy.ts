@@ -1,4 +1,5 @@
 import {STATUS_COMPLETED} from "@/utils/CommonVars";
+import client from "./singleClient.json";
 
 function solarElecChart() {
     cy.url().then((url) => {
@@ -6,6 +7,9 @@ function solarElecChart() {
     });
     cy.get('[data-testid="solar-elec-chart"]').should('be.visible')
     cy.get('[aria-label="state-stepper"]').should('be.visible')
+    cy.get('[aria-label="bar-transportCost"]').should('exist')
+    cy.get('[aria-label="bar-heatingCost"]').should('exist')
+    cy.get('[aria-label="bar-electricityCost"]').should('exist')
 }
 
 function stats() {
@@ -29,7 +33,7 @@ function goToClientList() {
     cy.url().should('eq', Cypress.config().baseUrl + '/')
 }
 
-function openGeneralParamsEdit() {
+function openOrCloseGeneralParamsEdit() {
     cy.get('[data-testid="right-menu"]').click()
     cy.get('[aria-label="generalParams-item"]').click()
     cy.get(`[data-testid="modal-editGeneralParams"]`).should('be.visible');
@@ -53,6 +57,9 @@ describe('CLIENT CRUD', () => {
             expect(response.body.uid_1).not.to.be.null
         });
     })
+    before(() => {
+        cy.viewport(1920, 1080)
+    })
     beforeEach(() => {
         cy.request('DELETE', Cypress.env('NEXT_PUBLIC_FIREBASE_URL_TEST') + '/clientList/uid_1.json')
     })
@@ -60,22 +67,22 @@ describe('CLIENT CRUD', () => {
         cy.visit('/')
         cy.setDate()
         cy.assertListIsEmpty()
-        cy.createClient()
+        cy.createClient(client["2023-12-12"].cid_1)
         cy.deleteClient()
     })
     it('edit client', () => {
         cy.visit('/')
         cy.setDate()
         cy.assertListIsEmpty()
-        cy.createClient()
+        cy.createClient(client["2023-12-12"].cid_1)
         cy.get('[aria-label="edit-client"]').click()
         cy.get('input[name="nickname"]').clear().type('test nickname edited')
         cy.get('textarea[name="remarks"]').clear().type('test remarks edited')
 
-        cy.get('[name="basePrice"]').clear().type('25')
-        cy.get('[name="unitPrice"]').clear().type('50')
-        cy.get('[name="consumptionYearly"]').clear().type('3500')
-        cy.get('[name="productionYearly"]').clear().type('6000')
+        cy.get('[name="basePrice"]').clear().type('{rightArrow}25')
+        cy.get('[name="unitPrice"]').clear().type('{rightArrow}50')
+        cy.get('[name="consumptionYearly"]').clear().type('{rightArrow}3500')
+        cy.get('[name="productionYearly"]').clear().type('{rightArrow}6000')
 
         cy.get('form').submit()
         cy.get(`[aria-label="clientCreate-snackbar"]`).should('be.visible');
@@ -105,7 +112,7 @@ describe('CLIENT CRUD', () => {
         cy.visit('/')
         cy.setDate()
         cy.assertListIsEmpty()
-        cy.createClient()
+        cy.createClient(client["2023-12-12"].cid_1)
         cy.get('[aria-label="present-client"]').click()
         solarElecChart()
         cy.get('[data-testid="forward-fab"]').click()
@@ -123,7 +130,7 @@ describe('CLIENT CRUD', () => {
         cy.visit('/')
         cy.setDate()
         cy.assertListIsEmpty()
-        cy.createClient()
+        cy.createClient(client["2023-12-12"].cid_1)
 
         cy.get('[aria-label="present-client"]').click()
         solarElecChart()
@@ -140,18 +147,19 @@ describe('CLIENT CRUD', () => {
         cy.setDate()
         cy.deleteClient()
     })
+
     it('edit generalParams', () => {
         cy.visit('/')
         cy.setDate()
         cy.assertListIsEmpty()
-        cy.createClient()
+        cy.createClient(client["2023-12-12"].cid_1)
 
         cy.get('[aria-label="present-client"]').click()
         solarElecChart()
         cy.get('[data-testid="forward-fab"]').click()
         stats()
 
-        openGeneralParamsEdit()
+        openOrCloseGeneralParamsEdit()
 
         cy.get('textarea[name="feedInPrice"]').should('not.be.empty')
         cy.get('textarea[name="rent"]').should('not.be.empty')
@@ -159,20 +167,22 @@ describe('CLIENT CRUD', () => {
         cy.get('textarea[name="electricityIncreaseRate"]').should('not.be.empty')
         cy.get('textarea[name="rentDiscountAmount"]').should('not.be.empty')
         cy.get('textarea[name="rentDiscountPeriod"]').should('not.be.empty')
-        cy.get('textarea[name="yearLimit"]').should('not.be.empty')
+        cy.get('textarea[name="yearLimitRent"]').should('not.be.empty')
+        cy.get('textarea[name="yearLimitPrediction"]').should('not.be.empty')
 
-        cy.get('[name="feedInPrice"]').clear().type('9')
-        cy.get('[name="rent"]').clear().type('140')
-        cy.get('[name="inflationRate"]').clear().type('4')
-        cy.get('[name="electricityIncreaseRate"]').clear().type('2')
-        cy.get('[name="rentDiscountAmount"]').clear().type('12')
-        cy.get('[name="rentDiscountPeriod"]').clear().type('3')
-        cy.get('[name="yearLimit"]').clear().type('25')
+        cy.get('[name="feedInPrice"]').clear().type('{rightArrow}9')
+        cy.get('[name="rent"]').clear().type('{rightArrow}140')
+        cy.get('[name="inflationRate"]').clear().type('{rightArrow}4')
+        cy.get('[name="electricityIncreaseRate"]').clear().type('{rightArrow}2')
+        cy.get('[name="rentDiscountAmount"]').clear().type('{rightArrow}12')
+        cy.get('[name="rentDiscountPeriod"]').clear().type('{rightArrow}3')
+        cy.get('[name="yearLimitRent"]').clear().type('{rightArrow}25')
+        cy.get('[name="yearLimitPrediction"]').clear().type('{rightArrow}30')
 
         cy.get('form').submit()
         cy.get('[aria-label="modalClose-generalParamsEdit"]').click()
 
-        openGeneralParamsEdit()
+        openOrCloseGeneralParamsEdit()
 
         cy.get('[name="feedInPrice"]').should('have.value', 9)
         cy.get('[name="rent"]').should('have.value', 140)
@@ -180,13 +190,58 @@ describe('CLIENT CRUD', () => {
         cy.get('[name="electricityIncreaseRate"]').should('have.value', 2)
         cy.get('[name="rentDiscountAmount"]').should('have.value', 12)
         cy.get('[name="rentDiscountPeriod"]').should('have.value', 3)
-        cy.get('[name="yearLimit"]').should('have.value', 25)
+        cy.get('[name="yearLimitRent"]').should('have.value', 25)
+        cy.get('[name="yearLimitPrediction"]').should('have.value', 30)
 
-        cy.get('[aria-label="modalClose-generalParamsEdit"]').click()
         goToClientList()
         cy.setDate()
         cy.deleteClient()
     })
+    it('should show correct yearLimitPrediction', () => {
+        cy.visit('/')
+        cy.setDate()
+        cy.assertListIsEmpty()
+        cy.request('PATCH', Cypress.env('NEXT_PUBLIC_FIREBASE_URL_TEST') + '/clientList/uid_1.json', client)
+        cy.wait(1000)
+        cy.reload()
+        cy.setDate()
+        cy.get('table tbody tr').should('have.length', 1)
+        cy.get('[aria-label="present-client"]').click()
+        solarElecChart()
+
+        //set yearLimitPrediction to 30
+        openOrCloseGeneralParamsEdit()
+        cy.get('textarea[name="yearLimitPrediction"]').should('not.be.empty')
+        cy.get('[name="yearLimitPrediction"]').clear().type('{rightArrow}30')
+        cy.get('form').submit()
+        cy.get('[aria-label="modalClose-generalParamsEdit"]').click()
+        //check if yearLimitPrediction is 30
+        openOrCloseGeneralParamsEdit()
+        cy.get('[name="yearLimitPrediction"]').should('have.value', 30)
+        openOrCloseGeneralParamsEdit()
+
+        // cy.get('[aria-label="x-axis"]').find('2053').should('contain.text')
+        Array.of(2023, 2028, 2033, 2038, 2043, 2048, 2053).forEach(value => {
+            cy.contains(value).should('be.visible');
+        })
+
+        openOrCloseGeneralParamsEdit()
+        cy.get('textarea[name="yearLimitPrediction"]').should('not.be.empty')
+        cy.get('[name="yearLimitPrediction"]').clear().type('{rightArrow}60')
+        cy.get('form').submit()
+        cy.get('[aria-label="modalClose-generalParamsEdit"]').click()
+        //check if yearLimitPrediction is 30
+        openOrCloseGeneralParamsEdit()
+        cy.get('[name="yearLimitPrediction"]').should('have.value', 60)
+        openOrCloseGeneralParamsEdit()
+
+        Array.of(2023, 2028, 2033, 2038, 2043, 2048, 2053, 2058, 2063, 2068, 2073, 2078, 2083).forEach(value => {
+            cy.contains(value).should('be.visible');
+        })
+        goToClientList()
+        cy.setDate()
+        cy.deleteClient()
+    });
 
     // afterEach(() => {
     // request to set url to null

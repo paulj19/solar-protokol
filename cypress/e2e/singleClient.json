@@ -1,0 +1,19 @@
+{
+  "2023-12-12": {
+    "cid_1": {
+      "basePrice": 10,
+      "consumptionYearly": 2500,
+      "id": 1,
+      "isPurchase": false,
+      "nickname": "FAMILIE BIEBER",
+      "presentationDate": "Tue Dec 12 2023 10:00:00 GMT+0100 (Central European Standard Time)",
+      "productionYearly": 5000,
+      "remarks": "test remarks",
+      "status": "open",
+      "unitPrice": 0.40,
+      "unitPriceSolar": 0.30,
+      "heatingCost": 1200,
+      "transportCost": 2400
+    }
+  }
+}

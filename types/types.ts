@@ -48,4 +48,13 @@ export type Client = {
     remarks: string;
     presentationDate: string;
     status: string;
+    basePrice: number;
+    unitPrice: number;
+    unitPriceSolar: number;
+    consumptionYearly: number;
+    productionYearly: number;
+    isPurchase: boolean;
+    purchasePrice: number | undefined;
+    transportCost: number;
+    heatingCost: number;
 }
