@@ -17,7 +17,7 @@ import PayoffChart from "@/src/payoffChart/PayoffChart";
 import {SessionProvider} from "next-auth/react";
 
 export default function SolarProtokol({Component, pageProps: {session, ...pageProps}}) {
-    const design = true;
+    const design = false;
     return (
         !design ?
             <NoSSR>
@@ -42,8 +42,9 @@ export default function SolarProtokol({Component, pageProps: {session, ...pagePr
                     </ThemeProvider>
                 </SessionProvider>
             </NoSSR> :
-            <NoSSR>
-                <ThemeProvider>
+        <NoSSR>
+            <ThemeProvider>
+                <SessionProvider session={session}>
                     <Provider store={store}>
                         <LocalizationProvider dateAdapter={AdapterDateFns}>
                             <Layout>
@@ -51,7 +52,8 @@ export default function SolarProtokol({Component, pageProps: {session, ...pagePr
                             </Layout>
                         </LocalizationProvider>
                     </Provider>
-                </ThemeProvider>
-            </NoSSR>
+                </SessionProvider>
+            </ThemeProvider>
+        </NoSSR>
     )
 }

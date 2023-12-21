@@ -8,10 +8,11 @@ import Menu from "@mui/joy/Menu";
 import MenuItem from "@mui/joy/MenuItem";
 import {Link} from "react-router-dom";
 import {ListItemDecorator, ModalClose, ModalDialog} from "@mui/joy";
-import {Home as HomeIcon, Settings} from "@mui/icons-material";
+import {Home as HomeIcon, Logout, Settings} from "@mui/icons-material";
 import React, {useState} from "react";
 import Modal from "@mui/joy/Modal";
 import {EditGeneralParams} from "@/src/components/EditGeneralParams";
+import {signOut} from "next-auth/react";
 
 const inter = Inter({subsets: ['latin']})
 
@@ -41,6 +42,12 @@ export default function Layout({children}) {
                                 <Settings/>
                             </ListItemDecorator>
                             Einstellungen
+                        </MenuItem>
+                        <MenuItem onClick={() => signOut()} aria-label="generalParams-item">
+                            <ListItemDecorator>
+                                <Logout/>
+                            </ListItemDecorator>
+                            Ausloggen
                         </MenuItem>
                     </Menu>
                 </Dropdown>
