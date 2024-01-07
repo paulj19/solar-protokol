@@ -36,6 +36,7 @@ jobs:
 #          name: build
 #          if-no-files-found: error
 #          path: .next
+#
 #  e2e_tests:
 #    runs-on: ubuntu-22.04
 #    needs: install
