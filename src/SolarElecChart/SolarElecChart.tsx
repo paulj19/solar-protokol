@@ -31,6 +31,7 @@ import Button from "@mui/material/Button";
 import ColoredSlider from "@/src/components/ColoredSlider";
 import {useTheme} from "next-themes";
 import {Link, useNavigate, useSearchParams} from "react-router-dom";
+import { useGetClient } from '@/src/customHooks';
 
 type Settings = {
     currentState: number
@@ -63,10 +64,12 @@ export default function SolarElecChart() {
     const [inflationRate, setInflationRate] = useState<number>(null)
     const [elecIncreaseRate, setElecIncreaseRate] = useState<number>(null)
     const [settings, changeSettings] = useState<Settings>({currentState: 0});
-    const {data: clientParams, isLoading: isClientParamLoading, isError: isClientParamError} = useGetClientQuery({
-        pDate,
-        clientId
-    });
+    const {data: clientParams, isLoading: isClientParamLoading, isError: isClientParamError} = useGetClient(pDate,clientId);
+    console.log("data", isClientParamError);
+    // const {data: clientParams, isLoading: isClientParamLoading, isError: isClientParamError} = useGetClientQuery({
+    //     pDate,
+    //     clientId
+    // });
     const {
         data: generalParams,
         isLoading: isGeneralParamLoading,
@@ -79,7 +82,8 @@ export default function SolarElecChart() {
     }
     //todo why undef rendered twice
     if (isClientParamError || isGeneralParamsError) {
-        return <ErrorScreen/>
+        throw Error('error loading clientParams or generalParams')
+        // return <ErrorScreen/>
     }
     //todo no direct url calls with cid, then have to handle loading and error conditions of query
 

@@ -22,6 +22,7 @@ import ErrorScreen from "@/src/components/ErrorScreen";
 import ColoredSlider from "@/src/components/ColoredSlider";
 import {Typography} from "@mui/joy";
 import {createTheme, ThemeProvider} from "@mui/material/styles";
+import { SessionInfo, useGetClient } from "@/src/customHooks";
 
 export default function GenerationConsumChart(): ReactElement {
     const navigate = useNavigate();
@@ -37,11 +38,8 @@ export default function GenerationConsumChart(): ReactElement {
     // const pDate = "2023-11-09"
     const [updateClientStatus] = useUpdateClientStatusMutation()
     const [snackOpen, setSnackOpen] = useState(false);
-    const {data: clientParams, isLoading: isClientParamLoading, isError: isClientParamError} = useGetClientQuery({
-        pDate,
-        clientId
-    });
     const [showConsumption, setShowConsumption] = useState<boolean>(false);
+    const {data: clientParams, isLoading: isClientParamLoading, isError: isClientParamError} = useGetClient(pDate,clientId);
     if (isClientParamLoading) {
         return <Loading/>;
     }

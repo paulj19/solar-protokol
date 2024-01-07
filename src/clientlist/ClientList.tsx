@@ -18,8 +18,20 @@ import SearchIcon from '@mui/icons-material/Search';
 import {useToggle} from "usehooks-ts";
 import SearchBar from "material-ui-search-bar";
 import Fuse, {FuseResult} from 'fuse.js'
+import { signIn, useSession } from "next-auth/react";
 
 export default function ClientList() {
+    const { data: session, status } = useSession({
+      required: true,
+      onUnauthenticated() {
+        signIn('okta');
+      },
+    })
+
+    console.log("session", session)
+    if (status === "loading") {
+      return <div>Bitte aktualisieren Sie die Seite zum Anmelden</div>
+    }
     const [searchView, toggleSearchView] = useToggle();
     const [modalParams, setModalParams] = useState<{ openModal: boolean, clientIdToEdit: string }>({
         openModal: false,

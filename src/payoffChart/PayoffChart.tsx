@@ -9,6 +9,7 @@ import Loading from "@/src/components/Loading";
 import ErrorScreen from "@/src/components/ErrorScreen";
 import {useTheme} from "next-themes";
 import {getFormattedCost} from "@/src/stats/Stats";
+import { useGetClient } from "@/src/customHooks";
 
 export type PayOffParam = {
     year: number
@@ -29,10 +30,11 @@ export default function PayoffChart(): ReactElement {
             navigate('/');
         }
     }, []);
-    const {data: clientParams, isLoading: isClientParamLoading, isError: isClientParamError} = useGetClientQuery({
-        pDate,
-        clientId
-    });
+    const {data: clientParams, isLoading: isClientParamLoading, isError: isClientParamError} = useGetClient(pDate,clientId);
+    // const {data: clientParams, isLoading: isClientParamLoading, isError: isClientParamError} = useGetClientQuery({
+    //     pDate,
+    //     clientId
+    // });
     const {
         data: generalParams,
         isLoading: isGeneralParamLoading,

@@ -1,0 +1,2 @@
+curl -v --request POST --url https://dev-lzh2ps2gz10j4lt2.us.auth0.com/oauth/token --header 'Content-Type: application/json' --data '{"grant_type":"refresh_token", "refresh_token":"v1.MUpyTmCQ6mRmX7aVl-3st3xdedrC-PqYwwFT6rWWFBXSxb2ZZX1iIL_zYZ2efI-NbrBo0nWmuaxsWnuzSgFCWCw", "scope": "offline_access openid email profile", "client_id": "LNs3zNwzqncqxjq9LdUOeLuYH7eUZ61A", "client_secret": "NX2LEek13rHPJRV_4nHfK5a2LzUtQnK4KoZdAXOwHb-Zxu_2skGpqcK_4Q-d2u-T"}'
+

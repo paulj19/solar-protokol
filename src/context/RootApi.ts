@@ -42,11 +42,11 @@ export const rootApi = createApi({
             },
         }),
         getClientListByPDate: builder.query({
-            query: ({startDate, endDate}) => {
+            query: ({startDate, endDate, userId}) => {
                 currentStartDate = startDate;
                 currentEndDate = endDate;
                 return {
-                    url: `/clientList/uid_1.json?`,
+                    url: `/clientList/uid_${userId}.json?`,
                     method: "get",
                     params: startDate && endDate && {
                         orderBy: '"$key"',
@@ -72,8 +72,8 @@ export const rootApi = createApi({
                     : ["ClientList"],
         }),
         getClient: builder.query({
-            query: ({pDate, clientId}) => ({
-                url: `/clientList/uid_1/${pDate}/cid_${clientId}.json`,
+            query: ({pDate, clientId, userId}) => ({
+                url: `/clientList/uid_${userId}/${pDate}/cid_${clientId}.json`,
                 method: "get",
             }),
             providesTags: (result, error, {clientId}) =>

@@ -14,9 +14,13 @@ import GenerationConsumChart from "@/src/GenerationConsumChart/GenerationConsumC
 import {NotFound} from "next/dist/client/components/error";
 import {ThemeProvider} from "next-themes";
 import PayoffChart from "@/src/payoffChart/PayoffChart";
-import {SessionProvider} from "next-auth/react";
+import {SessionProvider, getSession} from "next-auth/react";
+import {authOptions} from "@/pages/api/auth/[...nextauth]";
+import {getServerSession} from "next-auth";
+import ErrorScreen from "@/src/components/ErrorScreen";
+import ErrorBoundary  from "@/src/components/ErrorBoundary";
 
-export default function SolarProtokol({Component, pageProps: {session, ...pageProps}}) {
+export default function SolarProtokol({Component, pageProps: {...pageProps}, session}) {
     const design = false;
     return (
         !design ?
@@ -25,6 +29,7 @@ export default function SolarProtokol({Component, pageProps: {session, ...pagePr
                     <ThemeProvider>
                         <Provider store={store}>
                             <LocalizationProvider dateAdapter={AdapterDateFns}>
+                              <ErrorBoundary>
                                 <BrowserRouter>
                                     <Layout>
                                         <Routes>
@@ -34,9 +39,11 @@ export default function SolarProtokol({Component, pageProps: {session, ...pagePr
                                             <Route path="/stats" element={<Stats/>}/>
                                             <Route path="/generationConsumChart" element={<GenerationConsumChart/>}/>
                                             <Route path="*" element={<NotFound/>}/>
+                                            <Route path="/error" element={<ErrorScreen/>}/>
                                         </Routes>
                                     </Layout>
                                 </BrowserRouter>
+                              </ErrorBoundary>
                             </LocalizationProvider>
                         </Provider>
                     </ThemeProvider>
@@ -57,3 +64,16 @@ export default function SolarProtokol({Component, pageProps: {session, ...pagePr
         </NoSSR>
     )
 }
+
+// SolarProtokol.getInitialProps = async (ctx) => {
+//     const session = await getServerSession(ctx.req, ctx.res, authOptions)
+//     if (session) {
+//         return {
+//             session: {session}
+//         }
+//     }
+//     return {
+//         redirect: { destination: "/api/auth/signin/okta", permanent: false }
+//     }
+// }
+

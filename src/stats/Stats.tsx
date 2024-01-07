@@ -31,6 +31,7 @@ import AccordionGroup from "@mui/joy/AccordionGroup";
 import Accordion from "@mui/joy/Accordion";
 import AccordionDetails from "@mui/joy/AccordionDetails";
 import AccordionSummary from "@mui/joy/AccordionSummary";
+import { useGetClient } from "@/src/customHooks";
 
 export default function Stats() {
     const navigate = useNavigate();
@@ -50,10 +51,11 @@ export default function Stats() {
         isLoading: isGeneralParamLoading,
         isError: isGeneralParamsError
     } = useGetGeneralParamsQuery(undefined);
-    const {data: clientParams, isLoading: isClientParamLoading, isError: isClientParamError} = useGetClientQuery({
-        pDate,
-        clientId
-    });
+    const {data: clientParams, isLoading: isClientParamLoading, isError: isClientParamError} = useGetClient(pDate,clientId);
+    // const {data: clientParams, isLoading: isClientParamLoading, isError: isClientParamError} = useGetClientQuery({
+    //     pDate,
+    //     clientId
+    // });
 
     if (isClientParamLoading || isGeneralParamLoading) {
         return <Loading/>;
