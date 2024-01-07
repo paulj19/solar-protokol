@@ -82,7 +82,7 @@ function SolarCosts({
     return (
         <div className="flex flex-row gap-4 p-3 text-title">
             <div>
-                <div className={styles.costLabel}>{"Enpal Miete"}</div>
+                <div className={styles.costLabel}>{"Enpal Rate"}</div>
                 <Cost cost={rent} />
             </div>
             <div className="self-center text-lg">-</div>

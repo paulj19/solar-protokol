@@ -84,7 +84,7 @@ export function calcTotalSaved(params: PredictionParams): any {
         totalSolarCost += predictedCosts[i].solarCost * 12;
         totalTransportCost += predictedCosts[i].transportCost * 12;
         totalHeatingCost += predictedCosts[i].heatingCost * 12;
-        totalSaved += (predictedCosts[i].totalElecCost - predictedCosts[i].solarCost) * 12;
+        totalSaved += (predictedCosts[i].electricityCost - predictedCosts[i].solarCost) * 12;
     }
     return {totalSaved, totalElecCost, totalSolarCost, totalTransportCost, totalHeatingCost}
 }
@@ -205,7 +205,7 @@ function calcFeedInPrice({
 }
 
 function calcRent({year, generalParams: {rent, rentDiscountPeriod, rentDiscountAmount, yearLimitRent}}: PredictionParams): number {
-    if (year > yearLimitRent) {
+    if (year >= yearLimitRent) {
         return 0;
     }
     if (year < rentDiscountPeriod) {

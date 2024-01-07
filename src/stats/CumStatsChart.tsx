@@ -17,6 +17,7 @@ import {getBarLabel, customLabel} from "@/src/stats/Stats";
 import React from "react";
 
 export default function CumStatsChart(params: PredictionParams) {
+//todo definition of ineffi
     const {totalElecCost, totalSolarCost} = calcTotalSaved(params);
     const {totalElecCost: elecTotal, totalSolarCost: solarTotal} = calcTotalSaved({
         ...params,
