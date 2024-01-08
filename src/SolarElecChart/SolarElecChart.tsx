@@ -50,17 +50,17 @@ const STATES = [[STATE.ELEC_BAR], [STATE.ENERGY_BAR], [STATE.ENERGY_BAR, STATE.E
 export default function SolarElecChart() {
     const {setTheme} = useTheme();
     setTheme('gray-bg');
-    // const navigate = useNavigate();
-    // const [searchParams] = useSearchParams();
-    // const clientId = searchParams.get('clientId');
-    // const pDate = searchParams.get('pDate');
-    const clientId = "50"
-    const pDate = "2024-01-08"
-    // useEffect(() => {
-    //     if (!clientId || !pDate) {
-    //         navigate('/');
-    //     }
-    // }, []);
+    const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
+    const clientId = searchParams.get('clientId');
+    const pDate = searchParams.get('pDate');
+    // const clientId = "50"
+    // const pDate = "2024-01-08"
+    useEffect(() => {
+        if (!clientId || !pDate) {
+            navigate('/');
+        }
+    }, []);
     const [inflationRate, setInflationRate] = useState<number>(null)
     const [elecIncreaseRate, setElecIncreaseRate] = useState<number>(null)
     const [settings, changeSettings] = useState<Settings>({currentState: 0});
@@ -262,15 +262,15 @@ export default function SolarElecChart() {
                         </ResponsiveContainer>
                         {settings.currentState !== 0 ? <div
                             className="text-gray-300 text-font-medium text-sm pt-2 tracking-wide gap-4 flex flex-col w-[20%]">
-                            <h2 className="text-2xl font-bold">{`IHRE STROMKOSTEN IN DEN NÄCHSTEN ${generalParams.yearLimitPrediction} JAHREN`}</h2>
-                            <p className="text-3xl text-red-600 font-bold">{'STROM'}{<p
-                                className="text-5xl text-red-600 font-bold">{formatEuroCurrency(totalElecCost)}</p>}</p>
-                            <p className="text-3xl text-[#FFFF00] font-bold">{'WÄRME/HEIZEN'}{<p
-                                className="text-5xl text-[#FFFF00] font-bold">{formatEuroCurrency(totalHeatingCost)}</p>}</p>
+                            <h2 className="text-2xl font-bold">{`IHRE ENERGIEKOSTEN IN DEN NÄCHSTEN ${generalParams.yearLimitPrediction} JAHREN`}</h2>
                             <p className="text-3xl text-[#FF8C00] font-bold">{'BENZIN/TANKEN'}{<p
                                 className="text-5xl text-[#FF8C00] font-bold">{formatEuroCurrency(totalTransportCost)}</p>}</p>
-                            <p className="text-3xl text-red-600 font-bold">{'INSGESAMT'}{<p
-                                className="text-5xl text-red-600 font-bold">{formatEuroCurrency(totalElecCost + totalTransportCost + totalHeatingCost)}</p>}</p>
+                            <p className="text-3xl text-[#FFFF00] font-bold">{'WÄRME/HEIZEN'}{<p
+                                className="text-5xl text-[#FFFF00] font-bold">{formatEuroCurrency(totalHeatingCost)}</p>}</p>
+                            <p className="text-3xl text-red-600 font-bold">{'STROM'}{<p
+                                className="text-5xl text-red-600 font-bold">{formatEuroCurrency(totalElecCost)}</p>}</p>
+                            <p className="text-3xl text-white font-bold">{'INSGESAMT'}{<p
+                                className="text-5xl text-white font-bold">{formatEuroCurrency(totalElecCost + totalTransportCost + totalHeatingCost)}</p>}</p>
                             {stateHasSolarLine() && STATES[settings.currentState]?.includes(STATE.SOLAR_TEXT) ?
                                 <>
                                    {
@@ -417,8 +417,7 @@ export default function SolarElecChart() {
             </div>
             <div className="absolute bottom-7 right-7" data-testid="forward-fab">
                 <Tooltip title="comparison stat" arrow>
-                    <Fab variant="circular" sx={{backgroundColor: "#474747", color: "#878787de"}} 
-                   /* component={Link} */
+                    <Fab variant="circular" sx={{backgroundColor: "#474747", color: "#878787de"}} component={Link} 
                          to={`/stats?pDate=${pDate}&clientId=${clientId}`}
                          aria-label="add">
                         <ArrowForward/>
