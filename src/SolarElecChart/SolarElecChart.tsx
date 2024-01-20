@@ -31,7 +31,7 @@ import Button from "@mui/material/Button";
 import ColoredSlider from "@/src/components/ColoredSlider";
 import {useTheme} from "next-themes";
 import {Link, useNavigate, useSearchParams} from "react-router-dom";
-import { useGetClient } from '@/src/customHooks';
+import { useGetClientAndGeneralParams, useGetQueryParams } from '@/src/customHooks';
 
 type Settings = {
     currentState: number
@@ -50,41 +50,19 @@ const STATES = [[STATE.ELEC_BAR], [STATE.ELEC_BAR, STATE.ELEC_LINE], [STATE.ELEC
 export default function SolarElecChart() {
     const {setTheme} = useTheme();
     setTheme('gray-bg');
-    const navigate = useNavigate();
-    const [searchParams] = useSearchParams();
-    const clientId = searchParams.get('clientId');
-    const pDate = searchParams.get('pDate');
-    // const clientId = "43"
-    // const pDate = "2023-11-09"
-    useEffect(() => {
-        if (!clientId || !pDate) {
-            navigate('/');
-        }
-    }, []);
+    //todo put inflation rate and elecIncreaseRate in settings
     const [inflationRate, setInflationRate] = useState<number>(null)
     const [elecIncreaseRate, setElecIncreaseRate] = useState<number>(null)
     const [settings, changeSettings] = useState<Settings>({currentState: 0});
-    const {data: clientParams, isLoading: isClientParamLoading, isError: isClientParamError} = useGetClient(pDate,clientId);
-    console.log("data", isClientParamError);
-    // const {data: clientParams, isLoading: isClientParamLoading, isError: isClientParamError} = useGetClientQuery({
-    //     pDate,
-    //     clientId
-    // });
-    const {
-        data: generalParams,
-        isLoading: isGeneralParamLoading,
-        isError: isGeneralParamsError
-    } = useGetGeneralParamsQuery(undefined);
+    const {pDate, clientId} = useGetQueryParams();
+    const {clientParams, generalParams, isLoading} = useGetClientAndGeneralParams({pDate,clientId});
+
+    if (isLoading) {
+      return <Loading/>
+    }
+
     const currentYear = new Date().getFullYear();
     // const clientParams = useSelector(state => selectClientById(state, "cid_1"));
-    if (isClientParamLoading || isGeneralParamLoading) {
-        return <Loading/>;
-    }
-    //todo why undef rendered twice
-    if (isClientParamError || isGeneralParamsError) {
-        throw Error('error loading clientParams or generalParams')
-        // return <ErrorScreen/>
-    }
     //todo no direct url calls with cid, then have to handle loading and error conditions of query
 
     const comparisonData: Array<CostPredictions> = calcPredictions({

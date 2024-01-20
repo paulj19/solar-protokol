@@ -18,20 +18,10 @@ import SearchIcon from '@mui/icons-material/Search';
 import {useToggle} from "usehooks-ts";
 import SearchBar from "material-ui-search-bar";
 import Fuse, {FuseResult} from 'fuse.js'
-import { signIn, useSession } from "next-auth/react";
+import { useGetSession } from "../customHooks";
 
 export default function ClientList() {
-    const { data: session, status } = useSession({
-      required: true,
-      onUnauthenticated() {
-        signIn('okta');
-      },
-    })
-
-    console.log("session", session)
-    if (status === "loading") {
-      return <div>Bitte aktualisieren Sie die Seite zum Anmelden</div>
-    }
+    const {session, skip} = useGetSession();
     const [searchView, toggleSearchView] = useToggle();
     const [modalParams, setModalParams] = useState<{ openModal: boolean, clientIdToEdit: string }>({
         openModal: false,
@@ -45,7 +35,7 @@ export default function ClientList() {
         isLoading: isClientListLoading,
         isFetching: isClientListFetching,
         isError: isClientListError
-    } = useGetClientListByPDateQuery(searchView ? {} : {startDate: selectedDate, endDate: selectedDate});
+    } = useGetClientListByPDateQuery(searchView ? {userId: session?.user?.user_id} : {startDate: selectedDate, endDate: selectedDate, userId: session?.user?.user_id}, {skip});
     const [deleteClient] = useDeleteClientMutation();
     const [filteredList, setFilteredList] = useState(null);
 

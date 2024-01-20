@@ -18,34 +18,20 @@ import {Alert, Fab, FormControlLabel, FormGroup, Snackbar, Switch, Tooltip as Mu
 import {Link, useNavigate, useSearchParams} from "react-router-dom";
 import {ArrowBack} from "@mui/icons-material";
 import Loading from "@/src/components/Loading";
-import ErrorScreen from "@/src/components/ErrorScreen";
-import ColoredSlider from "@/src/components/ColoredSlider";
-import {Typography} from "@mui/joy";
 import {createTheme, ThemeProvider} from "@mui/material/styles";
-import { SessionInfo, useGetClient } from "@/src/customHooks";
+import { useGetClientAndGeneralParams, useGetQueryParams } from "@/src/customHooks";
 
 export default function GenerationConsumChart(): ReactElement {
     const navigate = useNavigate();
-    const [searchParams] = useSearchParams();
-    const clientId = searchParams.get('clientId');
-    const pDate = searchParams.get('pDate');
-    useEffect(() => {
-        if (!clientId || !pDate) {
-            navigate('/');
-        }
-    }, []);
-    // const clientId = "43"
-    // const pDate = "2023-11-09"
     const [updateClientStatus] = useUpdateClientStatusMutation()
     const [snackOpen, setSnackOpen] = useState(false);
     const [showConsumption, setShowConsumption] = useState<boolean>(false);
-    const {data: clientParams, isLoading: isClientParamLoading, isError: isClientParamError} = useGetClient(pDate,clientId);
-    if (isClientParamLoading) {
-        return <Loading/>;
-    }
-    //todo why undef rendered twice
-    if (isClientParamError) {
-        return <ErrorScreen/>
+
+    const {pDate, clientId} = useGetQueryParams();
+    const {clientParams, isLoading} = useGetClientAndGeneralParams({pDate,clientId});
+
+    if (isLoading) {
+      return <Loading/>
     }
 
     const generationConsumParams: Array<GenerationConsumParam> = getGenerationConsumParam(clientParams.productionYearly, clientParams.consumptionYearly);
@@ -75,7 +61,6 @@ export default function GenerationConsumChart(): ReactElement {
             <div data-testid="generationConsum-chart" className="w-[80%] h-[90%] ">
                 <ResponsiveContainer>
                     <ComposedChart
-
                         data={generationConsumParams}
                         margin={{
                             top: 20,

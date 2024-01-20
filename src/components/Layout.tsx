@@ -43,7 +43,7 @@ export default function Layout({children}) {
                             </ListItemDecorator>
                             Einstellungen
                         </MenuItem>
-                        <MenuItem onClick={() => signOut()} aria-label="generalParams-item">
+                        <MenuItem onClick={() => signOut()} aria-label="logout-item">
                             <ListItemDecorator>
                                 <Logout/>
                             </ListItemDecorator>

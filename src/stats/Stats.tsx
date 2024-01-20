@@ -31,38 +31,15 @@ import AccordionGroup from "@mui/joy/AccordionGroup";
 import Accordion from "@mui/joy/Accordion";
 import AccordionDetails from "@mui/joy/AccordionDetails";
 import AccordionSummary from "@mui/joy/AccordionSummary";
-import { useGetClient } from "@/src/customHooks";
+import { useGetClientAndGeneralParams, useGetQueryParams } from "@/src/customHooks";
 
 export default function Stats() {
-    const navigate = useNavigate();
-    const [searchParams] = useSearchParams();
-    const clientId = searchParams.get('clientId');
-    const pDate = searchParams.get('pDate');
-    useEffect(() => {
-        if (!clientId || !pDate) {
-            navigate('/');
-        }
-    }, []);
-    // const clientId = "43"
-    // const pDate = "2023-11-09"
     const [year, setYear] = useState<number>(10);
-    const {
-        data: generalParams,
-        isLoading: isGeneralParamLoading,
-        isError: isGeneralParamsError
-    } = useGetGeneralParamsQuery(undefined);
-    const {data: clientParams, isLoading: isClientParamLoading, isError: isClientParamError} = useGetClient(pDate,clientId);
-    // const {data: clientParams, isLoading: isClientParamLoading, isError: isClientParamError} = useGetClientQuery({
-    //     pDate,
-    //     clientId
-    // });
+    const {pDate, clientId} = useGetQueryParams();
+    const {clientParams, generalParams, isLoading} = useGetClientAndGeneralParams({pDate,clientId});
 
-    if (isClientParamLoading || isGeneralParamLoading) {
-        return <Loading/>;
-    }
-    //todo why undef rendered twice
-    if (isClientParamError || isGeneralParamsError) {
-        return <ErrorScreen/>
+    if (isLoading) {
+      return <Loading/>
     }
     //isError -> error page, put in rootApi, if undefined show error
     //do all error checks

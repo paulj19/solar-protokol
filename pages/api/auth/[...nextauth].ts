@@ -17,33 +17,26 @@ export const authOptions = {
          async jwt(props) {
            const {token, account, profile} = props;
 
-             // console.log("PROPS", props)
-             // console.log("EXPIRES", token)
-             if (account) {
-                 // Save the access token and refresh token in the JWT on the initial login
-                 const xxx = {
-                     access_token: account.access_token,
-                     expires_at: account.expires_at,
-                     userprofile: profile,
-                     id_token: account.id_token,
-                     refresh_token: account.refresh_token,
-                 }
-                 // console.log("jwt callback xxx: ", xxx)
-                 return xxx
-             } else if (Date.now() < token.expires_at * 1000) {
-                 // If the access token has not expired yet, return it
-                 return token
-             } 
-             else {
-               // console.log("REFRESHING TOKEN: ", token);
+              if (account) {
+                  // Save the access token and refresh token in the JWT on the initial login
+                  return {
+                      access_token: account.access_token,
+                      expires_at: account.expires_at,
+                      userprofile: profile,
+                      id_token: account.id_token,
+                      refresh_token: account.refresh_token,
+                  }
+              } else if (Date.now() < token.expires_at * 1000) {
+                  // If the access token has not expired yet, return it
+                  return token
+              } 
+              else {
                 // If the access token has expired, try to refresh it
                  try {
-                     // https://accounts.google.com/.well-known/openid-configuration
-                     // We need the `token_endpoint`.
-                     const response = await fetch("https://dev-lzh2ps2gz10j4lt2.us.auth0.com/oauth/token", {
-                         headers: { "Content-Type": "application/json", 
+                     const response = await fetch("https://dev-49057522.okta.com/oauth2/default/v1/token", {
+                         headers: { "Content-Type": "application/x-www-form-urlencoded", 
                          },
-                         body: JSON.stringify({
+                         body: new URLSearchParams({
                              grant_type: "refresh_token",
                              refresh_token: token.refresh_token,
                              scope: "offline_access openid email profile",
@@ -52,13 +45,11 @@ export const authOptions = {
                          }),
                          method: "POST",
                      })
-                     // console.log("jwt callback response: ", response)
-
                      const tokens = await response.json()
-                     // console.log("jwt callback tokens: ", tokens)
 
                      if (!response.ok) throw tokens
 
+                     delete token?.error
                      return {
                          ...token, // Keep the previous token properties
                          access_token: tokens.access_token,
@@ -76,8 +67,9 @@ export const authOptions = {
              }
          },
          async session({ session, token }) {
-           // console.log("sessionxxx", session)
-           // console.log("sessionxxx token", token)
+           if (token.error) {
+             session.error = token.error
+           }
            session.accessToken = token?.access_token
            session.refresh_token = token?.refresh_token 
            session.user.name = token?.userprofile?.name

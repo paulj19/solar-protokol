@@ -58,13 +58,16 @@ describe('CLIENT CRUD', () => {
     })
     it('create client', () => {
         cy.visit('/')
+        cy.login()
         cy.setDate()
         cy.assertListIsEmpty()
         cy.createClient()
         cy.deleteClient()
     })
     it('edit client', () => {
+        cy.setAuthCookies()
         cy.visit('/')
+        cy.wait(2000)
         cy.setDate()
         cy.assertListIsEmpty()
         cy.createClient()
@@ -82,6 +85,7 @@ describe('CLIENT CRUD', () => {
 
         cy.get('[aria-label="modal-close"]').click()
         cy.reload()
+        cy.wait(2000)
         cy.setDate()
 
         cy.get('[aria-label="edit-client"]').click()
@@ -102,7 +106,9 @@ describe('CLIENT CRUD', () => {
     })
 
     it('present client', () => {
+        cy.setAuthCookies()
         cy.visit('/')
+        cy.wait(2000)
         cy.setDate()
         cy.assertListIsEmpty()
         cy.createClient()
@@ -120,7 +126,9 @@ describe('CLIENT CRUD', () => {
     })
 
     it('traverse back and forth', () => {
+        cy.setAuthCookies()
         cy.visit('/')
+        cy.wait(2000)
         cy.setDate()
         cy.assertListIsEmpty()
         cy.createClient()
@@ -141,7 +149,9 @@ describe('CLIENT CRUD', () => {
         cy.deleteClient()
     })
     it('edit generalParams', () => {
+        cy.setAuthCookies()
         cy.visit('/')
+        cy.wait(2000)
         cy.setDate()
         cy.assertListIsEmpty()
         cy.createClient()
