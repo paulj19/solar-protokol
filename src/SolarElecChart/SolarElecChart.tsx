@@ -48,14 +48,12 @@ enum STATE {
 const STATES = [[STATE.ELEC_BAR], [STATE.ENERGY_BAR], [STATE.ENERGY_BAR, STATE.ELEC_LINE], [STATE.ELEC_LINE], [STATE.ELEC_LINE, STATE.SOLAR_LINE], [STATE.ELEC_LINE, STATE.SOLAR_LINE, STATE.SOLAR_TEXT], [STATE.ELEC_LINE, STATE.SOLAR_LINE, STATE.AREA, STATE.SOLAR_TEXT]]
 
 export default function SolarElecChart() {
-    const {setTheme} = useTheme();
-    setTheme('gray-bg');
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
     const clientId = searchParams.get('clientId');
     const pDate = searchParams.get('pDate');
-    // const clientId = "50"
-    // const pDate = "2024-01-08"
+    // const clientId = "54"
+    // const pDate = "2024-01-26"
     useEffect(() => {
         if (!clientId || !pDate) {
             navigate('/');
@@ -130,7 +128,7 @@ export default function SolarElecChart() {
         <>
             <div className="flex flex-col w-full justify-center m-auto gap-3 pl-[200px]" data-testid="solar-elec-chart">
                 <>
-                    <h1 className="font-bold text-3xl font-sans text-gray-300 ml-[14%] pb-2">IHRE MONATLICHEN
+                    <h1 className="font-bold text-3xl font-sans text-h1 ml-[14%] pb-2">IHRE MONATLICHEN
                         ENERGIEKOSTEN IN DER ZUKUNFT</h1>
                     <div className="flex gap-1 pt-4 min-h-[750px] w-full h-full">
                         <ResponsiveContainer className="max-w-[80%]">
@@ -180,8 +178,8 @@ export default function SolarElecChart() {
                                     </linearGradient>
                                     <linearGradient id='saved-enpal' gradientTransform="rotate(90)"
                                                     spreadMethod='reflect'>
-                                        <stop offset="30%" stopColor="#0aff33"/>
-                                        <stop offset="90%" stopColor="#026112"/>
+                                        <stop offset="30%" stopColor="rgb(var(--saved-area-start))"/>
+                                        <stop offset="90%" stopColor="rgb(var(--saved-area-stop))"/>
                                     </linearGradient>
                                 </defs>
                                 {/*<defs>*/}
@@ -205,7 +203,7 @@ export default function SolarElecChart() {
                                       legendType='none' tooltipType='none'
                                       hide={!STATES[settings.currentState]?.includes(STATE.AREA)}
                                 />
-                                <Bar dataKey="electricityCost" fill="#c41818" barSize={30}
+                                <Bar dataKey="electricityCost" fill="rgb(var(--elec-bar))" barSize={30}
                                      name="STROM"
                                      label='none'
                                      aria-label="bar-electricityCost"
@@ -214,7 +212,7 @@ export default function SolarElecChart() {
                                      hide={!stateHasElecBar()}
                                      stackId="a"
                                 />
-                                <Bar dataKey="heatingCost" fill="yellow" barSize={30}
+                                <Bar dataKey="heatingCost" fill="rgb(var(--heating-bar))" barSize={30}
                                      name="WÄRME"
                                      label='none'
                                      aria-label="bar-heatingCost"
@@ -223,7 +221,7 @@ export default function SolarElecChart() {
                                      hide={!STATES[settings.currentState]?.includes(STATE.ENERGY_BAR)}
                                      stackId="a"
                                 />
-                                <Bar dataKey="transportCost" fill="#FF8C00" barSize={30}
+                                <Bar dataKey="transportCost" fill="rgb(var(--transport-bar))" barSize={30}
                                      name="BENZIN"
                                      label='none'
                                      aria-label="bar-transportCost"
@@ -233,14 +231,14 @@ export default function SolarElecChart() {
                                      stackId="a"
                                 />
                                 <Line type="linear" dataKey="electricityCost" name="STROM PREISENTWICKLUNG"
-                                      stroke="#FF0000"
+                                      stroke="rgb(var(--elec-line))"
                                       legendType={STATES[settings.currentState]?.includes(STATE.ELEC_LINE) ? 'line' : 'none'}
                                       strokeWidth={STATES[settings.currentState]?.includes(STATE.ENERGY_BAR) ? 8.5 : 5.5}
                                       activeDot={{r: 6}} dot={<CustomizedDot/>}
                                       hide={!STATES[settings.currentState]?.includes(STATE.ELEC_LINE)}//todo util function here
 
                                 />
-                                <Line type="linear" dataKey="solarCost" name="MIT ENPAL" stroke="#10ad3f"
+                                <Line type="linear" dataKey="solarCost" name="MIT ENPAL" stroke="rgb(var(--solar-line))"
                                       legendType={STATES[settings.currentState]?.includes(STATE.SOLAR_LINE) ? 'line' : 'none'}
                                       strokeWidth={5.5}
                                       dot={<CustomizedDot/>}
@@ -261,24 +259,24 @@ export default function SolarElecChart() {
                             </ComposedChart>
                         </ResponsiveContainer>
                         {settings.currentState !== 0 ? <div
-                            className="text-gray-300 text-font-medium text-sm pt-2 tracking-wide gap-4 flex flex-col w-[20%]">
+                            className="text-h1 text-font-medium text-sm pt-2 tracking-wide gap-4 flex flex-col w-[20%]">
                             <h2 className="text-2xl font-bold">{`IHRE ENERGIEKOSTEN IN DEN NÄCHSTEN ${generalParams.yearLimitPrediction} JAHREN`}</h2>
-                            <p className="text-3xl text-[#FF8C00] font-bold">{'BENZIN/TANKEN'}{<p
-                                className="text-5xl text-[#FF8C00] font-bold">{formatEuroCurrency(totalTransportCost)}</p>}</p>
-                            <p className="text-3xl text-[#FFFF00] font-bold">{'WÄRME/HEIZEN'}{<p
-                                className="text-5xl text-[#FFFF00] font-bold">{formatEuroCurrency(totalHeatingCost)}</p>}</p>
-                            <p className="text-3xl text-red-600 font-bold">{'STROM'}{<p
-                                className="text-5xl text-red-600 font-bold">{formatEuroCurrency(totalElecCost)}</p>}</p>
-                            <p className="text-3xl text-white font-bold">{'INSGESAMT'}{<p
-                                className="text-5xl text-white font-bold">{formatEuroCurrency(totalElecCost + totalTransportCost + totalHeatingCost)}</p>}</p>
+                            <p className="text-3xl text-transportBar font-bold">{'BENZIN/TANKEN'}{<p
+                                className="text-5xl text-transportBar font-bold">{formatEuroCurrency(totalTransportCost)}</p>}</p>
+                            <p className="text-3xl text-heatingBar font-bold">{'WÄRME/HEIZEN'}{<p
+                                className="text-5xl text-heatingBar font-bold">{formatEuroCurrency(totalHeatingCost)}</p>}</p>
+                            <p className="text-3xl text-elecBar font-bold">{'STROM'}{<p
+                                className="text-5xl text-elecBar font-bold">{formatEuroCurrency(totalElecCost)}</p>}</p>
+                            <p className="text-3xl text-totalCost font-bold">{'INSGESAMT'}{<p
+                                className="text-5xl text-totalCost font-bold">{formatEuroCurrency(totalElecCost + totalTransportCost + totalHeatingCost)}</p>}</p>
                             {stateHasSolarLine() && STATES[settings.currentState]?.includes(STATE.SOLAR_TEXT) ?
                                 <>
                                    {
-                                        <p className="text-3xl text-green-600 font-bold leading-6 pt-8">{'MIT SOLAR'}
+                                        <p className="text-3xl text-solarLine font-bold leading-6 pt-8">{'MIT SOLAR'}
                                             {<p className="text-5xl font-bold">{formatEuroCurrency(totalSolarCost)}</p>}
                                         </p>}
                                     {((totalElecCost + totalTransportCost + totalHeatingCost) - totalSolarCost) > 0 && STATES[settings.currentState]?.includes(STATE.AREA) ?
-                                        <p className="text-3xl font-bold text-green-600 leading-6 pt-8">{'ERSPARNIS'}
+                                        <p className="text-3xl font-bold text-solarLine leading-6 pt-8">{'ERSPARNIS'}
                                             {
                                                 <p className="text-5xl ">{formatEuroCurrency((totalElecCost + totalTransportCost + totalHeatingCost) - totalSolarCost)}</p>}
                                         </p> : null}
@@ -417,7 +415,7 @@ export default function SolarElecChart() {
             </div>
             <div className="absolute bottom-7 right-7" data-testid="forward-fab">
                 <Tooltip title="comparison stat" arrow>
-                    <Fab variant="circular" sx={{backgroundColor: "#474747", color: "#878787de"}} component={Link} 
+                    <Fab variant="circular" sx={{backgroundColor: "#474747", color: "#878787de"}} component={Link}
                          to={`/stats?pDate=${pDate}&clientId=${clientId}`}
                          aria-label="add">
                         <ArrowForward/>
@@ -560,15 +558,15 @@ const CustomTooltip = ({active, payload, label, currentYear, currentState}) => {
     const getTooltipColor = (dataKey): string => {
         switch (dataKey) {
             case "electricityCost":
-                return "text-red-600";
+                return "text-elecBar";
             case "heatingCost":
-                return "text-[#FFFF00]";
+                return "text-heatingBar";
             case "transportCost":
-                return "text-[#FF8C00]";
+                return "text-transportBar";
             case "solarCost":
-                return "text-green-600";
+                return "text-solarLine";
             case "totalElecCost":
-                return "text-red-600";
+                return "text-totalCost";
             default:
                 return "";
         }
@@ -576,8 +574,8 @@ const CustomTooltip = ({active, payload, label, currentYear, currentState}) => {
 
     if (active && payload && payload.length) {
         return (
-            <div className="bg-gray-700 p-2 border rounded-sm opacity-95">
-                <div className="text-xl font-medium pb-2 text-gray-300">{`JAHR ${label + currentYear}`}</div>
+            <div className="bg-tooltip p-2 border rounded-sm opacity-95">
+                <div className="text-xl font-medium pb-2 text-h1">{`JAHR ${label + currentYear}`}</div>
                 {payload.map(v => (<div key={v.dataKey}
                                         className={"text-xl font-medium " + getTooltipColor(v.dataKey)}>{((v.dataKey === "electricityCost" && currentState === 2 && v.name === "STROM PREISENTWICKLUNG") || v.dataKey === "range") ? null : `${getTooltipDescription(v.dataKey) + " " + v.value} €`}</div>))}
             </div>
@@ -627,13 +625,13 @@ function LegendFormatter(value, inflationRate, elecIncreaseRate, currentState) {
         <span>
           {value === 'BENZIN' && (currentState === 1 || currentState === 2)? <>
           <span className="mr-1 ml-[-2px]">BENZIN</span>
-          <svg className="inline mb-[3px]" height="10" width="15"><rect width="30" height="10" fill="#FFFF00"/></svg>
-          <span className="text-[#FFFF00]">{` WÄRME `}</span>
-          <svg className="inline mb-[3px]" height="10" width="15"><rect width="30" height="10" fill="#c41818"/></svg>
-          <span className="text-[#c41818] mx-1">STROM</span></> : 
+          <svg className="inline mb-[3px]" height="10" width="15"><rect width="30" height="10" fill="rgb(var(--heating-bar))"/></svg>
+          <span className="text-heatingBar">{` WÄRME `}</span>
+          <svg className="inline mb-[3px]" height="10" width="15"><rect width="30" height="10" fill="rgb(var(--elec-bar))"/></svg>
+          <span className="text-elecBar mx-1">STROM</span></> :
                 <span>{value}</span>}
             {value === 'MIT ENPAL' || value === 'BENZIN' || (value === 'STROM PREISENTWICKLUNG' && currentState === 3)|| (value === 'STROM' && currentState === 0) ?
-                <div className="text-gray-300 whitespace-pre-line">{` INFLATION: ${inflationRate}% \nPREISSTEIGERUNG: ${elecIncreaseRate}%`}</div> : null}
+                <div className="text-h1 whitespace-pre-line">{` INFLATION: ${inflationRate}% \nPREISSTEIGERUNG: ${elecIncreaseRate}%`}</div> : null}
             </span>)
 }
 
@@ -656,7 +654,7 @@ function CustomLegend(props): ReactElement {
         {payload.map((item, index) => {
             return (
                 <div key={`legend-${index}`} className="flex gap-2">
-                    <span className="text-gray-300">{item.value}</span>
+                    <span className="text-h1">{item.value}</span>
                 </div>
             );
         })}

@@ -110,7 +110,7 @@ a {
 @tailwind utilities;
 
 @layer base {
-  html[data-theme='gray-bg'] {
+  html[data-theme='dark'] {
     --color-title: 255, 245, 0;
     --alpha-title: 0.93;
     --color-legend: 180, 172, 2;
@@ -124,6 +124,18 @@ a {
     --color-bar: 241, 231, 39;
     --color-line: 230, 0, 0;
     background-image: url("../public/2.png");
+    --color-h1: 209, 213, 219;
+    --elec-bar: 196, 24, 24;
+    --transport-bar: 255, 140, 0;
+    --heating-bar: 255, 255, 0;
+    --elec-line: 255, 0, 0;
+    --solar-line: 16, 173, 63;
+    --total-cost: 255, 255, 255;
+    --saved-area-start: 10, 255, 51;
+    --saved-area-stop: 2, 97, 18;
+    --accordion: 31, 41, 55;
+    --tooltip-bg: 55, 65, 81;
+    --slider-marks: 156, 163, 175;
   }
 
   html[data-theme='home'] {
@@ -141,6 +153,33 @@ a {
     --color-line: 230, 0, 0;
     background-image: none;
   }
+  html[data-theme='light'] {
+    --color-title: 255, 245, 0;
+    --alpha-title: 0.93;
+    --color-legend: 180, 172, 2;
+    --alpha-legend: 0.71;
+    --color-axis: 9, 153, 255;
+    --alpha-axis: 0.71;
+    --slider-thumb: 31, 45, 55;
+    --stats-chart-solar: 59, 161, 86;
+    --stats-chart-elec: 150, 0, 0;
+    --stats-chart-elecShade: 250, 59, 59;
+    --color-bar: 241, 231, 39;
+    --color-line: 230, 0, 0;
+    background-image: none;
+    --color-h1: 209, 213, 219;
+    --elec-bar: 196, 24, 24;
+    --transport-bar: 255, 140, 0;
+    --heating-bar: 255, 255, 0;
+    --elec-line: 255, 0, 0;
+    --solar-line: 16, 173, 63;
+    --total-cost: 255, 255, 255;
+    --saved-area-start: 10, 255, 51;
+    --saved-area-stop: 2, 97, 18;
+    --accordion: 31, 41, 55;
+    --tooltip-bg: 55, 65, 81;
+  }
+
 }
 
 /*input[type='range'] {*/

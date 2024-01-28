@@ -17,7 +17,16 @@ module.exports = {
                 title: 'rgb(var(--color-title), var(--alpha-title))',
                 legend: 'rgb(var(--color-legend), var(--alpha-legend))',
                 axis: 'rgb(var(--color-axis), var(--alpha-axis))',
+                h1: 'rgb(var(--color-h1))',
+                elecBar:'rgb(var(--elec-bar))',
+                transportBar:'rgb(var(--transport-bar))',
+                heatingBar:'rgb(var(--heating-bar))',
+                totalCost:'rgb(var(--total-cost))',
+                solarLine:'rgb(var(--solar-line))',
             },
+            backgroundColor: {
+                tooltip:'rgb(var(--tooltip-bg))',
+            }
         },
     },
     plugins: [],

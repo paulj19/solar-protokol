@@ -1,4 +1,4 @@
-import {Alert, Button, InputAdornment, Snackbar, TextField} from "@mui/material";
+import {Alert, Button, FormControlLabel, InputAdornment, Snackbar, TextField, ToggleButton} from "@mui/material";
 import {Controller, useForm} from "react-hook-form";
 import {useGetGeneralParamsQuery, useUpdateGeneralParamsMutation} from "@/src/context/RootApi";
 import {useState} from "react";
@@ -6,8 +6,11 @@ import {Typography} from "@mui/joy";
 import Loading from "@/src/components/Loading";
 import ErrorScreen from "@/src/components/ErrorScreen";
 import {CLOSE_MODAL_DELAY, ERROR_TEXT} from "@/utils/CommonVars";
+import {FormControl, FormLabel, Radio, RadioGroup} from "@material-ui/core";
+import {useTheme} from "next-themes";
 
 export function EditGeneralParams({setOpenModal}) {
+    const { setTheme, theme } = useTheme();
     const {
         data: values,
         isLoading: isGeneralParamLoading,
@@ -27,6 +30,10 @@ export function EditGeneralParams({setOpenModal}) {
     }
     if (isGeneralParamQueryError) {
         return <ErrorScreen/>
+    }
+    
+    function handleThemeChange(event) {
+        setTheme(event.target.value)
     }
     const onSubmit = async (data) => {
         try {
@@ -144,6 +151,19 @@ export function EditGeneralParams({setOpenModal}) {
                             endAdornment: <InputAdornment position="start">Jahre</InputAdornment>, type: 'number',
                         }}/>}
                     />
+                    <FormControl className="col-span-full">
+                        <FormLabel id="select-theme">Theme</FormLabel>
+                        <RadioGroup
+                            row
+                            aria-labelledby="select-theme"
+                            name="select-theme"
+                            value={theme}
+                            onChange={handleThemeChange}
+                        >
+                            <FormControlLabel value="light" control={<Radio />} label="Light"/>
+                            <FormControlLabel value="dark" control={<Radio />} label="Dark"/>
+                        </RadioGroup>
+                    </FormControl>
                     <Button variant="contained" color="inherit" type="submit">Speichern</Button>
                     <Button variant="contained" color="inherit" type="reset">Zurücksetzen</Button>
                 </form>
