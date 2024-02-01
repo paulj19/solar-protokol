@@ -143,6 +143,13 @@ a {
     --cumStatsBar-label-cost: 255, 255, 255;
     --cumStats-bar-solar: 13, 122, 52;
     --cost-savings: 0, 227, 30;
+    --genCon-carGrid: 255, 255, 255;
+    --genCon-xTicks: 227, 166, 0;
+    --genCon-bar: 227, 117, 0;
+    --genCon-bar2: 227, 116, 0;
+    --genCon-switch: 180, 172, 2;
+    --genCon-switchPrimary: 9,153,255,0.71;
+    --genCon-switchBase: 128, 128, 128;
   }
 
   html[data-theme='home'] {

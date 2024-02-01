@@ -26,7 +26,9 @@ module.exports = {
                 sliderMarks:'rgb(var(--slider-marks))',
                 statsBarLabel: 'rgb(var(--stats-bar-label))',
                 cumLabelCost: 'rgb(var(--cumStatsBar-label-cost))',
-                costSavings: 'rgb(var(--cost-savings))'
+                costSavings: 'rgb(var(--cost-savings))',
+                genConSwitch: 'rgb(var(--genCon-switch))',
+                genConBar: 'rgb(var(--genCon-bar))'
             },
             backgroundColor: {
                 tooltip:'rgb(var(--tooltip-bg))',

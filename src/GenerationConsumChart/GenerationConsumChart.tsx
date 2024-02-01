@@ -3,7 +3,8 @@ import {useGetClientQuery, useUpdateClientStatusMutation} from "@/src/context/Ro
 import {GenerationConsumParam, getGenerationConsumParam} from "@/utils/ElectricityCostCalculator";
 import {
     Bar,
-    CartesianGrid, Cell,
+    CartesianGrid,
+    Cell,
     ComposedChart,
     Legend,
     Line,
@@ -19,8 +20,6 @@ import {Link, useNavigate, useSearchParams} from "react-router-dom";
 import {ArrowBack} from "@mui/icons-material";
 import Loading from "@/src/components/Loading";
 import ErrorScreen from "@/src/components/ErrorScreen";
-import ColoredSlider from "@/src/components/ColoredSlider";
-import {Typography} from "@mui/joy";
 import {createTheme, ThemeProvider} from "@mui/material/styles";
 
 export default function GenerationConsumChart(): ReactElement {
@@ -33,8 +32,8 @@ export default function GenerationConsumChart(): ReactElement {
             navigate('/');
         }
     }, []);
-    // const clientId = "43"
-    // const pDate = "2023-11-09"
+    // const clientId = "54"
+    // const pDate = "2024-01-26"
     const [updateClientStatus] = useUpdateClientStatusMutation()
     const [snackOpen, setSnackOpen] = useState(false);
     const {data: clientParams, isLoading: isClientParamLoading, isError: isClientParamError} = useGetClientQuery({
@@ -73,7 +72,7 @@ export default function GenerationConsumChart(): ReactElement {
 
     return (
         <>
-            <h1 className="font-bold text-3xl font-sans text-gray-300 m-auto pb-2">{`ERTRAGSPROGNOSE ${clientParams?.nickname?.toUpperCase()}`}</h1>
+            <h1 className="font-bold text-3xl font-sans text-h1 m-auto pb-2">{`ERTRAGSPROGNOSE ${clientParams?.nickname?.toUpperCase()}`}</h1>
             <div data-testid="generationConsum-chart" className="w-[80%] h-[90%] ">
                 <ResponsiveContainer>
                     <ComposedChart
@@ -85,10 +84,10 @@ export default function GenerationConsumChart(): ReactElement {
                             left: 20,
                         }}
                     >
-                        <CartesianGrid stroke="#fff" vertical={false} strokeWidth={0.3} strokeOpacity={1}/>
-                        <XAxis dataKey="month" tick={{fill: '#e3a600'}} angle={320}
+                        <CartesianGrid stroke="rgb(var(--genCon-carGrid))" vertical={false} strokeWidth={0.3} strokeOpacity={1}/>
+                        <XAxis dataKey="month" tick={{fill: 'rgb(var(--genCon-xTicks))'}} angle={320}
                                tickMargin={15} dx={-20}/>
-                        <YAxis axisLine={false} tick={{fill: '#e3a600'}}
+                        <YAxis axisLine={false} tick={{fill: 'rgb(var(--genCon-xTicks))'}}
                                tickLine={false} tickMargin={15} ticks={getYAxisTicks(generationConsumParams)}/>
                         <Tooltip
                             content={<CustomTooltip />}
@@ -101,8 +100,8 @@ export default function GenerationConsumChart(): ReactElement {
                         {/*<Bar dataKey="generation" barSize={30} fill="rgb(var(--color-bar))" label={renderCustomizedLabel} />*/}
                         <defs>
                             <linearGradient id='gen-bar' gradientTransform="rotate(90)" spreadMethod='reflect'>
-                                <stop offset='20%' stopColor='#e37500'/>
-                                <stop offset='90%' stopColor='#e3a600'/>
+                                <stop offset='20%' stopColor='rgb(var(--genCon-bar))'/>
+                                <stop offset='90%' stopColor='rgb(var(--genCon-bar2))'/>
                             </linearGradient>
                         </defs>
                         <Bar dataKey='generation' fill={`url(#gen-bar)`} barSize={70}
@@ -122,7 +121,7 @@ export default function GenerationConsumChart(): ReactElement {
                         <Switch
                             onChange={(e) => setShowConsumption(e.target.checked)}/>}
                                       label={<span
-                                          className="font-sans font-normal text-[#B4AC02B5]">Stromverbrauch</span>}/>
+                                          className="font-sans font-normal text-genConSwitch">Stromverbrauch</span>}/>
                 </FormGroup>
             </ThemeProvider>
             <div className="absolute bottom-7 left-7" data-testid="backward-fab">
@@ -173,7 +172,7 @@ function LegendFormatter(value, productionYearly, consumptionYearly, showConsump
     const innerSum = "font-sans text-2xl font-bold text-start";
     if (value === "generation") {
         return (
-            <div className={outerDiv + " text-[#e37500]"}>
+            <div className={outerDiv + " text-genConBar"}>
                 <div className={innerTitle}>STROMPRODUKTION</div>
                 <div
                     className={innerSum}>{productionYearly + " kWh PRO JAHR"}</div>
@@ -203,7 +202,7 @@ const renderCustomizedLabel = (props) => {
 
     return (
         <g>
-            <text x={x + width / 2} y={y - radius} fill="#e3a600" textAnchor="middle"
+            <text x={x + width / 2} y={y - radius} fill="rgb(var(--genCon-bar))" textAnchor="middle"
                   className="text-md font-bold">
                 {value}
             </text>
@@ -216,20 +215,20 @@ const theme = createTheme({
             styleOverrides: {
                 switchBase: {
                     // Controls default (unchecked) color for the thumb
-                    color: "gray"
+                    color: "rgba(var(--genCon-switchBase))"
                 },
                 colorPrimary: {
                     "&.Mui-checked": {
                         // Controls checked color for the thumb
-                        color: "rgba(9,153,255,0.71)"
+                        color: "rgba(var(--genCon-switchPrimary))"
                     }
                 },
                 track: {
                     // Controls default (unchecked) color for the track
-                    backgroundColor: "gray",
+                    backgroundColor: "rgba(var(--genCon-switchBase))",
                     ".Mui-checked.Mui-checked + &": {
                         // Controls checked color for the track
-                        backgroundColor: "rgba(9,153,255,0.71)"
+                        backgroundColor: "rgba(var(--genCon-switchPrimary))"
                     }
                 }
             }
@@ -240,7 +239,7 @@ const theme = createTheme({
 const CustomTooltip = ({active, payload, label}) => {
     if (active && payload && payload.length) {
         return (
-            <div className="bg-gray-700 p-2 border rounded-sm opacity-95 text-gray-300">
+            <div className="bg-tooltip p-2 border rounded-sm opacity-95 text-h1">
                 <div className="text-xl font-medium">{`Im ${label}`}</div>
                 <div className="text-xl font-medium">{`STROMPRODUKTION: ${payload[0].value} KwH`}</div>
             </div>
