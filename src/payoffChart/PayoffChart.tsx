@@ -59,7 +59,7 @@ export default function PayoffChart(): ReactElement {
 
     return (
         <>
-            <h1 className="font-bold text-3xl font-sans text-gray-300 m-auto pb-2">AUSZAHLUNG</h1>
+            <h1 className="font-bold text-3xl font-sans text-h1 m-auto pb-2">AUSZAHLUNG</h1>
             <div data-testid="generationConsum-chart" className="w-[80%] h-[90%] ">
                 <ResponsiveContainer>
                     <ComposedChart
@@ -83,7 +83,7 @@ export default function PayoffChart(): ReactElement {
                                 style={{
                                     textAnchor: "middle",
                                     fontSize: "1.4em",
-                                    fill: "rgba(209 213 219, 0.8)",
+                                    fill: "rgba(var(--payoff-label))",
                                 }}
                                 dx={-60}
                                 angle={270}
@@ -96,8 +96,8 @@ export default function PayoffChart(): ReactElement {
                                 <stop offset='90%' stopColor='#ffc261'/>
                             </linearGradient>
                             <linearGradient id='payoff-negative' gradientTransform="rotate(90)" spreadMethod='reflect'>
-                                <stop offset='20%' stopColor="rgb(var(--stats-chart-elecShade))"/>
-                                <stop offset='90%' stopColor="rgb(var(--stats-chart-elec))"/>
+                                <stop offset='20%' stopColor="rgb(var(--stats-bar-elecShade))"/>
+                                <stop offset='90%' stopColor="rgb(var(--stats-bar-elec))"/>
                             </linearGradient>
                         </defs>
                         <Bar dataKey='saved' fill="rgb(var(--color-bar))" barSize={35}>

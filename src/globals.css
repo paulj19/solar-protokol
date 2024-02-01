@@ -150,6 +150,7 @@ a {
     --genCon-switch: 180, 172, 2;
     --genCon-switchPrimary: 9,153,255,0.71;
     --genCon-switchBase: 128, 128, 128;
+    --payoff-label: 209 213 219, 0.8;
   }
 
   html[data-theme='home'] {
