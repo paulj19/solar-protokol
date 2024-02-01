@@ -23,6 +23,10 @@ module.exports = {
                 heatingBar:'rgb(var(--heating-bar))',
                 totalCost:'rgb(var(--total-cost))',
                 solarLine:'rgb(var(--solar-line))',
+                sliderMarks:'rgb(var(--slider-marks))',
+                statsBarLabel: 'rgb(var(--stats-bar-label))',
+                cumLabelCost: 'rgb(var(--cumStatsBar-label-cost))',
+                costSavings: 'rgb(var(--cost-savings))'
             },
             backgroundColor: {
                 tooltip:'rgb(var(--tooltip-bg))',

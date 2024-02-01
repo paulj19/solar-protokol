@@ -8,8 +8,6 @@ import AccordionSummary from '@mui/joy/AccordionSummary';
 import { PriceHeading } from './Stats';
 import { ReactElement } from 'react';
 
-
-
 export function ElectricityStats(params: PredictionParams) {
     const totalCost = calcElectricityCostMonthly(params);
     const solarCostParams = calcSolarCostMonthly(params);

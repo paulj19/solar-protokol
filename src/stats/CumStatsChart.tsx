@@ -40,15 +40,15 @@ export default function CumStatsChart(params: PredictionParams) {
                     <YAxis ticks={getYAxisTicks(elecTotal)} domain={["dataMin", "dataMax"]} hide={true}/>
                     {/* <Tooltip /> */}
                     <Legend wrapperStyle={{bottom: 12}} formatter={value => <span
-                        className="text-[#fff] opacity-70 tracking-wide">{value}</span>}/>
+                        className="text-cumLabelCost opacity-70 tracking-wide">{value}</span>}/>
                     <defs>
                         <linearGradient id='stat-solar-total' gradientTransform="rotate(90)" spreadMethod='reflect'>
-                            <stop offset='20%' stopColor={"#0d7a34"}/>
-                            <stop offset='90%' stopColor="rgb(var(--stats-chart-solar))"/>
+                            <stop offset='20%' stopColor={"rgb(var(--cumStats-bar-solar))"}/>
+                            <stop offset='90%' stopColor="rgb(var(--stats-bar-solar))"/>
                         </linearGradient>
                         <linearGradient id='stat-elec' gradientTransform="rotate(90)" spreadMethod='reflect'>
-                            <stop offset='20%' stopColor="rgb(var(--stats-chart-elecShade))"/>
-                            <stop offset='90%' stopColor="rgb(var(--stats-chart-elec))"/>
+                            <stop offset='20%' stopColor="rgb(var(--stats-bar-elecShade))"/>
+                            <stop offset='90%' stopColor="rgb(var(--stats-bar-elec))"/>
                         </linearGradient>
                     </defs>
                     <Bar dataKey="totalElecCost" name={"OHNE ENPAL"} fill={`url(#stat-elec)`}
@@ -72,4 +72,3 @@ function getYAxisTicks(savedElecTotal): Array<number> {
     }
     return ticks;
 }
-

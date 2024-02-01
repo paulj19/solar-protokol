@@ -8,7 +8,7 @@ export default function TotalCostSavings(params: PredictionParams) {
     // text-[#c7c7c7]
     return (
         <>
-            <span className="font-sans font-normal text-[1.6em] tracking-wide m-auto pl-10 text-[#00e31e]">ERSPARNIS INSGESAMT</span>
+            <span className="font-sans font-normal text-[1.6em] tracking-wide m-auto pl-10 text-costSavings">ERSPARNIS INSGESAMT</span>
             <EuroCurrencyFormat totalSaved={totalSaved} />
         </ >
     );

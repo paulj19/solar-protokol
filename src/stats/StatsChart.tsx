@@ -49,30 +49,27 @@ export default function StatsChart(params: PredictionParams) {
                     {/*<YAxis/>*/}
                     {/*<Tooltip/>*/}
                     <Legend wrapperStyle={{bottom: 12}} formatter={value => <span
-                        className="text-[#fff] opacity-70 tracking-wide ">{value}</span>}/>
+                        className="text-statsBarLabel opacity-70 tracking-wide ">{value}</span>}/>
                     <defs>
                         <linearGradient id='stat-solar' gradientTransform="rotate(90)" spreadMethod='reflect'>
-                            <stop offset='20%' stopColor='rgb(var(--stats-chart-solar))'/>
-                            <stop offset='90%' stopColor={'rgb(var(--stats-chart-solar))'}/>
+                            <stop offset='20%' stopColor='rgb(var(--stats-bar-solar))'/>
+                            <stop offset='90%' stopColor={'rgb(var(--stats-bar-solar))'}/>
                         </linearGradient>
                         <linearGradient id='stat-solar-negative' gradientTransform="rotate(90)" spreadMethod='reflect'>
-                            <stop offset='' stopColor='rgb(var(--stats-chart-solar))'/>
-                            <stop offset='79%' stopColor={'rgb(var(--stats-chart-solar))'}/>
+                            <stop offset='' stopColor='rgb(var(--stats-bar-solar))'/>
+                            <stop offset='79%' stopColor={'rgb(var(--stats-bar-solar))'}/>
                         </linearGradient>
                         <linearGradient id='stat-elec' gradientTransform="rotate(90)" spreadMethod='reflect'>
-                            <stop offset='20%' stopColor="rgb(var(--stats-chart-elecShade))"/>
-                            <stop offset='90%' stopColor="rgb(var(--stats-chart-elec))"/>
-                        </linearGradient>
-                        <linearGradient id='stat-rent' gradientTransform="rotate(90)" spreadMethod='reflect'>
-                            <stop offset='20%' stopColor={"#0d7a34"}/>
-                            <stop offset='90%' stopColor="rgb(var(--stats-chart-solar))"/>
+                            <stop offset='20%' stopColor="rgb(var(--stats-bar-elecShade))"/>
+                            <stop offset='90%' stopColor="rgb(var(--stats-bar-elec))"/>
                         </linearGradient>
                     </defs>
                     <Bar dataKey="electricityCost" name={"OHNE ENPAL"} fill={`url(#stat-elec)`}
+
                          label={customLabel} radius={2}>
                         {getBarLabel("STROMRECHNUNG ALT")}
                     </Bar>
-                    <Bar stackId="a" dataKey="electricityCostNew" name={"MIT ENPAL"} fill="#0d7a34"
+                    <Bar stackId="a" dataKey="electricityCostNew" name={"MIT ENPAL"} fill="rgb(var(--stats-bar-elec-new))"
                          legendType={'none'} radius={2}
                          label={props => solarCost < 0 ? customLabel({...props, value: totalSolarCost}) : null}
                     >
@@ -80,13 +77,13 @@ export default function StatsChart(params: PredictionParams) {
                         {electricityCostNew ? getBarLabelCost(`${electricityCostNew} €`) : null}
                     </Bar>
                     <Bar stackId="a" dataKey="solarCost" name={"MIT ENPAL"}
-                         fill={"#1fa24e"}
+                         fill={"rgb(var(--statsChart-solarCost))"}
                          label={props => props.value > 0 ? customLabel({...props, value: totalSolarCost}) : null}
                          radius={2}>
-    <LabelList position={"insideTop"} fill={"rgb(243 244 246)"}
+    <LabelList position={"insideTop"} fill={"rgb(var(--stats-bar-label))"}
                                      className="font-sans font-medium tracking-wide whitespace-pre-line"
                                      style={{paddingLeft: "5px", textOverflow: "visible", whiteSpace: "pre-line"}}>{solarCost > 0 ? `ENPAL\n MONATL. RATE ${rent} €`:  `RATE ${rent} €`}</LabelList>
-    <LabelList position={solarCost > 0 ? "center": "insideBottom"} fill={"rgb(243 244 246)"}
+    <LabelList position={solarCost > 0 ? "center": "insideBottom"} fill={"rgb(var(--stats-bar-label))"}
                                      className="font-sans font-medium tracking-wide whitespace-pre-line"
                                      style={{paddingLeft: "5px", textOverflow: "visible", whiteSpace: "pre-line"}}>{solarCost > 0 ? `EINSPEISE-\nVERGÜTUNG${-1 * feedInTariffMonthly} €` : `EV${-1 * feedInTariffMonthly}€` }</LabelList>
                         {solarCost !== 0 ? getBarLabelCost(`${solarCost} €`) : null}
@@ -118,11 +115,3 @@ const BarWithBorder = (borderHeight, borderColor) => {
         );
     };
 };
-
-                    // <Bar stackId="a" dataKey="rent" name={"MIT ENPAL"}
-                    //      fill={`url(#stat-rent)`}
-                    //      legendType='none'
-                    //      label={props => props.value > 0 ? customLabel({...props, value: totalSolarCost}) : null}
-                    //     // shape={BarWithBorder(3, "#ff0000")}
-                    //      radius={2}>
-                    // </Bar>
