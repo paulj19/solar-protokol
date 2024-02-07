@@ -19,8 +19,9 @@ export default function Layout({children}) {
     const [openModal, setOpenModal] = useState(false);
     return (
         <>
-            <div className="absolute top-0 left-0 bg-zinc-900 w-full flex h-[50px] ">
-                    <h1 className="m-auto tracking-wide font-bold text-2xl text-gray-500">Enpal .</h1>
+            <div className="absolute top-0 left-0 bg-gray-100 w-full flex h-[50px] text-gray-300">
+                <h1 className="m-auto tracking-wide font-bold text-2xl text-h1">Enpal {<span
+                    className="text-enpalIconDot">.</span>}</h1>
             </div>
             <div className="absolute top-2 right-1" data-testid="right-menu">
                 <Dropdown>

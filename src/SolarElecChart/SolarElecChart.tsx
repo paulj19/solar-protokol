@@ -31,6 +31,7 @@ import Button from "@mui/material/Button";
 import ColoredSlider from "@/src/components/ColoredSlider";
 import {useTheme} from "next-themes";
 import {Link, useNavigate, useSearchParams} from "react-router-dom";
+import Slider from "@mui/joy/Slider";
 
 type Settings = {
     currentState: number
@@ -145,13 +146,13 @@ export default function SolarElecChart() {
                                 <XAxis dataKey="year" ticks={getXAxisMarks(generalParams.yearLimitPrediction)}
                                        aria-label="x-axis"
                                        tickFormatter={value => `${value + currentYear}`}
-                                       tick={{fill: 'rgba(var(--color-axis), var(--alpha-axis))'}}
+                                       tick={{fill: 'rgba(var(--color-axis)))'}}
                                        tickSize={8} tickMargin={15} strokeWidth={0.7}
                                 />
                                 <YAxis
                                     ticks={getYAxisTicks(comparisonDataWithRange, STATES[settings.currentState]?.includes(STATE.SOLAR_LINE), !stateHasElecBar())}
                                     tickFormatter={formatYAxisTicks} strokeWidth={0.7}
-                                    tick={{fill: 'rgba(var(--color-axis), var(--alpha-axis))'}} tickSize={8}
+                                    tick={{fill: 'rgba(var(--color-axis))'}} tickSize={8}
                                     tickMargin={15} width={80}
                                     domain={["dataMin", "dataMax"]}
                                 >
@@ -203,7 +204,7 @@ export default function SolarElecChart() {
                                       legendType='none' tooltipType='none'
                                       hide={!STATES[settings.currentState]?.includes(STATE.AREA)}
                                 />
-                                <Bar dataKey="electricityCost" fill="rgb(var(--elec-bar))" barSize={30}
+                                <Bar dataKey="electricityCost" fill="rgba(var(--elec-bar))" barSize={30}
                                      name="STROM"
                                      label='none'
                                      aria-label="bar-electricityCost"
@@ -282,12 +283,15 @@ export default function SolarElecChart() {
                                         </p> : null}
                                 </> : null}
                         </div> : null}
-                        <MobileStepper
+                        <CustomMobileStepper
                             variant="progress"
                             aria-label="state-stepper"
                             steps={STATES.length}
                             activeStep={settings.currentState}
-                            sx={{maxWidth: 400, flexGrow: 1, bgcolor: 'transparent', margin: 'auto'}}
+
+                            sx={{maxWidth: 400, flexGrow: 1, bgcolor: 'transparent', margin: 'auto', borderColor:"red", color:"red", [`& .MuiMobileStepper-progress`]: {
+                                    borderColor: 'red',
+                                },}}
                             nextButton={
                                 <Button
                                     onClick={() => changeSettings({
@@ -299,20 +303,15 @@ export default function SolarElecChart() {
                                     disabled={settings.currentState === STATES.length - 1}
                                     sx={{
                                         ':hover': {
-                                            bgcolor: 'primary.main', // theme.palette.primary.main
+                                            bgcolor: 'rgb(var(--color-axis))', // theme.palette.primary.main
                                             color: 'white',
                                         },
                                         borderRadius: 25,
-                                        border: "1px solid rgba(var(--color-axis), var(--alpha-axis))",
+                                        border: "1px solid rgb(var(--color-axis))",
                                         fontSize: "1em",
                                         fontWeight: "bold",
                                     }}>
-                                    {theme.direction === 'rtl' ? (
-                                        <KeyboardArrowLeft/>
-                                    ) : (
-                                        <KeyboardArrowRight/>
-                                    )}
-
+                                    <KeyboardArrowRight className="text-axis hover:text-white"/>
                                 </Button>
                             }
                             backButton={
@@ -326,19 +325,16 @@ export default function SolarElecChart() {
                                     disabled={settings.currentState === 0}
                                     sx={{
                                         ':hover': {
-                                            bgcolor: 'primary.main', // theme.palette.primary.main
+                                            bgcolor: 'rgb(var(--color-axis))', // theme.palette.primary.main
                                             color: 'white',
                                         },
                                         borderRadius: 25,
-                                        border: "1px solid rgba(var(--color-axis), var(--alpha-axis))",
+                                        border: "1px solid rgb(var(--color-axis))",
                                         fontSize: "1em",
                                         fontWeight: "bold",
                                     }}>
-                                    {theme.direction === 'rtl' ? (
-                                        <KeyboardArrowRight/>
-                                    ) : (
-                                        <KeyboardArrowLeft/>
-                                    )}
+                                    {  <KeyboardArrowLeft className="text-axis hover:text-white"/>
+                                    }
                                 </Button>
                             }
                         />
@@ -360,8 +356,8 @@ export default function SolarElecChart() {
                  data-testid="settings">
                 <AccordionGroup variant="plain">
                     <Accordion>
-                        <AccordionSummary className="bg-gray-800"><span
-                            className="text-legend"> Einstellung</span></AccordionSummary>
+                        <AccordionSummary className="bg-solarElecSettings rounded-xl"><span
+                            className="text-h1"> Einstellung</span></AccordionSummary>
                         <AccordionDetails>
                             <div className="flex justify-center h-[240px] gap-2 pt-4">
                                 <div className="flex flex-col justify-center gap-4">
@@ -378,7 +374,7 @@ export default function SolarElecChart() {
                                         onChange={(e, value) => setInflationRate(Number(value))}
                                     />
                                     <Typography fontSize={14}
-                                                textColor="rgba(var(--color-legend), var(--alpha-legend))">
+                                                textColor="rgba(var(--color-axis), var(--alpha-axis))">
                                         Inflation
                                     </Typography>
                                 </div>
@@ -396,7 +392,7 @@ export default function SolarElecChart() {
                                         onChange={(e, value) => setElecIncreaseRate(Number(value))}
                                     />
                                     <Typography fontSize={14}
-                                                textColor="rgba(var(--color-legend), var(--alpha-legend))">
+                                                textColor="rgba(var(--color-axis), var(--alpha-axis))">
                                         Preissteigerung
                                     </Typography>
                                 </div>
@@ -520,20 +516,20 @@ const theme = createTheme({
             styleOverrides: {
                 switchBase: {
                     // Controls default (unchecked) color for the thumb
-                    color: "gray"
+                    color: "rgba(var(--title-axis))"
                 },
                 colorPrimary: {
                     "&.Mui-checked": {
                         // Controls checked color for the thumb
-                        color: "rgba(9,153,255,0.71)"
+                        color: "rgba(var(--title-axis))"
                     }
                 },
                 track: {
                     // Controls default (unchecked) color for the track
-                    backgroundColor: "gray",
+                    backgroundColor: "rgba(var(--title-axis))",
                     ".Mui-checked.Mui-checked + &": {
                         // Controls checked color for the track
-                        backgroundColor: "rgba(9,153,255,0.71)"
+                        backgroundColor: "rgba(var(--title-axis))"
                     }
                 }
             }
@@ -675,3 +671,31 @@ function SmallRect() {
     <rect width="300" height="100" style="fill:rgb(0,0,255);stroke-width:3;stroke:rgb(0,0,0)" />
   </svg>)
 }
+const CustomMobileStepper = styled(MobileStepper)(({ theme }) => ({
+    // color: "#072543", //color of the slider between thumbs
+
+    // "& .MuiSlider-thumb": {
+    //     backgroundColor: "rgba(var(--slider-thumb))" //color of thumbs
+    // },
+    // "& .MuiSlider-rail": {
+    //     // backgroundColor: "rgba(var(--slider-thumb), 0.05)"
+    // },
+    // "& .MuiSlider-track": {
+    //     backgroundColor: "rgba(var(--slider-thumb), 0.85)"
+    // },
+    // '& input[type="range"]': {
+    //     WebkitAppearance: 'slider-vertical',
+    // },
+    // "& .MuiMobileStepper-positionStatic": {
+    //     backgroundColor: "rgb(var(--color-axis))"
+    // },
+    "& .css-5xe99f-MuiLinearProgress-bar1 ": {
+        backgroundColor: "rgb(var(--color-axis))"
+    },
+    "& .css-1be5mm1-MuiLinearProgress-root-MuiMobileStepper-progress": {
+        backgroundColor: "#d6d6d6"
+    },
+    // "& .MuiMobileStepper-progress": {
+    //     backgroundColor: "rgb(var(--color-axis))"
+    // },
+}));
