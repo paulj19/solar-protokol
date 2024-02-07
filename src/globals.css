@@ -111,7 +111,8 @@ a {
 
 @layer base {
   html[data-theme='dark'] {
-    --color-title: 255, 245, 0;
+    --rechnung-details-elec: 255, 245, 0;
+    --rechnung-details-solar: 255, 176, 0;
     --alpha-title: 0.93;
     --color-legend: 180, 172, 2;
     --alpha-legend: 0.71;
@@ -157,16 +158,16 @@ a {
   }
 
   html[data-theme='light'] {
-    --color-title: 255, 245, 0;
-    --alpha-title: 0.93;
+    --rechnung-details-elec: 255, 176, 0;
+    --rechnung-details-solar: 59, 161, 86;
     --color-legend: 7, 37, 67;
     --alpha-legend: 0.71;
     --color-axis: 7, 37, 67;
     --alpha-axis: 0.71;
     --slider-thumb: 31, 45, 55;
     --stats-bar-solar: 59, 161, 86;
-    --stats-bar-elec: 150, 0, 0;
-    --stats-bar-elecShade: 250, 59, 59;
+    --stats-bar-elec: 255, 176, 0;
+    --stats-bar-elecShade: 255, 176, 0;
     --color-bar: 241, 231, 39;
     --color-line: 230, 0, 0;
     --solarElec-settings: 214, 214, 214;
@@ -186,13 +187,13 @@ a {
     --accordion: 31, 41, 55;
     --tooltip-bg: 199, 199, 199;
     --slider-marks: 156, 163, 175;
-    --stats-bar-label: 243, 244, 246;
+    --stats-bar-label: 7, 37, 67;
     --stats-bar-label-cost: 255, 255, 255;
-    --stats-bar-elec-new: 13, 122, 52;
+    --stats-bar-elec-new: 59, 161, 86;
     --statsChart-solarCost: 31, 162, 78;
-    --cumStatsBar-label-cost: 255, 255, 255;
-    --cumStats-bar-solar: 13, 122, 52;
-    --cost-savings: 0, 227, 30;
+    --cumStatsBar-label-cost: 7, 37, 67;
+    --cumStats-bar-solar: 59, 161, 86;
+    --cost-savings: 59, 161, 86;
     --genCon-carGrid: 255, 255, 255;
     --genCon-xTicks: 227, 166, 0;
     --genCon-bar: 227, 117, 0;

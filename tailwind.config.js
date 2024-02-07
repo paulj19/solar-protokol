@@ -14,7 +14,8 @@ module.exports = {
                 '3': "url('/3.jpg')",
             },
             textColor: {
-                title: 'rgb(var(--color-title), var(--alpha-title))',
+                rechnungDetailsElec: 'rgb(var(--rechnung-details-elec))',
+                rechnungDetailsSolar: 'rgb(var(--rechnung-details-solar))',
                 legend: 'rgb(var(--color-legend), var(--alpha-legend))',
                 axis: 'rgb(var(--color-axis), var(--alpha-axis))',
                 h1: 'rgb(var(--title-h1))',

@@ -9,6 +9,7 @@ import { className } from "postcss-selector-parser";
 import { ReactElement } from "react";
 import { PriceHeading } from './Stats';
 
+//todo dead code, remove
 export default function SolarStats(params: PredictionParams) {
     const solarCostParams = calcSolarCostMonthly(params);
     return (

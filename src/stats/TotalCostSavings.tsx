@@ -15,9 +15,5 @@ export default function TotalCostSavings(params: PredictionParams) {
 }
 
 function EuroCurrencyFormat({ totalSaved }) {
-    if (totalSaved < 0) {
-        return <span className={styles.savedAmount}>0€</span>;
-    }
-
-    return <span className={styles.savedAmount}>{getFormattedCost(totalSaved)}</span>;
+    return <span className="p-2 text-costSavings w-150 font-extrabold text-5xl text-center mx-auto pl-[-80px]">{(totalSaved < 0) ? "0€" : getFormattedCost(totalSaved)}</span>;
 }

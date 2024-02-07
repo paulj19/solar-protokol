@@ -42,7 +42,7 @@ export function ElectricityStats(params: PredictionParams) {
 function ElectricityCosts({ params, totalCost }: { params: PredictionParams, totalCost: number }) {
     return (
         <>
-            <div className="flex justify-around pt-4 text-title">
+            <div className="flex justify-around pt-4 text-h1">
                 <div className={styles.costElements}>
                     <div className={styles.costLabel}>{"Grundpreis"}</div>
                     <div className={styles.costNumber}>{params.clientParams.basePrice + "€"}</div>
@@ -78,7 +78,7 @@ function SolarCosts({
         )
     }
     return (
-        <div className="flex flex-row gap-4 p-3 text-title">
+        <div className="flex flex-row gap-4 p-3 text-h1">
             <div>
                 <div className={styles.costLabel}>{"Enpal Rate"}</div>
                 <Cost cost={rent} />

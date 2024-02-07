@@ -52,7 +52,7 @@ export default function StatsChart(params: PredictionParams) {
                         className="text-statsBarLabel opacity-70 tracking-wide ">{value}</span>}/>
                     <defs>
                         <linearGradient id='stat-solar' gradientTransform="rotate(90)" spreadMethod='reflect'>
-                            <stop offset='20%' stopColor='rgb(var(--stats-bar-solar))'/>
+                            <stop offset='20%' stopColor={'rgb(var(--stats-bar-solar))'}/>
                             <stop offset='90%' stopColor={'rgb(var(--stats-bar-solar))'}/>
                         </linearGradient>
                         <linearGradient id='stat-solar-negative' gradientTransform="rotate(90)" spreadMethod='reflect'>
@@ -64,7 +64,9 @@ export default function StatsChart(params: PredictionParams) {
                             <stop offset='90%' stopColor="rgb(var(--stats-bar-elec))"/>
                         </linearGradient>
                     </defs>
-                    <Bar dataKey="electricityCost" name={"OHNE ENPAL"} fill={`url(#stat-elec)`}
+                    <Bar dataKey="electricityCost" name={"OHNE ENPAL"}
+                         fill={`url(#stat-elec)`}
+                        // fill="rgb(var(--stats-bar-elec))"
 
                          label={customLabel} radius={2}>
                         {getBarLabel("STROMRECHNUNG ALT")}
@@ -80,10 +82,10 @@ export default function StatsChart(params: PredictionParams) {
                          fill={"rgb(var(--statsChart-solarCost))"}
                          label={props => props.value > 0 ? customLabel({...props, value: totalSolarCost}) : null}
                          radius={2}>
-    <LabelList position={"insideTop"} fill={"rgb(var(--stats-bar-label))"}
+    <LabelList position={"insideTop"} fill={"rgb(var(--stats-bar-label-cost))"}
                                      className="font-sans font-medium tracking-wide whitespace-pre-line"
                                      style={{paddingLeft: "5px", textOverflow: "visible", whiteSpace: "pre-line"}}>{solarCost > 0 ? `ENPAL\n MONATL. RATE ${rent} €`:  `RATE ${rent} €`}</LabelList>
-    <LabelList position={solarCost > 0 ? "center": "insideBottom"} fill={"rgb(var(--stats-bar-label))"}
+    <LabelList position={solarCost > 0 ? "center": "insideBottom"} fill={"rgb(var(--stats-bar-label-cost))"}
                                      className="font-sans font-medium tracking-wide whitespace-pre-line"
                                      style={{paddingLeft: "5px", textOverflow: "visible", whiteSpace: "pre-line"}}>{solarCost > 0 ? `EINSPEISE-\nVERGÜTUNG${-1 * feedInTariffMonthly} €` : `EV${-1 * feedInTariffMonthly}€` }</LabelList>
                         {solarCost !== 0 ? getBarLabelCost(`${solarCost} €`) : null}
