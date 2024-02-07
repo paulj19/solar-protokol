@@ -169,7 +169,7 @@ a {
     --stats-bar-elec: 255, 176, 0;
     --stats-bar-elecShade: 255, 176, 0;
     --color-bar: 241, 231, 39;
-    --color-line: 230, 0, 0;
+    --color-line: 7, 37, 67;
     --solarElec-settings: 214, 214, 214;
     background-image: none;
     --title-h1: 7, 37, 67;
@@ -195,12 +195,13 @@ a {
     --cumStats-bar-solar: 59, 161, 86;
     --cost-savings: 59, 161, 86;
     --genCon-carGrid: 255, 255, 255;
-    --genCon-xTicks: 227, 166, 0;
-    --genCon-bar: 227, 117, 0;
-    --genCon-bar2: 227, 116, 0;
-    --genCon-switch: 180, 172, 2;
-    --genCon-switchPrimary: 9,153,255,0.71;
+    --genCon-xTicks: 7, 37, 67;
+    --genCon-bar: 255, 176, 0;
+    --genCon-bar2: 255, 176, 0;
+    --genCon-switch: 7, 37, 67;
+    --genCon-switchPrimary: 7, 37, 67;
     --genCon-switchBase: 128, 128, 128;
+    --genCon-bar-label: 7, 37, 67;
     --payoff-label: 209 213 219, 0.8;
     --header-bg: 243, 244, 246;
     --enpal-icon-dot: 252, 203, 28;

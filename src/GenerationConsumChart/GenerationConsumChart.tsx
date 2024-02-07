@@ -110,7 +110,7 @@ export default function GenerationConsumChart(): ReactElement {
                                 <Cell key="generation-bar" fill={`url(#gen-bar)`}/>
                             ))}
                         </Bar>
-                        <Line type="monotone" strokeWidth={4.5} dataKey="consumption" stroke="rgb(var(--color-line))" dot={false}
+                        <Line type="monotone" strokeWidth={7.5} dataKey="consumption" stroke="rgb(var(--color-line))" dot={false}
                               hide={!showConsumption}/>
                     </ComposedChart>
                 </ResponsiveContainer>
@@ -202,7 +202,7 @@ const renderCustomizedLabel = (props) => {
 
     return (
         <g>
-            <text x={x + width / 2} y={y - radius} fill="rgb(var(--genCon-bar))" textAnchor="middle"
+            <text x={x + width / 2} y={y - radius} fill="rgb(var(--genCon-bar-label))" textAnchor="middle"
                   className="text-md font-bold">
                 {value}
             </text>
