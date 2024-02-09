@@ -126,7 +126,7 @@ export default function GenerationConsumChart(): ReactElement {
             </ThemeProvider>
             <div className="absolute bottom-7 left-7" data-testid="backward-fab">
                 <MuiToolTip title="comparison stat" arrow>
-                    <Fab variant="circular" sx={{backgroundColor: "#474747", color: "#878787de"}} component={Link}
+                    <Fab variant="circular" sx={{backgroundColor: "rgb(var(--fab-bg))", color: "rgb(var(--fab-arrow))"}} component={Link}
                          to={`/stats?pDate=${pDate}&clientId=${clientId}`}
                          aria-label="add">
                         <ArrowBack/>
@@ -135,7 +135,7 @@ export default function GenerationConsumChart(): ReactElement {
             </div>
             <div className="absolute bottom-7 right-7" data-testid="end-fab">
                 <MuiToolTip title="back to home" arrow>
-                    <Fab variant="extended" sx={{backgroundColor: "#474747", color: "#878787de"}} component={Link} to='/'
+                    <Fab variant="extended" sx={{backgroundColor: "rgb(var(--fab-bg))", color: "rgb(var(--fab-arrow))"}} component={Link} to='/'
                          onClick={() => handleUpdateClientStatus()} aria-label="add">
                         BEENDEN
                     </Fab>

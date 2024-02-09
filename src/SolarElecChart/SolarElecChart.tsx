@@ -146,7 +146,7 @@ export default function SolarElecChart() {
                                 <XAxis dataKey="year" ticks={getXAxisMarks(generalParams.yearLimitPrediction)}
                                        aria-label="x-axis"
                                        tickFormatter={value => `${value + currentYear}`}
-                                       tick={{fill: 'rgba(var(--color-axis)))'}}
+                                       tick={{fill: 'rgba(var(--color-axis))'}}
                                        tickSize={8} tickMargin={15} strokeWidth={0.7}
                                 />
                                 <YAxis
@@ -411,7 +411,7 @@ export default function SolarElecChart() {
             </div>
             <div className="absolute bottom-7 right-7" data-testid="forward-fab">
                 <Tooltip title="comparison stat" arrow>
-                    <Fab variant="circular" sx={{backgroundColor: "#474747", color: "#878787de"}} component={Link}
+                    <Fab variant="circular" sx={{backgroundColor: "rgb(var(--fab-bg))", color: "rgb(var(--fab-arrow))"}} component={Link}
                          to={`/stats?pDate=${pDate}&clientId=${clientId}`}
                          aria-label="add">
                         <ArrowForward/>

@@ -111,7 +111,7 @@ export default function PayoffChart(): ReactElement {
             </div>
             <div className="absolute bottom-7 right-7" data-testid="forward-fab">
                 <MuiToolTip title="stats chart" arrow>
-                    <Fab variant="circular" sx={{backgroundColor: "#474747", color: "#878787de"}} component={Link}
+                    <Fab variant="circular" sx={{backgroundColor: "rgb(var(--fab-bg))", color: "rgb(var(--fab-arrow))"}} component={Link}
                          to={`/generationConsumChart?pDate=${pDate}&clientId=${clientId}`}
                          aria-label="add">
                         <ArrowForward/>

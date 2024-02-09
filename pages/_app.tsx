@@ -20,7 +20,7 @@ export default function SolarProtokol({Component, pageProps}) {
     return (
         !design ?
             <NoSSR>
-                <ThemeProvider>
+                <ThemeProvider defaultTheme="light">
                     <Provider store={store}>
                         <LocalizationProvider dateAdapter={AdapterDateFns}>
                             <BrowserRouter>
@@ -39,8 +39,8 @@ export default function SolarProtokol({Component, pageProps}) {
                     </Provider>
                 </ThemeProvider>
             </NoSSR> :
-            <NoSSR>
-                <html data-theme="gray-bg" suppressHydrationWarning>
+        <NoSSR>
+            <ThemeProvider defaultTheme="light">
                 <Provider store={store}>
                     <LocalizationProvider dateAdapter={AdapterDateFns}>
                         <Layout>
@@ -48,7 +48,7 @@ export default function SolarProtokol({Component, pageProps}) {
                         </Layout>
                     </LocalizationProvider>
                 </Provider>
-                </html>
-            </NoSSR>
-    )
+            </ThemeProvider>
+</NoSSR>
+)
 }

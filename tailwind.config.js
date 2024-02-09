@@ -35,6 +35,7 @@ module.exports = {
             backgroundColor: {
                 tooltip:'rgb(var(--tooltip-bg))',
                 solarElecSettings: 'rgb(var(--solarElec-settings))',
+                logoBanner: 'rgb(var(--logo-banner))',
             }
         },
     },

@@ -104,7 +104,7 @@ export default function Stats() {
             </div>
             <div className="absolute bottom-7 left-7" data-testid="backward-fab">
                 <Tooltip title="comparison chart" arrow>
-                    <Fab variant="circular" sx={{backgroundColor: "#474747", color: "#878787de"}} component={Link}
+                    <Fab variant="circular" sx={{backgroundColor: "rgb(var(--fab-bg))", color: "rgb(var(--fab-arrow))"}} component={Link}
                          to={`/solarElecChart?pDate=${pDate}&clientId=${clientId}`}
                          aria-label="add">
                         <ArrowBack/>
@@ -113,7 +113,7 @@ export default function Stats() {
             </div>
             <div className="absolute bottom-7 right-7" data-testid="forward-fab">
                 <Tooltip title="generation consumption chart" arrow>
-                    <Fab variant="circular" sx={{backgroundColor: "#474747", color: "#878787de"}} component={Link}
+                    <Fab variant="circular" sx={{backgroundColor: "rgb(var(--fab-bg))", color: "rgb(var(--fab-arrow))"}} component={Link}
                          to={`/generationConsumChart?pDate=${pDate}&clientId=${clientId}`}
                          aria-label="add">
                         <ArrowForward/>

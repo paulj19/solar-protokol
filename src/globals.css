@@ -155,6 +155,9 @@ a {
     --payoff-label: 209 213 219, 0.8;
     --header-bg: 24, 24 , 27;
     --enpal-icon-dot: 7, 37, 67;
+    --logo-banner: 24, 24, 27;
+    --fab-bg: 71, 71, 71;
+    --fab-arrow: 135, 135, 135;
   }
 
   html[data-theme='light'] {
@@ -205,6 +208,9 @@ a {
     --payoff-label: 209 213 219, 0.8;
     --header-bg: 243, 244, 246;
     --enpal-icon-dot: 252, 203, 28;
+    --logo-banner: 243, 244, 246;
+    --fab-bg: 243, 244, 246;;
+    --fab-arrow: 7, 37, 67;
   }
 }
 
