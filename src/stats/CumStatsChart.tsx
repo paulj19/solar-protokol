@@ -51,11 +51,11 @@ export default function CumStatsChart(params: PredictionParams) {
                             <stop offset='90%' stopColor="rgb(var(--stats-bar-elec))"/>
                         </linearGradient>
                     </defs>
-                    <Bar dataKey="totalElecCost" name={"OHNE ENPAL"} fill={`url(#stat-elec)`}
+                    <Bar dataKey="totalElecCost" name={"OHNE ENPAL"} fill="rgb(var(--stats-bar-elec))"
                          label={customLabel} radius={2}>
                         {getBarLabel(`GESAMTKOSTEN BIS ${selectedYear} OHNE SOLAR`, (totalElecCost / elecTotal) < 0.15)}
                     </Bar>
-                    <Bar dataKey="totalSolarCost" name={"MIT ENPAL"} fill={`url(#stat-solar-total)`}
+                    <Bar dataKey="totalSolarCost" name={"MIT ENPAL"} fill="rgb(var(--stats-bar-solar))"
                          label={customLabel} radius={2}>
                         {getBarLabel(`GESAMTKOSTEN BIS ${selectedYear} MIT SOLAR`, (totalSolarCost / solarTotal) < 0.21)}
                     </Bar>

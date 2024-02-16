@@ -55,15 +55,15 @@ export default function Stats() {
     const predictionParams: PredictionParams = {year, clientParams, generalParams};
     return (
         <>
-            <h1 className="m-auto font-medium font-sans text-4xl tracking-wide text-h1">{"Jahr " + (new Date().getFullYear() + year)}</h1>
+            <h1 className="m-auto font-normal font-poppins text-4xl tracking-wide text-h1">{"Jahr " + (new Date().getFullYear() + year)}</h1>
             <div className="w-full h-full" data-testid="stats">
-                <div className="flex w-[1800px] pb-10 h-[650px]">
-                    <div className="flex w-[1400px] justify-end h-[650px] pr-14 gap-12">
+                <div className="flex w-[1800px] pb-10 h-[800px]">
+                    <div className="flex w-[1400px] justify-end h-[750px] pr-14 gap-12">
                         <StatsChart {...predictionParams} />
                         <CumStatsChart {...predictionParams} />
                     </div>
                     <div className="flex flex-col">
-                        <div className="pt-14 pb-10">
+                        <div className="pt-14">
                             <AccordionGroup variant="plain">
                                 <Accordion>
                                     <AccordionSummary><span
@@ -75,7 +75,7 @@ export default function Stats() {
                                 </Accordion>
                             </AccordionGroup>
                         </div>
-                        <div className="flex m-auto flex-col pt-24">
+                        <div className="flex flex-col pt-44 mx-auto">
                             <TotalCostSavings {...predictionParams} />
                         </div>
                     </div>
@@ -161,7 +161,7 @@ export function getFormattedCost(cost: number) {
 
 export function getBarLabel(text, isValueTiny = false): ReactElement {
     return !isValueTiny ? <LabelList position={"middle"} fill={"rgb(var(--stats-bar-label-cost))"}
-                                     className="font-sans font-medium tracking-wide whitespace-pre-line"
+                                     className="font-public_sans font-medium whitespace-pre-line"
                                      style={{paddingLeft: "5px", textOverflow: "visible"}}>{text}</LabelList> : null
 }
 

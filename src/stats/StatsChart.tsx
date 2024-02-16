@@ -65,8 +65,8 @@ export default function StatsChart(params: PredictionParams) {
                         </linearGradient>
                     </defs>
                     <Bar dataKey="electricityCost" name={"OHNE ENPAL"}
-                         fill={`url(#stat-elec)`}
-                        // fill="rgb(var(--stats-bar-elec))"
+                         // fill={`url(#stat-elec)`}
+                        fill="rgb(var(--stats-bar-elec))"
 
                          label={customLabel} radius={2}>
                         {getBarLabel("STROMRECHNUNG ALT")}
@@ -79,7 +79,7 @@ export default function StatsChart(params: PredictionParams) {
                         {electricityCostNew ? getBarLabelCost(`${electricityCostNew} €`) : null}
                     </Bar>
                     <Bar stackId="a" dataKey="solarCost" name={"MIT ENPAL"}
-                         fill={"rgb(var(--statsChart-solarCost))"}
+                         fill={"rgb(var(--stats-bar-solar))"}
                          label={props => props.value > 0 ? customLabel({...props, value: totalSolarCost}) : null}
                          radius={2}>
     <LabelList position={"insideTop"} fill={"rgb(var(--stats-bar-label-cost))"}
