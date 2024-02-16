@@ -13,7 +13,7 @@ const ColoredSlider = styled(Slider)(({ theme }) => ({
         backgroundColor: "rgba(var(--slider-thumb), 0.85)"
     },
     '& input[type="range"]': {
-        WebkitAppearance: 'slider-vertical',
+        WebkitAppearance: 'slider-horizontal',
     },
 }));
 

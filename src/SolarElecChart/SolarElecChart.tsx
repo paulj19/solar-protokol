@@ -18,7 +18,7 @@ import Loading from "@/src/components/Loading";
 import ErrorScreen from "@/src/components/ErrorScreen";
 import {calcPredictions, calcTotalSaved} from '@/utils/ElectricityCostCalculator';
 import {CostPredictions} from '@/types/types';
-import {Fab, MobileStepper} from "@mui/material";
+import {Collapse, Fab, FormControlLabel, FormGroup, MobileStepper, Switch} from "@mui/material";
 import {ArrowForward, KeyboardArrowLeft, KeyboardArrowRight} from "@mui/icons-material";
 import {Mark} from "@mui/base";
 import {Typography} from "@mui/joy";
@@ -32,6 +32,8 @@ import ColoredSlider from "@/src/components/ColoredSlider";
 import {useTheme} from "next-themes";
 import {Link, useNavigate, useSearchParams} from "react-router-dom";
 import Slider from "@mui/joy/Slider";
+import {makeStyles} from '@mui/styles';
+import {TrendingUp} from "@material-ui/icons";
 
 type Settings = {
     currentState: number
@@ -60,6 +62,11 @@ export default function SolarElecChart() {
             navigate('/');
         }
     }, []);
+    const [inflationBtnClicked, setInflationBtnClicked] = React.useState(false);
+
+    const handleChange = () => {
+        setInflationBtnClicked((prev) => !prev);
+    };
     const [inflationRate, setInflationRate] = useState<number>(null)
     const [elecIncreaseRate, setElecIncreaseRate] = useState<number>(null)
     const [settings, changeSettings] = useState<Settings>({currentState: 0});
@@ -115,7 +122,21 @@ export default function SolarElecChart() {
         return acc.concat(item);
     }, []);
     // const {totalElecCost, totalSolarCost, totalTransportCost, totalHeatingCost} = calcTotalSaved({year: 30, clientParams, generalParams: {...generalParams, inflationRate, elecIncreaseRate}});
-    const {totalSaved, totalElecCost, totalSolarCost, totalTransportCost, totalHeatingCost} = calcTotalSaved({year: generalParams.yearLimitPrediction, clientParams, generalParams: {...generalParams, inflationRate: inflationRate ?? generalParams.inflationRate, electricityIncreaseRate: elecIncreaseRate ?? generalParams.electricityIncreaseRate}});
+    const {
+        totalSaved,
+        totalElecCost,
+        totalSolarCost,
+        totalTransportCost,
+        totalHeatingCost
+    } = calcTotalSaved({
+        year: generalParams.yearLimitPrediction,
+        clientParams,
+        generalParams: {
+            ...generalParams,
+            inflationRate: inflationRate ?? generalParams.inflationRate,
+            electricityIncreaseRate: elecIncreaseRate ?? generalParams.electricityIncreaseRate
+        }
+    });
 
     function stateHasSolarLine() {
         return STATES[settings.currentState]?.includes(STATE.SOLAR_LINE);
@@ -125,14 +146,15 @@ export default function SolarElecChart() {
         return STATES[settings.currentState]?.includes(STATE.ELEC_BAR) || STATES[settings.currentState]?.includes(STATE.ENERGY_BAR);
     }
 
+
     return (
         <>
-            <div className="flex flex-col w-full justify-center m-auto gap-3 pl-[200px]" data-testid="solar-elec-chart">
+            <div className="flex flex-col w-full h-full justify-center m-auto gap-3 " data-testid="solar-elec-chart">
                 <>
-                    <h1 className="font-bold text-3xl font-sans text-h1 ml-[14%] pb-2">IHRE MONATLICHEN
+                    <h1 className="text-4xl font-normal text-h1 m-auto pb-2 font-poppins">IHRE MONATLICHEN
                         ENERGIEKOSTEN IN DER ZUKUNFT</h1>
-                    <div className="flex gap-1 pt-4 min-h-[750px] w-full h-full">
-                        <ResponsiveContainer className="max-w-[80%]">
+                    <div className="flex gap-1 pt-4 h-[750px] w-full">
+                        <ResponsiveContainer className="max-w-[70%]">
                             <ComposedChart
                                 data={comparisonDataWithRange}
                                 margin={{
@@ -209,7 +231,7 @@ export default function SolarElecChart() {
                                      label='none'
                                      aria-label="bar-electricityCost"
                                      legendType={stateHasElecBar() && settings.currentState !== 1 && settings.currentState !== 2 ? 'rect' : 'none'}
-                                     // legendType='none'
+                                    // legendType='none'
                                      hide={!stateHasElecBar()}
                                      stackId="a"
                                 />
@@ -217,7 +239,7 @@ export default function SolarElecChart() {
                                      name="WÄRME"
                                      label='none'
                                      aria-label="bar-heatingCost"
-                                     // legendType={STATES[settings.currentState]?.includes(STATE.ENERGY_BAR) && clientParams.heatingCost ? 'rect' : 'none'}
+                                    // legendType={STATES[settings.currentState]?.includes(STATE.ENERGY_BAR) && clientParams.heatingCost ? 'rect' : 'none'}
                                      legendType='none'
                                      hide={!STATES[settings.currentState]?.includes(STATE.ENERGY_BAR)}
                                      stackId="a"
@@ -227,7 +249,7 @@ export default function SolarElecChart() {
                                      label='none'
                                      aria-label="bar-transportCost"
                                      legendType={STATES[settings.currentState]?.includes(STATE.ENERGY_BAR) && clientParams.transportCost ? 'rect' : 'none'}
-                                     // legendType='none'
+                                    // legendType='none'
                                      hide={!STATES[settings.currentState]?.includes(STATE.ENERGY_BAR)}
                                      stackId="a"
                                 />
@@ -259,168 +281,183 @@ export default function SolarElecChart() {
                                 {/*</Bar>*/}
                             </ComposedChart>
                         </ResponsiveContainer>
-                        {settings.currentState !== 0 ? <div
-                            className="text-h1 text-font-medium text-sm pt-2 tracking-wide gap-4 flex flex-col w-[20%]">
-                            <h2 className="text-2xl font-bold">{`IHRE ENERGIEKOSTEN IN DEN NÄCHSTEN ${generalParams.yearLimitPrediction} JAHREN`}</h2>
-                            <p className="text-3xl text-transportBar font-bold">{'BENZIN/TANKEN'}{<p
-                                className="text-5xl text-transportBar font-bold">{formatEuroCurrency(totalTransportCost)}</p>}</p>
-                            <p className="text-3xl text-heatingBar font-bold">{'WÄRME/HEIZEN'}{<p
-                                className="text-5xl text-heatingBar font-bold">{formatEuroCurrency(totalHeatingCost)}</p>}</p>
-                            <p className="text-3xl text-elecBar font-bold">{'STROM'}{<p
-                                className="text-5xl text-elecBar font-bold">{formatEuroCurrency(totalElecCost)}</p>}</p>
-                            <p className="text-3xl text-totalCost font-bold">{'INSGESAMT'}{<p
-                                className="text-5xl text-totalCost font-bold">{formatEuroCurrency(totalElecCost + totalTransportCost + totalHeatingCost)}</p>}</p>
+                        <div
+                            className="pt-2 tracking-wide flex flex-col w-[30%] border-gray-400 border rounded-lg p-4 text-center h-full">
+                            <h2 className="text-h1 text-2xl font-light font-public_sans">{`IHRE ENERGIEKOSTEN IN DEN NÄCHSTEN ${generalParams.yearLimitPrediction} JAHREN`}</h2>
+                            {settings.currentState !== 0 ?
+                                <>
+                                    <CostLabelValue label={'BENZIN/TANKEN'}
+                                                    value={formatEuroCurrency(totalTransportCost)}
+                                                    text_color={"text-transportBar"}/>
+                                    <CostLabelValue label={'WÄRME/HEIZEN'} value={formatEuroCurrency(totalHeatingCost)}
+                                                    text_color={"text-heatingBar"}/>
+                                </> : null}
+                            <CostLabelValue label={'STROM'} value={formatEuroCurrency(totalElecCost)}
+                                            text_color={"text-elecBar"}/>
+                            {settings.currentState !== 0 && <CostLabelValue label={'INSGESAMT'}
+                                                                            value={formatEuroCurrency(totalElecCost + totalTransportCost + totalHeatingCost)}
+                                                                            text_color={"text-totalCost"}/>}
                             {stateHasSolarLine() && STATES[settings.currentState]?.includes(STATE.SOLAR_TEXT) ?
                                 <>
-                                   {
-                                        <p className="text-3xl text-solarLine font-bold leading-6 pt-8">{'MIT SOLAR'}
-                                            {<p className="text-5xl font-bold">{formatEuroCurrency(totalSolarCost)}</p>}
-                                        </p>}
+                                    {<CostLabelValue label={'MIT SOLAR'} value={formatEuroCurrency(totalSolarCost)}
+                                                     text_color={"text-solarLine"}/>}
                                     {((totalElecCost + totalTransportCost + totalHeatingCost) - totalSolarCost) > 0 && STATES[settings.currentState]?.includes(STATE.AREA) ?
-                                        <p className="text-3xl font-bold text-solarLine leading-6 pt-8">{'ERSPARNIS'}
-                                            {
-                                                <p className="text-5xl ">{formatEuroCurrency((totalElecCost + totalTransportCost + totalHeatingCost) - totalSolarCost)}</p>}
-                                        </p> : null}
+                                        <CostLabelValue label={'ERSPARNIS'}
+                                                        value={formatEuroCurrency((totalElecCost + totalTransportCost + totalHeatingCost) - totalSolarCost)}
+                                                        text_color={"text-solarLine"}/> : null}
                                 </> : null}
-                        </div> : null}
-                        <CustomMobileStepper
-                            variant="progress"
-                            aria-label="state-stepper"
-                            steps={STATES.length}
-                            activeStep={settings.currentState}
-
-                            sx={{maxWidth: 400, flexGrow: 1, bgcolor: 'transparent', margin: 'auto', borderColor:"red", color:"red", [`& .MuiMobileStepper-progress`]: {
-                                    borderColor: 'red',
-                                },}}
-                            nextButton={
-                                <Button
-                                    onClick={() => changeSettings({
-                                        ...settings,
-                                        currentState: settings.currentState + 1,
-                                        // showSolar: STATES[settings.currentState + 1].includes(STATE.SOLAR_LINE),
-                                        // showElecBarChart: STATES[settings.currentState + 1].includes(STATE.ELEC_BAR)
-                                    })}
-                                    disabled={settings.currentState === STATES.length - 1}
-                                    sx={{
-                                        ':hover': {
-                                            bgcolor: 'rgb(var(--color-axis))', // theme.palette.primary.main
-                                            color: 'white',
-                                        },
-                                        borderRadius: 25,
-                                        border: "1px solid rgb(var(--color-axis))",
-                                        fontSize: "1em",
-                                        fontWeight: "bold",
-                                    }}>
-                                    <KeyboardArrowRight className="text-axis hover:text-white"/>
-                                </Button>
-                            }
-                            backButton={
-                                <Button
-                                    onClick={() => changeSettings({
-                                        ...settings,
-                                        currentState: settings.currentState - 1,
-                                        // showSolar: STATES[settings.currentState + 1].includes(STATE.SOLAR_LINE),
-                                        // showElecBarChart: STATES[settings.currentState + 1].includes(STATE.ELEC_BAR)
-                                    })}
-                                    disabled={settings.currentState === 0}
-                                    sx={{
-                                        ':hover': {
-                                            bgcolor: 'rgb(var(--color-axis))', // theme.palette.primary.main
-                                            color: 'white',
-                                        },
-                                        borderRadius: 25,
-                                        border: "1px solid rgb(var(--color-axis))",
-                                        fontSize: "1em",
-                                        fontWeight: "bold",
-                                    }}>
-                                    {  <KeyboardArrowLeft className="text-axis hover:text-white"/>
-                                    }
-                                </Button>
-                            }
-                        />
+                        </div>
                     </div>
-                    {/*<ThemeProvider theme={theme}>*/}
-                    {/*    <FormGroup className="m-auto pt-3" data-testid="solar-toggle">*/}
-                    {/*        <FormControlLabel control={*/}
-                    {/*            <Switch*/}
-                    {/*                onChange={(e) => changeSettings({...settings, showSolar: e.target.checked})}/>}*/}
-                    {/*                          label={<span*/}
-                    {/*                              className="font-sans font-normal text-lg tracking-wide text-[#B4AC02B5]">{settings.showSolar ? 'Mit Enpal' : 'Ohne Enpal'}</span>}/>*/}
-                    {/*    </FormGroup>*/}
-                    {/*</ThemeProvider>*/}
+                    {/*<ThemeProvider theme={theme}>*/
+                    }
+                    {/*    <FormGroup className="m-auto pt-3" data-testid="solar-toggle">*/
+                    }
+                    {/*        <FormControlLabel control={*/
+                    }
+                    {/*            <Switch*/
+                    }
+                    {/*                onChange={(e) => changeSettings({...settings, showSolar: e.target.checked})}/>}*/
+                    }
+                    {/*                          label={<span*/
+                    }
+                    {/*                              className="font-sans font-normal text-lg tracking-wide text-[#B4AC02B5]">{settings.showSolar ? 'Mit Enpal' : 'Ohne Enpal'}</span>}/>*/
+                    }
+                    {/*    </FormGroup>*/
+                    }
+                    {/*</ThemeProvider>*/
+                    }
                 </>
-                {/*     : <ElecBarChart comparisonData={comparisonData}/>
-                 } */}
             </div>
-            <div className="bottom-24 left-8 absolute"
-                 data-testid="settings">
-                <AccordionGroup variant="plain">
-                    <Accordion>
-                        <AccordionSummary className="bg-solarElecSettings rounded-xl"><span
-                            className="text-h1"> Einstellung</span></AccordionSummary>
-                        <AccordionDetails>
-                            <div className="flex justify-center h-[240px] gap-2 pt-4">
-                                <div className="flex flex-col justify-center gap-4">
-                                    <ColoredSlider
-                                        orientation="vertical"
-                                        color="neutral"
-                                        aria-label="inflationRate-slider"
-                                        defaultValue={generalParams.inflationRate}
-                                        min={generalParams.inflationRate}
-                                        max={generalParams.inflationRate + 5}
-                                        step={1}
-                                        marks={getSliderMarks(generalParams.inflationRate)}
-                                        valueLabelDisplay="off"
-                                        onChange={(e, value) => setInflationRate(Number(value))}
-                                    />
-                                    <Typography fontSize={14}
-                                                textColor="rgba(var(--color-axis), var(--alpha-axis))">
-                                        Inflation
-                                    </Typography>
-                                </div>
-                                <div className="flex flex-col justify-center gap-4">
-                                    <ColoredSlider
-                                        orientation="vertical"
-                                        color="neutral"
-                                        aria-label="elecIncreaseRate-slider"
-                                        defaultValue={generalParams.electricityIncreaseRate}
-                                        min={generalParams.electricityIncreaseRate}
-                                        max={generalParams.electricityIncreaseRate + 5}
-                                        step={1}
-                                        marks={getSliderMarks(generalParams.electricityIncreaseRate)}
-                                        valueLabelDisplay="off"
-                                        onChange={(e, value) => setElecIncreaseRate(Number(value))}
-                                    />
-                                    <Typography fontSize={14}
-                                                textColor="rgba(var(--color-axis), var(--alpha-axis))">
-                                        Preissteigerung
-                                    </Typography>
-                                </div>
+            <div className="flex w-full pl-[450px] pt-3">
+                <CustomMobileStepper
+                    variant="progress"
+                    aria-label="state-stepper"
+                    steps={STATES.length}
+                    activeStep={settings.currentState}
+                    sx={{
+                        maxWidth: 450,
+                        flexGrow: 1,
+                        bgcolor: 'transparent',
+                        position: 'relative',
+                        marginTop: 3,
+                    }}
+                    nextButton={
+                        <Button
+                            onClick={() => changeSettings({
+                                ...settings,
+                                currentState: settings.currentState + 1,
+                                // showSolar: STATES[settings.currentState + 1].includes(STATE.SOLAR_LINE),
+                                // showElecBarChart: STATES[settings.currentState + 1].includes(STATE.ELEC_BAR)
+                            })}
+                            disabled={settings.currentState === STATES.length - 1}
+                            sx={{
+                                ':hover': {
+                                    bgcolor: 'rgb(var(--color-axis))', // theme.palette.primary.main
+                                    color: 'white',
+                                },
+                                borderRadius: 25,
+                                border: "1px solid rgb(var(--color-axis))",
+                                fontSize: "1em",
+                                fontWeight: "bold",
+                            }}>
+                            <KeyboardArrowRight className="text-axis hover:text-white"/>
+                        </Button>
+                    }
+                    backButton={
+                        <Button
+                            onClick={() => changeSettings({
+                                ...settings,
+                                currentState: settings.currentState - 1,
+                                // showSolar: STATES[settings.currentState + 1].includes(STATE.SOLAR_LINE),
+                                // showElecBarChart: STATES[settings.currentState + 1].includes(STATE.ELEC_BAR)
+                            })}
+                            disabled={settings.currentState === 0}
+                            sx={{
+                                ':hover': {
+                                    bgcolor: 'rgb(var(--color-axis))', // theme.palette.primary.main
+                                    color: 'white',
+                                },
+                                borderRadius: 25,
+                                border: "1px solid rgb(var(--color-axis))",
+                                fontSize: "1em",
+                                fontWeight: "bold",
+                            }}>
+                            {<KeyboardArrowLeft className="text-axis hover:text-white"/>
+                            }
+                        </Button>
+                    }
+                />
+                <div className="flex pl-[335px]">
+                    <Button
+                        onClick={handleChange}
+                        sx={{
+                            ':hover': {
+                                bgcolor: 'rgb(var(--color-axis))', // theme.palette.primary.main
+                                color: 'white',
+                                textColor: 'white',
+                            },
+                            border: "1px solid rgb(var(--color-axis))",
+                            // marginTop: 4,
+                            height: inflationBtnClicked ? 80 : 40,
+                            minWidth: 20,
+                            marginTop: inflationBtnClicked ? 0 : 4,
+                            marginRight: 1,
+                        }}
+                    >
+                        <TrendingUp className="text-axis hover:text-white"/>
+                    </Button>
+                    <Collapse in={inflationBtnClicked} orientation="horizontal">{
+                        <>
+                            <div className="flex w-[280px] justify-between gap-4">
+                                <Typography fontSize={14} paddingRight={6} paddingTop={1.5}
+                                            textColor="rgba(var(--color-axis), var(--alpha-axis))">
+                                    Inflation
+                                </Typography>
+                                <ColoredSlider
+                                    color="neutral"
+                                    aria-label="inflationRate-slider"
+                                    defaultValue={generalParams.inflationRate}
+                                    min={generalParams.inflationRate}
+                                    max={generalParams.inflationRate + 5}
+                                    step={1}
+                                    marks={getSliderMarks(generalParams.inflationRate)}
+                                    valueLabelDisplay="off"
+                                    onChange={(e, value) => setInflationRate(Number(value))}
+                                />
                             </div>
-                            {/* <ThemeProvider theme={theme}>
-                                <FormGroup className="m-auto pt-3">
-                                    <FormControlLabel control={<Switch
-                                        onChange={(event, checked) => changeSettings({ ...settings, showElecBarChart: checked })} />}
-                                        label={<span
-                                            className="text-legend">Strom</span>} />
-                                </FormGroup>
-                            </ThemeProvider> */}
-                        </AccordionDetails>
-                    </Accordion>
-                </AccordionGroup>
+                            <div className="flex justify-center gap-4 w-[280px] ">
+                                <Typography fontSize={14} paddingTop={1.5}
+                                            textColor="rgba(var(--color-axis), var(--alpha-axis))">
+                                    Preissteigerung
+                                </Typography>
+                                <ColoredSlider
+                                    color="neutral"
+                                    aria-label="elecIncreaseRate-slider"
+                                    defaultValue={generalParams.electricityIncreaseRate}
+                                    min={generalParams.electricityIncreaseRate}
+                                    max={generalParams.electricityIncreaseRate + 5}
+                                    step={1}
+                                    marks={getSliderMarks(generalParams.electricityIncreaseRate)}
+                                    valueLabelDisplay="off"
+                                    onChange={(e, value) => setElecIncreaseRate(Number(value))}
+                                />
+                            </div>
+                        </>
+                    }</Collapse>
+                </div>
             </div>
-            <div className="absolute bottom-7 right-7" data-testid="forward-fab">
+            {<div className="absolute bottom-7 right-7" data-testid="forward-fab">
                 <Tooltip title="comparison stat" arrow>
-                    <Fab variant="circular" sx={{backgroundColor: "rgb(var(--fab-bg))", color: "rgb(var(--fab-arrow))"}} component={Link}
+                    <Fab variant="circular" sx={{backgroundColor: "rgb(var(--fab-bg))", color: "rgb(var(--fab-arrow))"}}
+                         component={Link}
                          to={`/stats?pDate=${pDate}&clientId=${clientId}`}
                          aria-label="add">
                         <ArrowForward/>
                     </Fab>
                 </Tooltip>
-            </div>
+            </div>}
         </>
     )
-        ;
 }
 
 function getYAxisTicks(comparisonDataWithRange, showSolar, shrinkValues): Array<number> {
@@ -619,29 +656,34 @@ function LegendFormatter(value, inflationRate, elecIncreaseRate, currentState) {
     // const margins = getInflationMargins(currentState)
     return (
         <span>
-          {value === 'BENZIN' && (currentState === 1 || currentState === 2)? <>
-          <span className="mr-1 ml-[-2px]">BENZIN</span>
-          <svg className="inline mb-[3px]" height="10" width="15"><rect width="30" height="10" fill="rgb(var(--heating-bar))"/></svg>
-          <span className="text-heatingBar">{` WÄRME `}</span>
-          <svg className="inline mb-[3px]" height="10" width="15"><rect width="30" height="10" fill="rgb(var(--elec-bar))"/></svg>
-          <span className="text-elecBar mx-1">STROM</span></> :
-                <span>{value}</span>}
-            {value === 'MIT ENPAL' || value === 'BENZIN' || (value === 'STROM PREISENTWICKLUNG' && currentState === 3)|| (value === 'STROM' && currentState === 0) ?
-                <div className="text-h1 whitespace-pre-line">{` INFLATION: ${inflationRate}% \nPREISSTEIGERUNG: ${elecIncreaseRate}%`}</div> : null}
+          {value === 'BENZIN' && (currentState === 1 || currentState === 2) ? <>
+                  <span className="mr-1 ml-[-2px]">BENZIN</span>
+                  <svg className="inline mb-[3px]" height="10" width="15">
+                      <rect width="30" height="10" fill="rgb(var(--heating-bar))"/>
+                  </svg>
+                  <span className="text-heatingBar">{` WÄRME `}</span>
+                  <svg className="inline mb-[3px]" height="10" width="15">
+                      <rect width="30" height="10" fill="rgb(var(--elec-bar))"/>
+                  </svg>
+                  <span className="text-elecBar mx-1">STROM</span></> :
+              <span>{value}</span>}
+            {value === 'MIT ENPAL' || value === 'BENZIN' || (value === 'STROM PREISENTWICKLUNG' && currentState === 3) || (value === 'STROM' && currentState === 0) ?
+                <div
+                    className="text-h1 whitespace-pre-line">{` INFLATION: ${inflationRate}% \nPREISSTEIGERUNG: ${elecIncreaseRate}%`}</div> : null}
             </span>)
 }
 
 function getInflationMargins(currentState) {
-  switch(currentState) {
-    case 0:
-      return [-780, -35]
-    case 2:
-      return [-780, -40]
-    case 3:
-      return [-780, -60]
-    default:
-      return [-780, -50]
-  }
+    switch (currentState) {
+        case 0:
+            return [-780, -35]
+        case 2:
+            return [-780, -40]
+        case 3:
+            return [-780, -60]
+        default:
+            return [-780, -50]
+    }
 }
 
 function CustomLegend(props): ReactElement {
@@ -667,11 +709,12 @@ function getXAxisMarks(tickLimit: number): Array<number> {
 }
 
 function SmallRect() {
-  return (<svg width="400" height="110">
-    <rect width="300" height="100" style="fill:rgb(0,0,255);stroke-width:3;stroke:rgb(0,0,0)" />
-  </svg>)
+    return (<svg width="400" height="110">
+        <rect width="300" height="100" style="fill:rgb(0,0,255);stroke-width:3;stroke:rgb(0,0,0)"/>
+    </svg>)
 }
-const CustomMobileStepper = styled(MobileStepper)(({ theme }) => ({
+
+const CustomMobileStepper = styled(MobileStepper)(({theme}) => ({
     // color: "#072543", //color of the slider between thumbs
 
     // "& .MuiSlider-thumb": {
@@ -699,3 +742,10 @@ const CustomMobileStepper = styled(MobileStepper)(({ theme }) => ({
     //     backgroundColor: "rgb(var(--color-axis))"
     // },
 }));
+
+function CostLabelValue({label, value, text_color}): ReactElement {
+    // text-3xl text-solarLine font-bold leading-6 pt-8
+    // <p className="text-3xl font-bold text-solarLine leading-6 pt-8">{'ERSPARNIS'}
+    return (<><p className={"font-poppins font-light text-2xl pt-7 " + text_color}>{label}</p>
+        <p className={"font-poppins text-5xl font-bold tracking-wide " + text_color}>{value}</p></>)
+}

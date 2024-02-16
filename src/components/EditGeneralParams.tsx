@@ -162,6 +162,13 @@ export function EditGeneralParams({setOpenModal}) {
                         >
                             <FormControlLabel value="light" control={<Radio />} label="Light"/>
                             <FormControlLabel value="dark" control={<Radio />} label="Dark"/>
+                            <FormControlLabel value="combi2" control={<Radio />} label="combi2"/>
+                            <FormControlLabel value="combi3" control={<Radio />} label="combi3"/>
+                            <FormControlLabel value="combi4" control={<Radio />} label="combi4"/>
+                            <FormControlLabel value="combi5" control={<Radio />} label="combi5"/>
+                            <FormControlLabel value="combi6" control={<Radio />} label="combi6"/>
+                            <FormControlLabel value="combi7" control={<Radio />} label="combi7"/>
+                            <FormControlLabel value="combi8" control={<Radio />} label="combi8"/>
                         </RadioGroup>
                     </FormControl>
                     <Button variant="contained" color="inherit" type="submit">Speichern</Button>

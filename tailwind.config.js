@@ -8,6 +8,10 @@ module.exports = {
     ],
     theme: {
         extend: {
+            fontFamily: {
+                poppins: ["Poppins", "sans-serif"],
+                public_sans: ["Public Sans", "sans-serif"]
+            },
             backgroundImage: {
                 'gray-grained': "url('/gray-grained.jpg')",
                 '2': "url('/2.png')",

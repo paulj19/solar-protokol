@@ -1,110 +1,6 @@
-/* :root {
-  --max-width: 1100px;
-  --border-radius: 12px;
-  --font-mono: ui-monospace, Menlo, Monaco, 'Cascadia Mono', 'Segoe UI Mono',
-    'Roboto Mono', 'Oxygen Mono', 'Ubuntu Monospace', 'Source Code Pro',
-    'Fira Mono', 'Droid Sans Mono', 'Courier New', monospace;
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,100..900;1,100..900&display=swap');
 
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
-
-  --primary-glow: conic-gradient(
-    from 180deg at 50% 50%,
-    #16abff33 0deg,
-    #0885ff33 55deg,
-    #54d6ff33 120deg,
-    #0071ff33 160deg,
-    transparent 360deg
-  );
-  --secondary-glow: radial-gradient(
-    rgba(255, 255, 255, 1),
-    rgba(255, 255, 255, 0)
-  );
-
-  --tile-start-rgb: 239, 245, 249;
-  --tile-end-rgb: 228, 232, 233;
-  --tile-border: conic-gradient(
-    #00000080,
-    #00000040,
-    #00000030,
-    #00000020,
-    #00000010,
-    #00000010,
-    #00000080
-  );
-
-  --callout-rgb: 238, 240, 241;
-  --callout-border-rgb: 172, 175, 176;
-  --card-rgb: 180, 185, 188;
-  --card-border-rgb: 131, 134, 135;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-
-    --primary-glow: radial-gradient(rgba(1, 65, 255, 0.4), rgba(1, 65, 255, 0));
-    --secondary-glow: linear-gradient(
-      to bottom right,
-      rgba(1, 65, 255, 0),
-      rgba(1, 65, 255, 0),
-      rgba(1, 65, 255, 0.3)
-    );
-
-    --tile-start-rgb: 2, 13, 46;
-    --tile-end-rgb: 2, 5, 19;
-    --tile-border: conic-gradient(
-      #ffffff80,
-      #ffffff40,
-      #ffffff30,
-      #ffffff20,
-      #ffffff10,
-      #ffffff10,
-      #ffffff80
-    );
-
-    --callout-rgb: 20, 20, 20;
-    --callout-border-rgb: 108, 108, 108;
-    --card-rgb: 100, 100, 100;
-    --card-border-rgb: 200, 200, 200;
-  }
-}
-
-* {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
-}
-
-html,
-body {
-  max-width: 100vw;
-  overflow-x: hidden;
-} */
-/* 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
-}
-
-a {
-  color: inherit;
-  text-decoration: none;
-}
-
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
-  }
-} */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -193,6 +89,350 @@ a {
     --stats-bar-label: 7, 37, 67;
     --stats-bar-label-cost: 255, 255, 255;
     --stats-bar-elec-new: 59, 161, 86;
+    --statsChart-solarCost: 31, 162, 78;
+    --cumStatsBar-label-cost: 7, 37, 67;
+    --cumStats-bar-solar: 59, 161, 86;
+    --cost-savings: 59, 161, 86;
+    --genCon-carGrid: 255, 255, 255;
+    --genCon-xTicks: 7, 37, 67;
+    --genCon-bar: 255, 176, 0;
+    --genCon-bar2: 255, 176, 0;
+    --genCon-switch: 7, 37, 67;
+    --genCon-switchPrimary: 7, 37, 67;
+    --genCon-switchBase: 128, 128, 128;
+    --genCon-bar-label: 7, 37, 67;
+    --payoff-label: 209 213 219, 0.8;
+    --header-bg: 243, 244, 246;
+    --enpal-icon-dot: 252, 203, 28;
+    --logo-banner: 243, 244, 246;
+    --fab-bg: 243, 244, 246;;
+    --fab-arrow: 7, 37, 67;
+  }
+
+  html[data-theme='combi2'] {
+    --rechnung-details-elec: 255, 176, 0;
+    --rechnung-details-solar: 59, 161, 86;
+    --color-legend: 7, 37, 67;
+    --alpha-legend: 0.71;
+    --color-axis: 7, 37, 67;
+    --alpha-axis: 0.71;
+    --slider-thumb: 31, 45, 55;
+    --stats-bar-solar: 59, 161, 86;
+    --stats-bar-elec: 255, 176, 0;
+    --stats-bar-elecShade: 255, 176, 0;
+    --color-bar: 241, 231, 39;
+    --color-line: 7, 37, 67;
+    --solarElec-settings: 214, 214, 214;
+    background-image: none;
+    --title-h1: 7, 37, 67;
+    --elec-bar: 183, 40, 24;
+    --transport-bar: 188, 96, 34;
+    --heating-bar: 232, 197, 153;
+    --elec-line: 255, 0, 0;
+    --solar-line: 16, 173, 63;
+    --total-cost: 7, 37, 67;
+    --saved-area-start: 10, 255, 51;
+    --saved-area-stop: 2, 97, 18;
+    --accordion: 31, 41, 55;
+    --tooltip-bg: 199, 199, 199;
+    --slider-marks: 156, 163, 175;
+    --stats-bar-label: 7, 37, 67;
+    --stats-bar-label-cost: 255, 255, 255;
+    --stats-bar-elec-new: 59, 161, 86;
+    --statsChart-solarCost: 31, 162, 78;
+    --cumStatsBar-label-cost: 7, 37, 67;
+    --cumStats-bar-solar: 59, 161, 86;
+    --cost-savings: 59, 161, 86;
+    --genCon-carGrid: 255, 255, 255;
+    --genCon-xTicks: 7, 37, 67;
+    --genCon-bar: 255, 176, 0;
+    --genCon-bar2: 255, 176, 0;
+    --genCon-switch: 7, 37, 67;
+    --genCon-switchPrimary: 7, 37, 67;
+    --genCon-switchBase: 128, 128, 128;
+    --genCon-bar-label: 7, 37, 67;
+    --payoff-label: 209 213 219, 0.8;
+    --header-bg: 243, 244, 246;
+    --enpal-icon-dot: 252, 203, 28;
+    --logo-banner: 243, 244, 246;
+    --fab-bg: 243, 244, 246;;
+    --fab-arrow: 7, 37, 67;
+  }
+  html[data-theme='combi3'] {
+    --rechnung-details-elec: 255, 176, 0;
+    --rechnung-details-solar: 59, 161, 86;
+    --color-legend: 7, 37, 67;
+    --alpha-legend: 0.71;
+    --color-axis: 7, 37, 67;
+    --alpha-axis: 0.71;
+    --slider-thumb: 31, 45, 55;
+    --stats-bar-solar: 59, 161, 86;
+    --stats-bar-elec: 255, 176, 0;
+    --stats-bar-elecShade: 255, 176, 0;
+    --color-bar: 241, 231, 39;
+    --color-line: 7, 37, 67;
+    --solarElec-settings: 214, 214, 214;
+    background-image: none;
+    --title-h1: 7, 37, 67;
+    --elec-bar: 251, 101, 66;
+    --transport-bar: 55, 94, 151;
+    --heating-bar: 255, 187, 0;
+    --elec-line: 255, 0, 0;
+    --solar-line: 16, 173, 63;
+    --total-cost: 7, 37, 67;
+    --saved-area-start: 10, 255, 51;
+    --saved-area-stop: 2, 97, 18;
+    --accordion: 31, 41, 55;
+    --tooltip-bg: 199, 199, 199;
+    --slider-marks: 156, 163, 175;
+    --stats-bar-label: 7, 37, 67;
+    --stats-bar-label-cost: 255, 255, 255;
+    --stats-bar-elec-new: 59, 161, 86;
+    --statsChart-solarCost: 31, 162, 78;
+    --cumStatsBar-label-cost: 7, 37, 67;
+    --cumStats-bar-solar: 59, 161, 86;
+    --cost-savings: 59, 161, 86;
+    --genCon-carGrid: 255, 255, 255;
+    --genCon-xTicks: 7, 37, 67;
+    --genCon-bar: 255, 176, 0;
+    --genCon-bar2: 255, 176, 0;
+    --genCon-switch: 7, 37, 67;
+    --genCon-switchPrimary: 7, 37, 67;
+    --genCon-switchBase: 128, 128, 128;
+    --genCon-bar-label: 7, 37, 67;
+    --payoff-label: 209 213 219, 0.8;
+    --header-bg: 243, 244, 246;
+    --enpal-icon-dot: 252, 203, 28;
+    --logo-banner: 243, 244, 246;
+    --fab-bg: 243, 244, 246;;
+    --fab-arrow: 7, 37, 67;
+  }
+  html[data-theme='combi4'] {
+    --rechnung-details-elec: 255, 176, 0;
+    --rechnung-details-solar: 59, 161, 86;
+    --color-legend: 7, 37, 67;
+    --alpha-legend: 0.71;
+    --color-axis: 7, 37, 67;
+    --alpha-axis: 0.71;
+    --slider-thumb: 31, 45, 55;
+    --stats-bar-solar: 59, 161, 86;
+    --stats-bar-elec: 255, 176, 0;
+    --stats-bar-elecShade: 255, 176, 0;
+    --color-bar: 241, 231, 39;
+    --color-line: 7, 37, 67;
+    --solarElec-settings: 214, 214, 214;
+    background-image: none;
+    --title-h1: 7, 37, 67;
+    --elec-bar: 30, 39, 97;
+    --transport-bar: 64, 142, 198;
+    --heating-bar: 122, 32, 72;
+    --elec-line: 255, 0, 0;
+    --solar-line: 16, 173, 63;
+    --total-cost: 7, 37, 67;
+    --saved-area-start: 10, 255, 51;
+    --saved-area-stop: 2, 97, 18;
+    --accordion: 31, 41, 55;
+    --tooltip-bg: 199, 199, 199;
+    --slider-marks: 156, 163, 175;
+    --stats-bar-label: 7, 37, 67;
+    --stats-bar-label-cost: 255, 255, 255;
+    --stats-bar-elec-new: 59, 161, 86;
+    --statsChart-solarCost: 31, 162, 78;
+    --cumStatsBar-label-cost: 7, 37, 67;
+    --cumStats-bar-solar: 59, 161, 86;
+    --cost-savings: 59, 161, 86;
+    --genCon-carGrid: 255, 255, 255;
+    --genCon-xTicks: 7, 37, 67;
+    --genCon-bar: 255, 176, 0;
+    --genCon-bar2: 255, 176, 0;
+    --genCon-switch: 7, 37, 67;
+    --genCon-switchPrimary: 7, 37, 67;
+    --genCon-switchBase: 128, 128, 128;
+    --genCon-bar-label: 7, 37, 67;
+    --payoff-label: 209 213 219, 0.8;
+    --header-bg: 243, 244, 246;
+    --enpal-icon-dot: 252, 203, 28;
+    --logo-banner: 243, 244, 246;
+    --fab-bg: 243, 244, 246;;
+    --fab-arrow: 7, 37, 67;
+  }
+  html[data-theme='combi5'] {
+    --rechnung-details-elec: 255, 176, 0;
+    --rechnung-details-solar: 59, 161, 86;
+    --color-legend: 7, 37, 67;
+    --alpha-legend: 0.71;
+    --color-axis: 7, 37, 67;
+    --alpha-axis: 0.71;
+    --slider-thumb: 31, 45, 55;
+    --stats-bar-solar: 59, 161, 86;
+    --stats-bar-elec: 255, 176, 0;
+    --stats-bar-elecShade: 255, 176, 0;
+    --color-bar: 241, 231, 39;
+    --color-line: 7, 37, 67;
+    --solarElec-settings: 214, 214, 214;
+    background-image: none;
+    --title-h1: 7, 37, 67;
+    --elec-bar: 184, 80, 66;
+    --transport-bar: 231, 232, 209;
+    --heating-bar: 167, 190, 174;
+    --elec-line: 255, 0, 0;
+    --solar-line: 16, 173, 63;
+    --total-cost: 7, 37, 67;
+    --saved-area-start: 10, 255, 51;
+    --saved-area-stop: 2, 97, 18;
+    --accordion: 31, 41, 55;
+    --tooltip-bg: 199, 199, 199;
+    --slider-marks: 156, 163, 175;
+    --stats-bar-label: 7, 37, 67;
+    --stats-bar-label-cost: 255, 255, 255;
+    --stats-bar-elec-new: 59, 161, 86;
+    --statsChart-solarCost: 31, 162, 78;
+    --cumStatsBar-label-cost: 7, 37, 67;
+    --cumStats-bar-solar: 59, 161, 86;
+    --cost-savings: 59, 161, 86;
+    --genCon-carGrid: 255, 255, 255;
+    --genCon-xTicks: 7, 37, 67;
+    --genCon-bar: 255, 176, 0;
+    --genCon-bar2: 255, 176, 0;
+    --genCon-switch: 7, 37, 67;
+    --genCon-switchPrimary: 7, 37, 67;
+    --genCon-switchBase: 128, 128, 128;
+    --genCon-bar-label: 7, 37, 67;
+    --payoff-label: 209 213 219, 0.8;
+    --header-bg: 243, 244, 246;
+    --enpal-icon-dot: 252, 203, 28;
+    --logo-banner: 243, 244, 246;
+    --fab-bg: 243, 244, 246;;
+    --fab-arrow: 7, 37, 67;
+  }
+  html[data-theme='combi6'] {
+    --rechnung-details-elec: 255, 176, 0;
+    --rechnung-details-solar: 59, 161, 86;
+    --color-legend: 7, 37, 67;
+    --alpha-legend: 0.71;
+    --color-axis: 7, 37, 67;
+    --alpha-axis: 0.71;
+    --slider-thumb: 31, 45, 55;
+    --stats-bar-elecShade: 255, 176, 0;
+    --color-bar: 241, 231, 39;
+    --color-line: 7, 37, 67;
+    --solarElec-settings: 214, 214, 214;
+    background-image: none;
+    --title-h1: 7, 37, 67;
+    --elec-bar: 184, 80, 66;
+    --transport-bar: 231, 232, 209;
+    --heating-bar: 167, 190, 174;
+    --elec-line: 255, 0, 0;
+    --solar-line: 16, 173, 63;
+    --total-cost: 7, 37, 67;
+    --saved-area-start: 10, 255, 51;
+    --saved-area-stop: 2, 97, 18;
+    --accordion: 31, 41, 55;
+    --tooltip-bg: 199, 199, 199;
+    --slider-marks: 156, 163, 175;
+    --stats-bar-label: 7, 37, 67;
+    --stats-bar-label-cost: 255, 255, 255;
+    --stats-bar-elec: 32, 148, 139;
+    --stats-bar-elec-new: 106, 177, 135;
+    --stats-bar-solar: 106, 177, 135;
+    --statsChart-solarCost: 31, 162, 78;
+    --cumStatsBar-label-cost: 7, 37, 67;
+    --cumStats-bar-solar: 59, 161, 86;
+    --cost-savings: 59, 161, 86;
+    --genCon-carGrid: 255, 255, 255;
+    --genCon-xTicks: 7, 37, 67;
+    --genCon-bar: 255, 176, 0;
+    --genCon-bar2: 255, 176, 0;
+    --genCon-switch: 7, 37, 67;
+    --genCon-switchPrimary: 7, 37, 67;
+    --genCon-switchBase: 128, 128, 128;
+    --genCon-bar-label: 7, 37, 67;
+    --payoff-label: 209 213 219, 0.8;
+    --header-bg: 243, 244, 246;
+    --enpal-icon-dot: 252, 203, 28;
+    --logo-banner: 243, 244, 246;
+    --fab-bg: 243, 244, 246;;
+    --fab-arrow: 7, 37, 67;
+  }
+  html[data-theme='combi7'] {
+    --rechnung-details-elec: 255, 176, 0;
+    --rechnung-details-solar: 59, 161, 86;
+    --color-legend: 7, 37, 67;
+    --alpha-legend: 0.71;
+    --color-axis: 7, 37, 67;
+    --alpha-axis: 0.71;
+    --slider-thumb: 31, 45, 55;
+    --stats-bar-elecShade: 255, 176, 0;
+    --color-bar: 241, 231, 39;
+    --color-line: 7, 37, 67;
+    --solarElec-settings: 214, 214, 214;
+    background-image: none;
+    --title-h1: 7, 37, 67;
+    --elec-bar: 184, 80, 66;
+    --transport-bar: 231, 232, 209;
+    --heating-bar: 167, 190, 174;
+    --elec-line: 255, 0, 0;
+    --solar-line: 16, 173, 63;
+    --total-cost: 7, 37, 67;
+    --saved-area-start: 10, 255, 51;
+    --saved-area-stop: 2, 97, 18;
+    --accordion: 31, 41, 55;
+    --tooltip-bg: 199, 199, 199;
+    --slider-marks: 156, 163, 175;
+    --stats-bar-label: 7, 37, 67;
+    --stats-bar-label-cost: 255, 255, 255;
+    --stats-bar-elec: 249, 97, 103;
+    --stats-bar-elec-new: 249, 231, 149;
+    --stats-bar-solar: 249, 231, 149;
+    --statsChart-solarCost: 31, 162, 78;
+    --cumStatsBar-label-cost: 7, 37, 67;
+    --cumStats-bar-solar: 59, 161, 86;
+    --cost-savings: 59, 161, 86;
+    --genCon-carGrid: 255, 255, 255;
+    --genCon-xTicks: 7, 37, 67;
+    --genCon-bar: 255, 176, 0;
+    --genCon-bar2: 255, 176, 0;
+    --genCon-switch: 7, 37, 67;
+    --genCon-switchPrimary: 7, 37, 67;
+    --genCon-switchBase: 128, 128, 128;
+    --genCon-bar-label: 7, 37, 67;
+    --payoff-label: 209 213 219, 0.8;
+    --header-bg: 243, 244, 246;
+    --enpal-icon-dot: 252, 203, 28;
+    --logo-banner: 243, 244, 246;
+    --fab-bg: 243, 244, 246;;
+    --fab-arrow: 7, 37, 67;
+  }
+  html[data-theme='combi8'] {
+    --rechnung-details-elec: 255, 176, 0;
+    --rechnung-details-solar: 59, 161, 86;
+    --color-legend: 7, 37, 67;
+    --alpha-legend: 0.71;
+    --color-axis: 7, 37, 67;
+    --alpha-axis: 0.71;
+    --slider-thumb: 31, 45, 55;
+    --stats-bar-elecShade: 255, 176, 0;
+    --color-bar: 241, 231, 39;
+    --color-line: 7, 37, 67;
+    --solarElec-settings: 214, 214, 214;
+    background-image: none;
+    --title-h1: 7, 37, 67;
+    --elec-bar: 184, 80, 66;
+    --transport-bar: 231, 232, 209;
+    --heating-bar: 167, 190, 174;
+    --elec-line: 255, 0, 0;
+    --solar-line: 16, 173, 63;
+    --total-cost: 7, 37, 67;
+    --saved-area-start: 10, 255, 51;
+    --saved-area-stop: 2, 97, 18;
+    --accordion: 31, 41, 55;
+    --tooltip-bg: 199, 199, 199;
+    --slider-marks: 156, 163, 175;
+    --stats-bar-label: 7, 37, 67;
+    --stats-bar-label-cost: 255, 255, 255;
+    --stats-bar-elec: 249, 136, 102;;
+    --stats-bar-elec-new: 161, 190, 149;
+    --stats-bar-solar: 161, 190, 149;
     --statsChart-solarCost: 31, 162, 78;
     --cumStatsBar-label-cost: 7, 37, 67;
     --cumStats-bar-solar: 59, 161, 86;
